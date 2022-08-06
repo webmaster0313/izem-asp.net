@@ -31,7 +31,24 @@
     <div ng-app="employer-app" ng-cloak>
         <div ng-controller="employer-controller">
             <div class="container-scroller">
-                @Html.Partial("header")
+                <aside>
+                    @Html.Partial("sidemenu")
+                </aside>
+                <main>
+                    @Html.Partial("header")
+                    <div class="content-wrapper">
+                        @RenderBody()
+                    </div>
+                    <footer class="footer">
+                        <div class="d-sm-flex justify-content-center justify-content-sm-between">
+                            <span class="float-none float-sm-left d-block mt-1 mt-sm-0 text-center"></span>
+                            <span class="text-muted text-center text-sm-right d-block d-sm-inline-block">
+                                Copyright © @DateTime.Now.Year <span class="text-behance">Erazem Sdn Bhd</span>. All rights reserved.
+                            </span>
+                        </div>
+                    </footer>
+                </main>
+                @* @Html.Partial("header")
                 <div class="container-fluid page-body-wrapper" style="margin-top: 70px;">
                     @Html.Partial("sidemenu")
                     <div class="main-panel">
@@ -47,7 +64,7 @@
                             </div>
                         </footer>
                     </div>
-                </div>
+                </div> *@
             </div>
         </div>
     </div>

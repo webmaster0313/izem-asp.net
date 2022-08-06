@@ -1,0 +1,128 @@
+﻿
+<div ng-controller="employee-dependentsetup-controller">
+    <div class="row">
+        <div class="col-md-5 mb-1">
+            <form name="employeesalaryform">
+                <div class="card">
+                    <div class="card-header">
+                        Manage Employee Dependent
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-hover table-responsive-xl">
+                            <thead>
+                                <tr>
+                                    <th>Full-Name</th>
+                                    <th>Relation</th>
+                                    <th class="widthCenter">Active</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-if="!dependentloaded">
+                                    <td class="loading"><div class="bar"></div></td>
+                                    <td class="loading"><div class="bar"></div></td>
+                                    <td class="loading"><div class="bar"></div></td>
+                                </tr>
+                                <tr ng-if="dependentloaded" ng-repeat="x in dependentTableParams">
+                                    <td>{{x.memberName}}</td>
+                                    <td>
+                                        <select ng-model="x.masterrelationshipId" class="badge" ng-change="onChange_UpdateRelationShip(x.masterrelationshipId,x.employeedependentId)">
+                                            <option ng-selected="y == x.masterrelationshipId" ng-repeat="y in fill_masterrelationshipId" ng-value="y.masterrelationshipId">
+                                                {{y.masterrelationshipTitle}}
+                                            </option>
+                                        </select>
+                                    </td>
+                                    <td class="text-nowrap">
+                                        <a class="cursor" ng-click="onClick_DeleteDependentRecord(x.employeedependentId)">
+                                            <i class="mdi mdi-delete-forever icon-font-size text-danger"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="card-footer"></div>
+                </div>
+            </form>
+        </div>
+        <div class="col-md-7 mb-1">
+            <form name="employeesalaryform">
+                <div class="card mb-1">
+                    <div class="card-header">
+                        Search member using NRIC and Passport!
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group mb-1">
+                                    <label>Search by NRIC</label>
+                                    <input type="text" class="form-control"
+                                           ng-model="searchbynric"
+                                           placeholder="Enter NRIC">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group mb-1">
+                                    <label>Search by Passport</label>
+                                    <input type="text" class="form-control"
+                                           ng-model="searchbypassport"
+                                           placeholder="Enter Passport">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <input type="button" class="btn btn-gradient-primary "
+                               ng-click="onLoad_MasterMemberService()"
+                               value="Search" />
+
+                        <button type="button" class="btn btn-gradient-warning"
+                                value="Cancel" ng-click="onClick_resetFromDependentForm()">
+                            Reset
+                        </button>
+
+                        <button type="button" class="btn btn-inverse-dark"
+                                value="Cancel" ng-click="onClick_CloseEmployeeDependentSetup()">
+                            Cancel
+                        </button>
+
+                    </div>
+                </div>
+                <div class="card mb-1">
+                    <div class="card-header">
+                        Member List <small> (Search result)</small>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-hover table-responsive-xl">
+                            <thead>
+                                <tr>
+                                    <th>Action</th>
+                                    <th>Full-Name</th>
+                                    <th>NRIC</th>
+                                    <th>Passport</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-if="!memberloaded">
+                                    <td class="loading"><div class="bar"></div></td>
+                                    <td class="loading"><div class="bar"></div></td>
+                                    <td class="loading"><div class="bar"></div></td>
+                                    <td class="loading"><div class="bar"></div></td>
+                                </tr>
+                                <tr ng-if="memberloaded" ng-repeat="x in memberTableParams">
+                                    <td class="text-nowrap">
+                                        <a class="cursor" ng-click="onClick_AddMemberToDependent(x)">
+                                            <span class="badge badge-dark">Add</span>
+                                        </a>
+                                    </td>
+                                    <td>{{x.memberName}}</td>
+                                    <td>{{x.memberNric}}</td>
+                                    <td>{{x.memberPassport}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

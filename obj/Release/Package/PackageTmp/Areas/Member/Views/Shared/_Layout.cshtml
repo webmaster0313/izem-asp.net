@@ -1,0 +1,80 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>@ViewBag.Title - iZem | Employee Benefits | Payroll | Clinic Management | IzemEBS | IzemPAY | IzemCMS</title>
+    <link rel="stylesheet" href="~/Content/assets/vendors/mdi/css/materialdesignicons.min.css">
+    <link rel="stylesheet" href="~/Content/assets/vendors/css/vendor.bundle.base.css">
+    <link rel="stylesheet" href="~/Content/assets/css/style.css">
+    <link rel="stylesheet" href="~/Content/assets/css/manual.css" />
+    <link rel="stylesheet" href="~/Content/toastr.css" />
+    <link rel="stylesheet" href="~/Content/chosen.css" />
+    <link rel="shortcut icon" href="~/Content/images/logo.png" />
+    <script>
+        var backlink = '@(System.Configuration.ConfigurationManager.AppSettings["backlink"].ToString())';
+    </script>
+    <style>
+        .chosen-container {
+            width: 100% !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="overlay"></div>
+    <div ng-app="member-app" ng-cloak>
+        <div ng-controller="member-controller">
+            <div class="container-scroller">
+                @Html.Partial("header")
+                <div class="container-fluid page-body-wrapper" style="margin-top: 70px;">
+                    @Html.Partial("sidemenu")
+                    <div class="main-panel">
+                        <div class="content-wrapper">
+                            @RenderBody()
+                        </div>
+                        <footer class="footer">
+                            <div class="d-sm-flex justify-content-center justify-content-sm-between">
+                                <span class="float-none float-sm-left d-block mt-1 mt-sm-0 text-center"></span>
+                                <span class="text-muted text-center text-sm-right d-block d-sm-inline-block">
+                                    Copyright © @DateTime.Now.Year <span class="text-behance">Erazem Sdn Bhd</span>. All rights reserved.
+                                </span>
+                            </div>
+                        </footer>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="~/Content/assets/vendors/js/vendor.bundle.base.js"></script>
+    <script src="~/Content/assets/js/off-canvas.js"></script>
+    <script src="~/Content/assets/js/hoverable-collapse.js"></script>
+    <script src="~/Content/assets/js/misc.js"></script>
+
+    <script src="~/Scripts/angular.min.js"></script>
+    <script src="~/Scripts/moment.min.js"></script>
+    <script src="~/Scripts/toastr.min.js"></script>
+    <script src="~/Scripts/chosen.jquery.min.js"></script>
+    <script src="~/Scripts/angular-chosen.min.js"></script>
+
+    <script src="~/Content/common/common.js?version=@(System.Configuration.ConfigurationManager.AppSettings["version"].ToString())"></script>
+
+    <script src="~/Content/common/ui-bootstrap-tpls-0.13.4.min.js"></script>
+
+    <script src="~/Areas/Member/_Member/member-app.js?version=@(System.Configuration.ConfigurationManager.AppSettings["version"].ToString())"></script>
+    <script src="~/Areas/Member/_Member/member-controller.js?version=@(System.Configuration.ConfigurationManager.AppSettings["version"].ToString())"></script>
+    <script src="~/Areas/Member/_Member/member-header-controller.js?version=@(System.Configuration.ConfigurationManager.AppSettings["version"].ToString())"></script>
+    <script src="~/Areas/Member/_Member/member-sidemenu-controller.js?version=@(System.Configuration.ConfigurationManager.AppSettings["version"].ToString())"></script>
+
+    <script src="~/Areas/_Service/common-operation-service.js?version=@(System.Configuration.ConfigurationManager.AppSettings["version"].ToString())"></script>
+    <script src="~/Areas/_Service/common-dropdown-service.js?version=@(System.Configuration.ConfigurationManager.AppSettings["version"].ToString())"></script>
+
+    @RenderSection("scripts", required: false)
+</body>
+</html>

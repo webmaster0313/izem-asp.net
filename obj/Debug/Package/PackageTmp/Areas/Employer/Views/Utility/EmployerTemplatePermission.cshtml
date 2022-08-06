@@ -1,0 +1,100 @@
+﻿
+@{
+    ViewBag.Title = "Employer Template-Permission";
+    Layout = "~/Areas/Employer/Views/Shared/_Layout.cshtml";
+}
+
+<div ng-controller="employer-templatepermission-controller">
+
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Utility</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Template Permission</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <div class="col-md-12 mt-1">
+            <div class="card">
+                <div class="card-header">
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <select ng-model="employerTemplateId" class="form-control" ng-change="onChange_Template()" chosen>
+                                <option value="">-- Select --</option>
+                                <option ng-selected="x == employerTemplateId" ng-repeat="x in fill_employerMasterTemplate" ng-value="x.employerTemplateId">
+                                    {{x.templateName}}
+                                </option>
+                            </select>
+                        </div>
+                        <div class="col-md-8">
+                            <input type="submit" class="btn btn-gradient-primary" ng-click="onClick_Submit()" value="Submit" />
+                            <input type="button" class="btn btn-gradient-warning" ng-click="onClick_Delete()" value="Delete" />
+                        </div>
+
+                    </div>
+                </div>
+                <div class="card-footer"></div>
+            </div>
+        </div>
+        <div class="col-md-12 mt-1">
+            <div class="card">
+                <div class="card-header">
+                    Template-Page List
+                </div>
+                <div class="card-body">
+                    <table class="table table-hover table-responsive-xl">
+                        <thead>
+                            <tr>
+                                <th>Menu</th>
+                                <th>Page</th>
+                                <th class="widthCenter">Access</th>
+                                <th class="widthCenter">Add</th>
+                                <th class="widthCenter">Edit</th>
+                                <th class="widthCenter">Delete</th>
+                                <th class="widthCenter">Report</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-if="!loaded">
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                            </tr>
+                            <tr ng-if="loaded" ng-repeat="x in tableParams">
+                                <td>{{x.menuName}}</td>
+                                <td>{{x.pageName}}</td>
+                                <td class="text-nowrap text-center">
+                                    <input type="checkbox" ng-model="x.isAccess" />
+                                </td>
+                                <td class="text-nowrap text-center">
+                                    <input type="checkbox" ng-model="x.isAdd" />
+                                </td>
+                                <td class="text-nowrap text-center">
+                                    <input type="checkbox" ng-model="x.isEdit" />
+                                </td>
+                                <td class="text-nowrap text-center">
+                                    <input type="checkbox" ng-model="x.isDelete" />
+                                </td>
+                                <td class="text-nowrap text-center">
+                                    <input type="checkbox" ng-model="x.isReport" />
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/Areas/Employer/_Employer/Code/UtilitySetting/employer-templatepermission-controller.js?version=@(System.Configuration.ConfigurationManager.AppSettings["version"].ToString())"></script>
+}

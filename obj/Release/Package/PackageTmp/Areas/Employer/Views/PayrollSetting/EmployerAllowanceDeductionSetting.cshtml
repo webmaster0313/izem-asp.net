@@ -1,0 +1,429 @@
+﻿
+@{
+    ViewBag.Title = "Employer Allowance-Deduction-Setting";
+    Layout = "~/Areas/Employer/Views/Shared/_Layout.cshtml";
+}
+
+<div ng-controller="employer-allowancededuction-controller">
+
+    @*Entry List*@
+
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Payroll Process</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Allowance Deduction Setup</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <div class="col-md-12" ng-show="hideEntry">
+            <div class="card">
+                <div class="card-header">
+                    <div class="float-right">
+                        <a class="listMenu" data-toggle="tooltip" data-placement="top"
+                           title="Open search" ng-click="onClick_OpenSearch()">
+                            <i class="mdi mdi-filter icon-font-size filterMenu"></i>
+                        </a>
+                        <a class="listMenu" data-toggle="tooltip" data-placement="top"
+                           title="Reset result" ng-click="onClick_ResetSearch()">
+                            <i class="mdi mdi-view-list icon-font-size viewMenu"></i>
+                        </a>
+                        <a class="listMenu" data-toggle="tooltip" data-placement="top"
+                           title="New entry"
+                           ng-show="isAddPermit"
+                           ng-click="onClick_AddRecord()">
+                            <i class="mdi mdi-plus-box icon-font-size addMenu"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <table class="table table-hover table-responsive">
+                        <thead>
+                            <tr>
+                                <th class="widthCenter"
+                                    ng-if="isEditPermit">Action</th>
+                                <th class="widthCenter">Code</th>
+                                <th>Description</th>
+                                <th class="widthCenter">Status</th>
+                                <th class="widthCenter">Prorate</th>
+                                <th class="widthCenter">EPF</th>
+                                <th class="widthCenter">Socso</th>
+                                <th class="widthCenter">EIS</th>
+                                <th class="widthCenter">HRDF</th>
+                                <th class="widthCenter">PCB</th>
+                                <th class="widthCenter">OT</th>
+                                <th class="widthCenter">NPL</th>
+                                <th class="widthCenter">Add Pay</th>
+                                <th class="widthCenter">CP8A</th>
+                                <th class="widthCenter">CP22A</th>
+                                <th class="widthCenter">PTPTN</th>
+                                <th class="widthCenter">Zakat</th>
+                                <th class="widthCenter">Tabung Haji</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-if="!loaded">
+                                <td class="loading"
+                                    ng-if="isEditPermit">
+                                    <div class="bar"></div>
+                                </td>
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                            </tr>
+                            <tr ng-if="loaded" ng-repeat="x in tableParams">
+                                <td class="text-nowrap text-center"
+                                    ng-if="isEditPermit">
+                                    <a class="cursor" ng-click="onClick_EditRecord(x.employerallowanceId)">
+                                        <i class="mdi mdi-pencil-box icon-font-size text-info"></i>
+                                    </a>
+                                </td>
+                                <td>{{x.employerallowanceCode}}</td>
+                                <td>{{x.employerallowanceDescription}}</td>
+                                <td class="text-nowrap text-center">
+                                    <span style="width: 80px;" ng-if="x.employerallowanceIsActive.data[0]=='0'" class="badge badge-dark">InActive</span>
+                                    <span style="width: 80px;" ng-if="x.employerallowanceIsActive.data[0]=='1'" class="badge badge-info">Active</span>
+                                </td>
+
+                                <td class="text-nowrap text-center">
+                                    <span style="width: 40px;" ng-if="x.employerallowanceProrate.data[0]=='0'" class="badge badge-danger">No</span>
+                                    <span style="width: 40px;" ng-if="x.employerallowanceProrate.data[0]=='1'" class="badge badge-success">Yes</span>
+                                </td>
+                                <td class="text-nowrap text-center">
+                                    <span style="width: 40px;" ng-if="x.employerallowanceEpf.data[0]=='0'" class="badge badge-danger">No</span>
+                                    <span style="width: 40px;" ng-if="x.employerallowanceEpf.data[0]=='1'" class="badge badge-success">Yes</span>
+                                </td>
+                                <td class="text-nowrap text-center">
+                                    <span style="width: 40px;" ng-if="x.employerallowanceSocso.data[0]=='0'" class="badge badge-danger">No</span>
+                                    <span style="width: 40px;" ng-if="x.employerallowanceSocso.data[0]=='1'" class="badge badge-success">Yes</span>
+                                </td>
+                                <td class="text-nowrap text-center">
+                                    <span style="width: 40px;" ng-if="x.employerallowanceEIS.data[0]=='0'" class="badge badge-danger">No</span>
+                                    <span style="width: 40px;" ng-if="x.employerallowanceEIS.data[0]=='1'" class="badge badge-success">Yes</span>
+                                </td>
+                                <td class="text-nowrap text-center">
+                                    <span style="width: 40px;" ng-if="x.employerallowanceHRDF.data[0]=='0'" class="badge badge-danger">No</span>
+                                    <span style="width: 40px;" ng-if="x.employerallowanceHRDF.data[0]=='1'" class="badge badge-success">Yes</span>
+                                </td>
+                                <td class="text-nowrap text-center">
+                                    <span style="width: 40px;" ng-if="x.employerallowancePCB.data[0]=='0'" class="badge badge-danger">No</span>
+                                    <span style="width: 40px;" ng-if="x.employerallowancePCB.data[0]=='1'" class="badge badge-success">Yes</span>
+                                </td>
+                                <td class="text-nowrap text-center">
+                                    <span style="width: 40px;" ng-if="x.employerallowanceOT.data[0]=='0'" class="badge badge-danger">No</span>
+                                    <span style="width: 40px;" ng-if="x.employerallowanceOT.data[0]=='1'" class="badge badge-success">Yes</span>
+                                </td>
+                                <td class="text-nowrap text-center">
+                                    <span style="width: 40px;" ng-if="x.employerallowanceNPL.data[0]=='0'" class="badge badge-danger">No</span>
+                                    <span style="width: 40px;" ng-if="x.employerallowanceNPL.data[0]=='1'" class="badge badge-success">Yes</span>
+                                </td>
+                                <td class="text-nowrap text-center">
+                                    <span style="width: 40px;" ng-if="x.employerallowanceAddPay.data[0]=='0'" class="badge badge-danger">No</span>
+                                    <span style="width: 40px;" ng-if="x.employerallowanceAddPay.data[0]=='1'" class="badge badge-success">Yes</span>
+                                </td>
+                                <td class="text-nowrap text-center">
+                                    <span style="width: 40px;" ng-if="x.employerallowanceCP8A.data[0]=='0'" class="badge badge-danger">No</span>
+                                    <span style="width: 40px;" ng-if="x.employerallowanceCP8A.data[0]=='1'" class="badge badge-success">Yes</span>
+                                </td>
+                                <td class="text-nowrap text-center">
+                                    <span style="width: 40px;" ng-if="x.employerallowanceCP22A.data[0]=='0'" class="badge badge-danger">No</span>
+                                    <span style="width: 40px;" ng-if="x.employerallowanceCP22A.data[0]=='1'" class="badge badge-success">Yes</span>
+                                </td>
+                                <td class="text-nowrap text-center">
+                                    <span style="width: 40px;" ng-if="x.employerallowancePTPTN.data[0]=='0'" class="badge badge-danger">No</span>
+                                    <span style="width: 40px;" ng-if="x.employerallowancePTPTN.data[0]=='1'" class="badge badge-success">Yes</span>
+                                </td>
+                                <td class="text-nowrap text-center">
+                                    <span style="width: 40px;" ng-if="x.employerallowanceZakat.data[0]=='0'" class="badge badge-danger">No</span>
+                                    <span style="width: 40px;" ng-if="x.employerallowanceZakat.data[0]=='1'" class="badge badge-success">Yes</span>
+                                </td>
+                                <td class="text-nowrap text-center">
+                                    <span style="width: 40px;" ng-if="x.employerallowanceTabungHaji.data[0]=='0'" class="badge badge-danger">No</span>
+                                    <span style="width: 40px;" ng-if="x.employerallowanceTabungHaji.data[0]=='1'" class="badge badge-success">Yes</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="float-left">
+                                <select ng-model="pageSizeSelected" ng-change="changePageSize()" class="badge">
+                                    <option value="15">15</option>
+                                    <option value="30">30</option>
+                                    <option value="50">50</option>
+                                </select>
+                            </div>
+                            <div class="float-right">
+                                <pagination total-items="totalCount" ng-change="pageChanged()"
+                                            items-per-page="pageSizeSelected" direction-links="true" ng-model="pageIndex"
+                                            next-text=">" previous-text="<"
+                                            max-size="maxSize" class="pagination" first-text="First" last-text="Last"
+                                            boundary-links="true" rotate="false"
+                                            num-pages="numPages">
+                                </pagination>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @* Entry Form *@
+
+    <div class="row">
+        <div class="col-md-12" ng-show="!hideEntry">
+
+            <form name="dataForm" autocomplete="off">
+                <div class="card">
+                    <div class="card-header">
+                        Manage Allowance Deduction
+                    </div>
+                    <div class="card-body">
+                        <div style="display:none;">
+                            <input type="text" ng-model="employerallowanceId" />
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>OT Code</label>
+                                    <input type="text" id="_employerallowanceCode" class="form-control form-control-lg"
+                                           onkeypress="return blockSpecialChar(event)"
+                                           ng-model="employerallowanceCode">
+                                    <small id="emailHelp" class="form-text text-muted">Please use <b>-</b> instead of space.</small>
+                                </div>
+                                <div class="form-group">
+                                    <label>Description </label>
+                                    <textarea type="text" class="form-control form-control-lg"
+                                              rows="3"
+                                              ng-model="employerallowanceDescription"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label>EA-Form Position</label>
+                                    <input type="text" class="form-control form-control-lg"
+                                           ng-model="employerallowanceEAPosition">
+                                </div>
+                                <div class="form-group">
+                                    <label>CP22A Position</label>
+                                    <input type="text" class="form-control form-control-lg"
+                                           ng-model="employerallowanceCP22APosition">
+                                </div>
+                                <div class="form-check">
+                                    <label class="form-check-label text-muted">
+                                        <input type="checkbox" class="form-check-input"
+                                               ng-model="employerallowanceBenefitInKind"> Benefit in Kind
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <label class="form-check-label text-muted">
+                                        <input type="checkbox" class="form-check-input"
+                                               ng-model="employerallowanceIsActive"> Is Active
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-9">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="form-check">
+                                            <label class="form-check-label text-muted">
+                                                <input type="checkbox" class="form-check-input"
+                                                       ng-model="employerallowanceProrate"> Prorate
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-check">
+                                            <label class="form-check-label text-muted">
+                                                <input type="checkbox" class="form-check-input"
+                                                       ng-model="employerallowanceEpf"> EPF
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-check">
+                                            <label class="form-check-label text-muted">
+                                                <input type="checkbox" class="form-check-input"
+                                                       ng-model="employerallowanceSocso"> Socso
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-check">
+                                            <label class="form-check-label text-muted">
+                                                <input type="checkbox" class="form-check-input"
+                                                       ng-model="employerallowancePCB"> PCB
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-check">
+                                            <label class="form-check-label text-muted">
+                                                <input type="checkbox" class="form-check-input"
+                                                       ng-model="employerallowanceEIS"> EIS
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-check">
+                                            <label class="form-check-label text-muted">
+                                                <input type="checkbox" class="form-check-input"
+                                                       ng-model="employerallowanceOT"> OT
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-check">
+                                            <label class="form-check-label text-muted">
+                                                <input type="checkbox" class="form-check-input"
+                                                       ng-model="employerallowanceNPL"> NPL
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-check">
+                                            <label class="form-check-label text-muted">
+                                                <input type="checkbox" class="form-check-input"
+                                                       ng-model="employerallowanceCP8A"> CP8A
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-check">
+                                            <label class="form-check-label text-muted">
+                                                <input type="checkbox" class="form-check-input"
+                                                       ng-model="employerallowanceCP22A"> CP22A
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-check">
+                                            <label class="form-check-label text-muted">
+                                                <input type="checkbox" class="form-check-input"
+                                                       ng-model="employerallowanceCP38Tax"> CP38TAX
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-check">
+                                            <label class="form-check-label text-muted">
+                                                <input type="checkbox" class="form-check-input"
+                                                       ng-model="employerallowanceAddPay"> Add Pay
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-check">
+                                            <label class="form-check-label text-muted">
+                                                <input type="checkbox" class="form-check-input"
+                                                       ng-model="employerallowancePTPTN"> PTPTN
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-check">
+                                            <label class="form-check-label text-muted">
+                                                <input type="checkbox" class="form-check-input"
+                                                       ng-model="employerallowanceZakat"> Zakat
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-check">
+                                            <label class="form-check-label text-muted">
+                                                <input type="checkbox" class="form-check-input"
+                                                       ng-model="employerallowanceTabungHaji"> Tabung Haji
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-check">
+                                            <label class="form-check-label text-muted">
+                                                <input type="checkbox" class="form-check-input"
+                                                       ng-model="employerallowanceHRDF"> HRDF
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <input type="submit" class="btn btn-gradient-primary m-1" ng-click="dataForm.$valid && onClick_Submit()" />
+                        <button type="button" class="btn btn-inverse-dark m-1" ng-click="onClick_Cancel()">Cancel</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    @*Search Modal*@
+
+    <div class="modal fade" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel"
+         aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog" style="max-width:600px !important;" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="searchModalLabel">Search Result</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Allowance Code</label>
+                                <input type="text" class="form-control"
+                                       ng-model="SearchEmployerallowanceCode">
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Status</label>
+                                <select ng-model="SearchEmployerallowanceIsActive" class="form-control">
+                                    <option value="true">Active</option>
+                                    <option value="false">InActive</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" ng-click="onClick_CloseSearch()">Close</button>
+                    <button type="button" class="btn btn-primary" ng-click="onClick_SearchResult()">Search</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@section scripts{
+    <script src="~/Areas/Employer/_Employer/Code/PayrollSetting/employer-allowancededuction-controller.js?version=@(System.Configuration.ConfigurationManager.AppSettings["version"].ToString())"></script>
+    <script type="text/javascript">
+        function blockSpecialChar(e) {
+            var k;
+            document.all ? k = e.keyCode : k = e.which;
+            if (k == 45) {
+                return;
+            }
+            return ((k > 64 && k < 91) || (k > 96 && k < 123) || k == 8 || (k >= 48 && k <= 57));
+        }
+    </script>
+}

@@ -1,0 +1,220 @@
+﻿
+@{
+    ViewBag.Title = "ExeSetup";
+    Layout = "~/Areas/Backoffice/Views/Shared/_Layout.cshtml";
+}
+
+<div ng-controller="home-exesetup-controller">
+
+    @*Entry List*@
+
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Master Entry</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Exe-Setup</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <div class="col-md-12" ng-show="hideEntry">
+            <div class="card">
+                <div class="card-header">
+                    <div class="float-right">
+                        <a class="listMenu" data-toggle="tooltip" data-placement="top"
+                           title="New entry" ng-click="onClick_AddRecord()">
+                            <i class="mdi mdi-plus-box icon-font-size addMenu"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <table class="table table-hover table-responsive-xl">
+                        <thead>
+                            <tr>
+                                <th>Employer</th>
+                                <th>Private Key</th>
+                                <th>Location</th>
+                                <th class="widthCenter">Pattern</th>
+                                <th class="widthCenter">Active</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-if="!loaded">
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                            </tr>
+                            <tr ng-if="loaded" ng-repeat="x in tableParams">
+                                <td>{{x.employerName}}</td>
+                                <td>{{x.employerIdEncrypt}}</td>
+                                <td>{{x.location}}</td>
+                                <td>{{x.enrollNoPattern}}</td>
+                                <td class="text-nowrap">
+                                    <a class="cursor" ng-click="onClick_EditRecord(x.companyAuthId)">
+                                        <i class="mdi mdi-pencil-box icon-font-size text-info"></i>
+                                    </a>
+                                    <a class="cursor" ng-click="onClick_DeleteRecord(x.companyAuthId)">
+                                        <i class="mdi mdi-delete-forever icon-font-size text-danger"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="float-left">
+                                <select ng-model="pageSizeSelected" ng-change="changePageSize()" class="badge">
+                                    <option value="15">15</option>
+                                    <option value="30">30</option>
+                                    <option value="50">50</option>
+                                </select>
+                            </div>
+                            <div class="float-right">
+                                <pagination total-items="totalCount" ng-change="pageChanged()"
+                                            items-per-page="pageSizeSelected" direction-links="true" ng-model="pageIndex"
+                                            next-text=">" previous-text="<"
+                                            max-size="maxSize" class="pagination" first-text="First" last-text="Last"
+                                            boundary-links="true" rotate="false"
+                                            num-pages="numPages">
+                                </pagination>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @* Entry Form *@
+
+    <div class="row">
+        <div class="col-md-12" ng-show="!hideEntry">
+            <div class="card">
+                <form name="dataForm" autocomplete="off">
+                    <div class="card-header">
+                        Manage Exe-Setup
+                    </div>
+                    <div class="card-body">
+                        <div style="display:none;">
+                            <input type="text" ng-model="companyAuthId" />
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="text-nowrap">Employer<span class="text-danger">*</span></label>
+                                    <select ng-model="employerId" class="form-control" ng-change="onChanged_UpdatePattern(employerId)" required>
+                                        <option value="">-- Select --</option>
+                                        <option ng-selected="x == employerId" ng-repeat="x in fill_employer" ng-value="x.employerId">
+                                            {{x.employerName}}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="text-nowrap">
+                                        Enrollment Pattern<span class="text-danger">*</span>
+                                        <a class="cursor text-danger" data-toggle="tooltip" title="Format that use for the machine enrollment!">
+                                            <i class="mdi mdi-message-alert"></i>
+                                        </a>
+                                    </label>
+                                    <input type="text" class="form-control form-control-lg" disabled placeholder="I001E00001"
+                                           ng-model="enrollNoPattern">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="text-nowrap">
+                                        Login UserId
+                                        <span class="text-danger">*</span>
+                                    </label>
+                                    <input type="text" class="form-control form-control-lg" required
+                                           ng-model="companyAuthUser">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="text-nowrap">
+                                        Login Password<span class="text-danger">*</span>
+                                    </label>
+                                    <input type="text" class="form-control form-control-lg" required
+                                           ng-model="companyAuthPassword">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="text-nowrap">
+                                        Company Location<span class="text-danger">*</span>
+                                    </label>
+                                    <input type="text" class="form-control form-control-lg" required
+                                           ng-model="location">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="text-nowrap">
+                                        Notification Email
+                                    </label>
+                                    <input type="email" class="form-control form-control-lg"
+                                           ng-model="downloadEmail">
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <input type="submit" class="btn btn-gradient-primary m-1" ng-click="dataForm.$valid && onClick_Submit()" />
+                        <button type="button" class="btn btn-inverse-dark m-1" ng-click="onClick_Cancel()">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    @*Search Modal*@
+
+    <div class="modal fade" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel"
+         aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="searchModalLabel">Search Result</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Country</label>
+                                <input type="text" class="form-control"
+                                       ng-model="SearchMasterCountryTitle">
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Status</label>
+                                <select ng-model="SearchMastercountryIsActive" class="form-control">
+                                    <option value="true">Active</option>
+                                    <option value="false">InActive</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" ng-click="onClick_CloseSearch()">Close</button>
+                    <button type="button" class="btn btn-primary" ng-click="onClick_SearchResult()">Search</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@section scripts{
+    <script src="~/Areas/Backoffice/_Backoffice/Code/Home/home-exesetup-controller.js"></script>
+}

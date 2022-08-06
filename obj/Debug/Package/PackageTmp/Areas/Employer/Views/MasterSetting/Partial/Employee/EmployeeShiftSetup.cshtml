@@ -1,0 +1,89 @@
+﻿<div ng-controller="employee-shiftsetup-controller">
+    <div class="row">
+
+        <div class="col-md-6 mb-1">
+            <form name="employeeShiftform">
+                <div class="card mb-1">
+                    <div class="card-header"></div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Shift<span class="text-danger">*</span></label>
+                                    <select ng-model="employerMasterShiftId" class="form-control" required chosen ng-disabled="disabled">
+                                        <option value="">-- Select --</option>
+                                        <option ng-selected="x == employerMasterShiftId" ng-repeat="x in fill_employerMasterShift" ng-value="x.employerMasterShiftId">
+                                            {{x.shiftName}}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-check">
+                                    <label class="form-check-label cursor text-muted">
+                                        <input type="checkbox" class="form-check-input"
+                                               ng-change="onChange_UpdateStatus()"
+                                               ng-model="ismultiShift"> Multiple Shift?
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-check">
+                                    <label class="form-check-label cursor text-muted">
+                                        <input type="checkbox" class="form-check-input"
+                                               ng-change="onChange_UpdateStatus()"
+                                               ng-model="employeeIsManualAttendance"> Mobile Attendance?
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <input type="submit" class="btn btn-gradient-primary "
+                               ng-disabled="disabled"
+                               ng-click="employeeShiftform.$valid && onClick_Submit()"
+                               value="Submit" />
+
+                        <button type="button" class="btn btn-inverse-dark"
+                                value="Cancel" ng-click="onClick_CloseEmployeeShiftSetup()">
+                            Cancel
+                        </button>
+
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="col-md-6 mb-1">
+            <div class="card">
+                <div class="card-header">
+                    Manage Employee Shift
+                </div>
+                <div class="card-body">
+                    <table class="table table-hover table-responsive-xl">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th class="widthCenter">Active</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-if="!loaded">
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                            </tr>
+                            <tr ng-if="loaded" ng-repeat="x in tableParams">
+                                <td>{{x.shiftName}}</td>
+                                <td class="text-nowrap">
+                                    <a class="cursor" ng-click="onClick_DeleteRecord(x.employeeassignshiftid)">
+                                        <i class="mdi mdi-delete-forever icon-font-size text-danger"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer"></div>
+            </div>
+        </div>
+    </div>
+</div>

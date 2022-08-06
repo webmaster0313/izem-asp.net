@@ -1,0 +1,264 @@
+﻿
+@{
+    ViewBag.Title = "Employer Hourly-Salary Process";
+    Layout = "~/Areas/Employer/Views/Shared/_Layout.cshtml";
+}
+
+<div ng-controller="employer-hourlysalaryprocess-controller">
+    @*Entry List*@
+
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Payroll Process</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Houlry Process</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <div class="col-md-12" ng-show="hideEntry">
+            <div class="card">
+                <div class="card-header">
+                    <div class="float-right">
+                        <a class="listMenu" data-toggle="tooltip" data-placement="top"
+                           title="Open search" ng-click="onClick_OpenSearch()">
+                            <i class="mdi mdi-filter icon-font-size filterMenu"></i>
+                        </a>
+                        <a class="listMenu" data-toggle="tooltip" data-placement="top"
+                           title="Reset result" ng-click="onClick_ResetSearch()">
+                            <i class="mdi mdi-view-list icon-font-size viewMenu"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <table class="table table-hover table-responsive-xl">
+                        <thead>
+                            <tr>
+                                <th>Payroll Date</th>
+                                <th class="widthCenter">Detail</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-if="!loaded">
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                            </tr>
+                            <tr ng-if="loaded" ng-repeat="x in tableParamsOne">
+                                <td>{{x._payrollDate}}</td>
+                                <td class="text-center">
+                                    <a class="cursor"
+                                       ng-click="onLoad_MasterService(x._payrollDate)">
+                                        <i class="mdi mdi-note-text icon-font-size editMenu"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer"></div>
+            </div>
+        </div>
+    </div>
+
+    @* Entry Form *@
+
+    <div class="row">
+        <div class="col-md-12" ng-show="!hideEntry">
+            <div class="card">
+                <div class="card-header">
+                    <div class="float-left">
+                        <a class="listMenu" data-toggle="tooltip" data-placement="top"
+                           ng-click="onClick_BacktoMain()">
+                            <span style="width: 70px;" class="badge inActiveColor">Back</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <table class="table table-hover table-responsive-xl">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Name</th>
+                                <th>In-Time</th>
+                                <th>Out-Time</th>
+                                <th>Total-Time</th>
+                                <th class="widthCenter">Basic Salary</th>
+                                <th class="widthCenter">Net Salary</th>
+                                <th class="widthCenter"
+                                    ng-show="isEditPermit">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-if="!loaded1">
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"
+                                    ng-show="isEditPermit">
+                                    <div class="bar"></div>
+                                </td>
+                            </tr>
+                            <tr ng-if="loaded1" ng-repeat="x in tableParams">
+                                <td>{{x._payrollDate}}</td>
+                                <td>{{x.memberName}}</td>
+                                <td>{{x._payrollInTime}}</td>
+                                <td>{{x._payrollOutTime}}</td>
+                                <td>{{x.totalTime}}</td>
+                                <td class="text-center">
+                                    <input type="text" style="width:100px;" ng-model="x.payrollBasicSalaryRound4">
+                                </td>
+                                <td class="text-center">
+                                    <input type="text" style="width:100px;" ng-model="x.payrollNetSalaryRound2">
+                                </td>
+                                <td class="text-nowrap text-center"
+                                    ng-show="isEditPermit">
+                                    <a class="cursor"
+                                       ng-click="onClick_EditRecord(x)">
+                                        <i class="mdi mdi-pencil-box icon-font-size editMenu"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="float-left">
+                                <select ng-model="pageSizeSelected" ng-change="changePageSize()" class="badge">
+                                    <option value="15">15</option>
+                                    <option value="30">30</option>
+                                    <option value="50">50</option>
+                                </select>
+                            </div>
+                            <div class="float-right">
+                                <pagination total-items="totalCount" ng-change="pageChanged()"
+                                            items-per-page="pageSizeSelected" direction-links="true" ng-model="pageIndex"
+                                            next-text=">" previous-text="<"
+                                            max-size="maxSize" class="pagination" first-text="First" last-text="Last"
+                                            boundary-links="true" rotate="false"
+                                            num-pages="numPages">
+                                </pagination>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @*Search Modal*@
+
+    <div class="modal fade" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel"
+         aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog" style="max-width:600px !important;" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="searchModalLabel">Search Result</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>From Date</label>
+                                <input type="date" class="form-control form-control-lg"
+                                       ng-model="fromDate">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>To Date</label>
+                                <input type="date" class="form-control form-control-lg"
+                                       ng-model="toDate">
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Employee</label>
+                                <select ng-model="employeeId" class="form-control" chosen multiple>
+                                    <option value="">-- Select --</option>
+                                    <option ng-repeat="x in fill_SearchEmployeeId" ng-value="x.employeeId">
+                                        {{x.memberName}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Department</label>
+                                <select ng-model="employerdepartmentId" class="form-control" chosen multiple>
+                                    <option value="">-- Select --</option>
+                                    <option ng-repeat="x in fill_SearchEmployerdepartmentId" ng-value="x.employerdepartmentId">
+                                        {{x.employerdepartmentTitle}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Branch</label>
+                                <select ng-model="employerbranchId" class="form-control" chosen multiple>
+                                    <option value="">-- Select --</option>
+                                    <option ng-repeat="x in fill_SearchEmployerbranchId" ng-value="x.employerbranchId">
+                                        {{x.employerbranchName}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6" ng-show="isReportPermit">
+                            <div class="form-group">
+                                <label>Excel Report</label>
+                                <select ng-model="excelReport" class="form-control"
+                                        ng-change="onChange_Reports('Excel')"
+                                        chosen>
+                                    <option value="">-- Select --</option>
+                                    <option value="employeewise">Pay Voucher</option>
+                                    <option value="paymentmethod">Payment method</option>
+                                    <option value="departmentwise">Pay summary sort by department</option>
+                                    <option value="branchwise">Pay summary sort by branch</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6" ng-show="isReportPermit">
+                            <div class="form-group">
+                                <label>PDF Report</label>
+                                <select ng-model="pdfReport" class="form-control"
+                                        ng-change="onChange_Reports('PDF')"
+                                        chosen>
+                                    <option value="">-- Select --</option>
+                                    <option value="employeewise">Pay Voucher</option>
+                                    <option value="paymentmethod">Payment method</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="row">
+                        <div class="col-md-12 text-right">
+                            <button type="button" class="btn btn-danger" ng-show="pdfReport == 'employeewise'" ng-click="onClick_SendEmail()"> Send Email </button>
+                            <button type="button" class="btn btn-behance" ng-show="isExcel" ng-click="onClick_DownloadExcel()">Download Excel</button>
+                            <button type="button" class="btn btn-behance" ng-show="isPDF" ng-click="onClick_DownloadPDF()"> Open PDF </button>
+                            <button type="button" class="btn btn-primary"  ng-click="onClick_ExecuteAttendance()"> Execute </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" ng-click="onClick_CloseSearch()">Close</button>
+                    <button type="button" class="btn btn-primary" ng-click="onClick_SearchResult()">Search</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @*Excel Download*@
+    <div style="display:none">
+        <table id="tabledata"></table>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/Areas/Employer/_Employer/Code/PayrollSetting/employer-hourlysalaryprocess-controller.js?version=@(System.Configuration.ConfigurationManager.AppSettings["version"].ToString())"></script>
+}

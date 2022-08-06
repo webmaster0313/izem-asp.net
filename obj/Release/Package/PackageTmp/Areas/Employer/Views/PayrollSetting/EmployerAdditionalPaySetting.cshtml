@@ -1,0 +1,237 @@
+﻿
+@{
+    ViewBag.Title = "Employer-AdditionalPay-Setting";
+    Layout = "~/Areas/Employer/Views/Shared/_Layout.cshtml";
+}
+
+<div ng-controller="employer-additionalpay-controller">
+
+    @*Entry List*@
+
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Payroll Process</a></li>
+            <li class="breadcrumb-item active" aria-current="page">AdditionalPay Setup</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <div class="col-md-12" ng-show="hideEntry">
+            <div class="card">
+                <div class="card-header">
+                    <div class="float-right">
+                        <a href="#" class="badge badge-info"
+                            ng-show="!loaded"
+                           ng-click="onClick_AddDefault()">
+                            Add Default
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <table class="table table-hover table-responsive-xl">
+                        <thead>
+                            <tr>
+                                <th class="widthCenter">Code</th>
+                                <th class="widthRight">Rate</th>
+                                <th>Description</th>
+                                <th class="widthCenter">EPF</th>
+                                <th class="widthCenter">Socso</th>
+                                <th class="widthCenter">EIS</th>
+                                <th class="widthCenter">PCB</th>
+                                <th class="widthCenter">CP8A</th>
+                                <th class="widthCenter">CP22A</th>
+                                <th class="widthCenter">HRDF</th>
+                                <th class="widthCenter"
+                                    ng-show="isEditPermit">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-if="!loaded">
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"
+                                    ng-show="isEditPermit">
+                                    <div class="bar"></div>
+                                </td>
+                            </tr>
+                            <tr ng-if="loaded" ng-repeat="x in tableParams">
+                                <td>{{x.employeradditionalpaysetupCode}}</td>
+                                <td class="text-right">{{x.employeradditionalpaysetupRateRound2}}</td>
+                                <td>{{x.employeradditionalpaysetupDescription}}</td>
+                                <td class="text-nowrap text-center">
+                                    <span style="width: 70px;" ng-if="x.employeradditionalpaysetupEPF.data[0]=='0'" class="badge badge-danger">No</span>
+                                    <span style="width: 70px;" ng-if="x.employeradditionalpaysetupEPF.data[0]=='1'" class="badge badge-success">Yes</span>
+                                </td>
+                                <td class="text-nowrap text-center">
+                                    <span style="width: 70px;" ng-if="x.employeradditionalpaysetupSocso.data[0]=='0'" class="badge badge-danger">No</span>
+                                    <span style="width: 70px;" ng-if="x.employeradditionalpaysetupSocso.data[0]=='1'" class="badge badge-success">Yes</span>
+                                </td>
+
+                                <td class="text-nowrap text-center">
+                                    <span style="width: 70px;" ng-if="x.employeradditionalpaysetupEIS.data[0]=='0'" class="badge badge-danger">No</span>
+                                    <span style="width: 70px;" ng-if="x.employeradditionalpaysetupEIS.data[0]=='1'" class="badge badge-success">Yes</span>
+                                </td>
+                                <td class="text-nowrap text-center">
+                                    <span style="width: 70px;" ng-if="x.employeradditionalpaysetupPCB.data[0]=='0'" class="badge badge-danger">No</span>
+                                    <span style="width: 70px;" ng-if="x.employeradditionalpaysetupPCB.data[0]=='1'" class="badge badge-success">Yes</span>
+                                </td>
+                                <td class="text-nowrap text-center">
+                                    <span style="width: 70px;" ng-if="x.employeradditionalpaysetupCP8A.data[0]=='0'" class="badge badge-danger">No</span>
+                                    <span style="width: 70px;" ng-if="x.employeradditionalpaysetupCP8A.data[0]=='1'" class="badge badge-success">Yes</span>
+                                </td>
+                                <td class="text-nowrap text-center">
+                                    <span style="width: 70px;" ng-if="x.employeradditionalpaysetupCP22A.data[0]=='0'" class="badge badge-danger">No</span>
+                                    <span style="width: 70px;" ng-if="x.employeradditionalpaysetupCP22A.data[0]=='1'" class="badge badge-success">Yes</span>
+                                </td>
+                                <td class="text-nowrap text-center">
+                                    <span style="width: 70px;" ng-if="x.employeradditionalpaysetupHRDF.data[0]=='0'" class="badge badge-danger">No</span>
+                                    <span style="width: 70px;" ng-if="x.employeradditionalpaysetupHRDF.data[0]=='1'" class="badge badge-success">Yes</span>
+                                </td>
+                                <td class="text-nowrap text-center"
+                                    ng-show="isEditPermit">
+                                    <a class="cursor" ng-click="onClick_EditRecord(x.employeradditionalpaysetupId)">
+                                        <i class="mdi mdi-pencil-box icon-font-size text-info"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @* Entry Form *@
+
+    <div class="row">
+        <div class="col-md-12" ng-show="!hideEntry">
+            <div class="card">
+                <form name="dataForm" autocomplete="off">
+                    <div class="card-header">
+                        Manage Department
+                    </div>
+                    <div class="card-body">
+                        <div style="display:none;">
+                            <input type="text" ng-model="employeradditionalpaysetupId" />
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>OT Code</label>
+                                    <input type="text" class="form-control form-control-lg" disabled
+                                           ng-model="employeradditionalpaysetupCode">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Rate</label>
+                                    <input type="text" class="form-control form-control-lg decimalInputValidation"
+                                           ng-model="employeradditionalpaysetupRate">
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Description </label>
+                                    <textarea type="text" class="form-control form-control-lg"
+                                              rows="3"
+                                              ng-model="employeradditionalpaysetupDescription"></textarea>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-check">
+                                    <label class="form-check-label text-muted">
+                                        <input type="checkbox" class="form-check-input"
+                                               ng-model="employeradditionalpaysetupEPF"> EPF
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-check">
+                                    <label class="form-check-label text-muted">
+                                        <input type="checkbox" class="form-check-input"
+                                               ng-model="employeradditionalpaysetupSocso"> Socso
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-check">
+                                    <label class="form-check-label text-muted">
+                                        <input type="checkbox" class="form-check-input"
+                                               ng-model="employeradditionalpaysetupPCB"> PCB
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-check">
+                                    <label class="form-check-label text-muted">
+                                        <input type="checkbox" class="form-check-input"
+                                               ng-model="employeradditionalpaysetupEIS"> EIS
+                                    </label>
+                                </div>
+                            </div>
+                            @*<div class="col-md-6">
+            <div class="form-check">
+                <label class="form-check-label text-muted">
+                    <input type="checkbox" class="form-check-input"
+                           ng-model="employeradditionalpaysetupOT"> OT
+                </label>
+            </div>
+        </div>*@
+                            @*<div class="col-md-6">
+            <div class="form-check">
+                <label class="form-check-label text-muted">
+                    <input type="checkbox" class="form-check-input"
+                           ng-model="employeradditionalpaysetupNPL"> NPL
+                </label>
+            </div>
+        </div>*@
+                            <div class="col-md-6">
+                                <div class="form-check">
+                                    <label class="form-check-label text-muted">
+                                        <input type="checkbox" class="form-check-input"
+                                               ng-model="employeradditionalpaysetupCP8A"> CP8A
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-check">
+                                    <label class="form-check-label text-muted">
+                                        <input type="checkbox" class="form-check-input"
+                                               ng-model="employeradditionalpaysetupCP22A"> CP22A
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-check">
+                                    <label class="form-check-label text-muted">
+                                        <input type="checkbox" class="form-check-input"
+                                               ng-model="employeradditionalpaysetupHRDF"> HRDF
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <input type="submit" class="btn btn-gradient-primary m-1" ng-click="dataForm.$valid && onClick_Submit()" />
+                        <button type="button" class="btn btn-inverse-dark m-1" ng-click="onClick_Cancel()">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@section scripts{
+    <script src="~/Areas/Employer/_Employer/Code/PayrollSetting/employer-additionalpay-controller.js?version=@(System.Configuration.ConfigurationManager.AppSettings["version"].ToString())"></script>
+}

@@ -1,0 +1,228 @@
+﻿
+<div ng-controller="employee-customratesetup-controller">
+    <div class="row">
+        <div class="col-md-3 mb-1">
+            <div class="card">
+                <div class="card-header">
+                    Setting Tab
+                </div>
+                <div class="card-body">
+                    <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                        <a class="nav-link btn btn-outline-secondary mb-2 active" id="v-pills-shift-tab" data-toggle="pill"
+                           href="#v-pills-shift" role="tab" aria-controls="v-pills-shift" aria-selected="true" ng-click="onLoad_MasterService_ShiftSetup()">
+                            Shift Rate
+                        </a>
+                        <a class="nav-link btn btn-outline-secondary mb-2" id="v-pills-ot-tab" data-toggle="pill"
+                           href="#v-pills-ot" role="tab" aria-controls="v-pills-ot" aria-selected="false" ng-click="onLoad_MasterService_OTSetup()">
+                            Over-time Rate
+                        </a>
+                        <a class="nav-link btn btn-outline-secondary mb-2" id="v-pills-addpay-tab" data-toggle="pill"
+                           href="#v-pills-addpay" role="tab" aria-controls="v-pills-addpay" aria-selected="false" ng-click="onLoad_MasterService_AdditionalPaySetup()">
+                            Additional Pay Rate
+                        </a>
+                        <a class="nav-link btn btn-outline-secondary mb-2" id="v-pills-npl-tab" data-toggle="pill"
+                           href="#v-pills-npl" role="tab" aria-controls="v-pills-npl" aria-selected="false" ng-click="onLoad_MasterService_NPLSetup()">
+                            NPL Rate
+                        </a>
+                        <a class="nav-link btn btn-outline-secondary mb-2" id="v-pills-statutory-tab" data-toggle="pill"
+                           href="#v-pills-statutory" role="tab" aria-controls="v-pills-statutory" aria-selected="false" ng-click="onLoad_MasterService_StatutorySetup()">
+                            Statutory Rate
+                        </a>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <input type="button" class="btn btn-inverse-dark"
+                           ng-click="onClick_CloseEmployeeCustomRateSetup()" value="Cancel" />
+                </div>
+            </div>
+        </div>
+        <div class="col-md-9 mb-1">
+            <div class="card">
+                <div class="tab-content" id="v-pills-tabContent">
+                    <div class="tab-pane fade show active" id="v-pills-shift" role="tabpanel" aria-labelledby="v-pills-shift-tab">
+                        <div class="card">
+                            <div class="card-header">
+                                Shift Setup
+                            </div>
+                            <div class="card-body">
+                                <div class="col-md-12" ng-repeat="x in tableParams_ShiftSetup">
+                                    <div class="form-group row mb-1">
+                                        <label class="col-md-3 col-form-label">{{x.employershiftsetupDescription}}</label>
+                                        <div class="col-md-5">
+                                            <input type="text" class="form-control" ng-model="x.employeeshiftsetupRate">
+                                        </div>
+                                        <div class="col-md-3 col-form-label ">
+                                            <a href="#" class="badge badge-success cursor" ng-click="onClick_Submit_ShiftSetup(x)">Submit</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <a href="#" class="badge badge-danger cursor" ng-click="onClick_DeleteRecord_ShiftSetup()">Reset Shift Data</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="v-pills-ot" role="tabpanel" aria-labelledby="v-pills-ot-tab">
+                        <div class="card">
+                            <div class="card-header">
+                                Overtime Setup
+                            </div>
+                            <div class="card-body">
+                                <div class="col-md-12" ng-repeat="x in tableParams_OTSetup">
+                                    <div class="form-group row mb-1">
+                                        <label class="col-md-3 col-form-label">{{x.employerotsetupOTCode}} ({{x.employerotsetupDescription}})</label>
+                                        <div class="col-md-5">
+                                            <input type="text" class="form-control" ng-model="x.employeeotsetupRate">
+                                        </div>
+                                        <div class="col-md-3 col-form-label ">
+                                            <a href="#" class="badge badge-success cursor" ng-click="onClick_Submit_OTSetup(x)">Submit</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <a href="#" class="badge badge-danger cursor" ng-click="onClick_DeleteRecord_OTSetup()">Reset Overtime Data</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="v-pills-addpay" role="tabpanel" aria-labelledby="v-pills-addpay-tab">
+                        <div class="card">
+                            <div class="card-header">
+                                Additional-pay Setup
+                            </div>
+                            <div class="card-body">
+                                <div class="col-md-12" ng-repeat="x in tableParams_Additional_Pay_Rate_Setup">
+                                    <div class="form-group row mb-1">
+                                        <label class="col-md-3 col-form-label">{{x.employeradditionalpaysetupCode}} ({{x.employeradditionalpaysetupDescription}})</label>
+                                        <div class="col-md-4">
+                                            <input type="text" class="form-control" ng-model="x.employeeadditionalpaysetupRate">
+                                        </div>
+                                        <div class="col-md-3 col-form-label ">
+                                            <a href="#" class="badge badge-success cursor" ng-click="onClick_Submit_AdditionalPaySetup(x)">Submit</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <a href="#" class="badge badge-danger cursor" ng-click="onClick_DeleteRecord_AdditionalPaySetup()">Reset Additional-pay Data</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="v-pills-npl" role="tabpanel" aria-labelledby="v-pills-npl-tab">
+                        <div class="card">
+                            <div class="card-header">
+                                Day&Hour Rate Setup
+                            </div>
+                            <div class="card-body">
+                                <div class="d-none">
+                                    <input type="text" class="form-control" ng-model="employeenplsetupId">
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-1">
+                                        <div class="form-group mb-1">
+                                            <label>Day Rate</label>
+                                            <input type="text" class="form-control form-control-lg decimalInputValidation"
+                                                   ng-model="employeenplsetupDayRate">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 mb-1">
+                                        <div class="form-group mb-1">
+                                            <label>Hour Rate</label>
+                                            <input type="text" class="form-control form-control-lg decimalInputValidation"
+                                                   ng-model="employeenplsetupHourRate">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <a href="#" class="badge badge-danger cursor" ng-click="onClick_Submit_NPLSetup()">Submit Rate</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="v-pills-statutory" role="tabpanel" aria-labelledby="v-pills-statutory-tab">
+                        <div class="card">
+                            <div class="card-header">
+                                Statutory Setup
+                            </div>
+                            <div class="card-body">
+                                <div class="d-none">
+                                    <input type="text" class="form-control" ng-model="employeestatutorysetupId">
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="card-header">
+                                            EPF
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="form-group mb-2">
+                                                <label>EPF(E)</label>
+                                                <input type="text" class="form-control decimalInputValidation"
+                                                       ng-model="employeestatutorysetupEpfERate">
+                                            </div>
+                                            <div class="form-group mb-2">
+                                                <label>EPF(R)</label>
+                                                <input type="text" class="form-control decimalInputValidation"
+                                                       ng-model="employeestatutorysetupEpfRRate">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="card-header">
+                                            Socso
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="form-group mb-2">
+                                                <label>Socso(E)</label>
+                                                <input type="text" class="form-control decimalInputValidation"
+                                                       ng-model="employeestatutorysetupSocsoERate">
+                                            </div>
+                                            <div class="form-group mb-2">
+                                                <label>Socso(R)</label>
+                                                <input type="text" class="form-control decimalInputValidation"
+                                                       ng-model="employeestatutorysetupSocsoRRate">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="card-header">
+                                            ESI
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="form-group mb-2">
+                                                <label>EIS(E)</label>
+                                                <input type="text" class="form-control decimalInputValidation"
+                                                       ng-model="employeestatutorysetupEISERate">
+                                            </div>
+                                            <div class="form-group mb-2">
+                                                <label>EIS(R)</label>
+                                                <input type="text" class="form-control decimalInputValidation"
+                                                       ng-model="employeestatutorysetupEISRRate">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="card-header">
+                                            PCB
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="form-group mb-2">
+                                                <label>PCB(E)</label>
+                                                <input type="text" class="form-control decimalInputValidation"
+                                                       ng-model="employeestatutorysetupPCBERate">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <a href="#" class="badge badge-danger cursor" ng-click="onClick_Submit_StatutorySetup()">Submit Statutory</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

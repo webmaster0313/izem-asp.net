@@ -1,0 +1,178 @@
+﻿
+<div ng-controller="employer-sidemenu-controller">
+    <nav class="sidebar sidebar-offcanvas" id="sidebar">
+        <ul class="nav">
+            <li class="nav-item nav-profile border-top border-bottom">
+                <a href="#" class="nav-link">
+                    <div class="d-flex flex-column">
+                        <span class="font-weight-bold mb-2">{{report_companyName}}</span>
+                        <span class="text-secondary text-small">{{loginRole}}</span>
+                    </div>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/employer">
+                    <span class="menu-title">Dashboard</span>
+                    <i class="mdi mdi-home menu-icon"></i>
+                </a>
+            </li>
+            <li class="nav-item" ng-if="verification" ng-show="_isMasterSetting && _companyProfile">
+                <a class="nav-link" href="/employer/mastersetting/manage-your-company-setting">
+                    <span class="menu-title">Company Profile</span>
+                    <i class="mdi mdi-note-text menu-icon"></i>
+                </a>
+            </li>
+            <li class="nav-item" ng-if="verification" ng-show="_isMasterSetting">
+                <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
+                    <span class="menu-title">Master</span>
+                    <i class="menu-arrow"></i>
+                    <i class="mdi mdi-library-books menu-icon"></i>
+                </a>
+                <div class="collapse" id="ui-basic">
+                    <ul class="nav flex-column sub-menu">
+                        <li class="nav-item" ng-show="_branch">
+                            <a class="nav-link" href="/employer/mastersetting/manage-your-branch">Branch</a>
+                        </li>
+                        <li class="nav-item" ng-show="_department">
+                            <a class="nav-link" href="/employer/mastersetting/manage-your-department">Department</a>
+                        </li>
+                        <li class="nav-item" ng-show="_setting">
+                            <a class="nav-link" href="/employer/mastersetting/manage-your-setting">Setting</a>
+                        </li>
+                        <li class="nav-item" ng-show="_entitlement">
+                            <a class="nav-link" href="/employer/mastersetting/manage-your-entitlement">Entitlement</a>
+                        </li>
+                        <li class="nav-item" ng-show="_facility">
+                            <a class="nav-link" href="/employer/mastersetting/manage-your-facility">Facility</a>
+                        </li>
+                        <li class="nav-item" ng-show="_subscription">
+                            <a class="nav-link" href="/employer/mastersetting/manage-your-subscription">Subscription</a>
+                        </li>
+                        <li class="nav-item" ng-show="_holiday">
+                            <a class="nav-link" href="/employer/mastersetting/manage-your-holiday">Holiday</a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+            <li class="nav-item" ng-if="verification" ng-show="_isMasterSetting && _employee">
+                <a class="nav-link" href="/employer/mastersetting/manage-your-employee-list">
+                    <span class="menu-title">Employee</span>
+                    <i class="mdi mdi-note-text menu-icon"></i>
+                </a>
+            </li>
+            <li class="nav-item" ng-if="verification" ng-show="_isAttendanceEntries">
+                <a class="nav-link" data-toggle="collapse" href="#ui-attendance" aria-expanded="false" aria-controls="ui-attendance">
+                    <span class="menu-title">Attendance</span>
+                    <i class="menu-arrow"></i>
+                    <i class="mdi mdi-note-text menu-icon"></i>
+                </a>
+                <div class="collapse" id="ui-attendance">
+                    <ul class="nav flex-column sub-menu">
+                        <li class="nav-item" ng-show="_attendance">
+                            <a class="nav-link" href="/employer/attendancesetting/manage-your-attendancelist">Attendance</a>
+                        </li>
+                        <li class="nav-item" ng-show="_attendanceReport">
+                            <a class="nav-link" href="/employer/attendancesetting/manage-your-attendancereport">Attendance Report</a>
+                        </li>
+                        <li class="nav-item" ng-show="_device">
+                            <a class="nav-link" href="/employer/attendancesetting/manage-your-device">Device</a>
+                        </li>
+                        <li class="nav-item" ng-show="_shift">
+                            <a class="nav-link" href="/employer/attendancesetting/manage-your-shift">Shift Master</a>
+                        </li>
+                        <li class="nav-item" ng-show="_deviceOperation">
+                            <a class="nav-link" href="/employer/attendancesetting/manage-your-transfer">Device Operation</a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+            <li class="nav-item" ng-if="verification" ng-show="_isLeaveEntries">
+                <a class="nav-link" data-toggle="collapse" href="#ui-leave" aria-expanded="false" aria-controls="ui-leave">
+                    <span class="menu-title">Leave</span>
+                    <i class="menu-arrow"></i>
+                    <i class="mdi mdi-note-text menu-icon"></i>
+                </a>
+                <div class="collapse" id="ui-leave">
+                    <ul class="nav flex-column sub-menu">
+                        <li class="nav-item" ng-show="_leaveApplication">
+                            <a class="nav-link" href="/employer/leavesetting/manage-your-leaveapplication">Leave Application</a>
+                        </li>
+                        <li class="nav-item" ng-show="_leaveReport">
+                            <a class="nav-link" href="/employer/leavesetting/manage-your-leavesummary">Leave Report</a>
+                        </li>
+                        <li class="nav-item" ng-show="_leaveType">
+                            <a class="nav-link" href="/employer/leavesetting/manage-your-leavetype">Leave Type</a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+
+            <li class="nav-item" ng-if="verification" ng-show="_isPayrollProcess">
+                <a class="nav-link" data-toggle="collapse" href="#ui-payrollprocess" aria-expanded="false" aria-controls="ui-payrollprocess">
+                    <span class="menu-title">Payroll</span>
+                    <i class="menu-arrow"></i>
+                    <i class="mdi mdi-note-text menu-icon"></i>
+                </a>
+                <div class="collapse" id="ui-payrollprocess">
+                    <ul class="nav flex-column sub-menu">
+                        <li class="nav-item" ng-show="_payroll">
+                            <a class="nav-link" href="/employer/payrollsetting/manage-payroll-process">Payroll</a>
+                        </li>
+                        <li class="nav-item" ng-show="_payrollReport">
+                            <a class="nav-link" href="/employer/payrollsetting/manage-payroll-report">Payroll Report</a>
+                        </li>
+                        <li class="nav-item" ng-show="_additionalPaySetup">
+                            <a class="nav-link" href="/employer/payrollsetting/manage-payroll-additionalpaysetup">Additional Setup</a>
+                        </li>
+                        <li class="nav-item" ng-show="_globalSetup">
+                            <a class="nav-link" href="/employer/payrollsetting/manage-payroll-globalsetting">Global Setting</a>
+                        </li>
+                        <li class="nav-item" ng-show="_overtimeSetup">
+                            <a class="nav-link" href="/employer/payrollsetting/manage-payroll-overtimesetup">Overtime Setup</a>
+                        </li>
+                        <li class="nav-item" ng-show="_shiftSetup">
+                            <a class="nav-link" href="/employer/payrollsetting/manage-payroll-shiftsetup">Shift Setup</a>
+                        </li>
+                        <li class="nav-item" ng-show="_allowanceDeductionSetup">
+                            <a class="nav-link" href="/employer/payrollsetting/manage-payroll-allowance-deduction">Allowance-Deduction</a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+            <li class="nav-item" ng-if="verification" ng-show="_isPayrollProcess && _houlryProcess">
+                <a class="nav-link" href="/employer/payrollsetting/manage-hourlypayroll-process">
+                    <span class="menu-title">Hourly Payroll</span>
+                    <i class="mdi mdi-note-text menu-icon"></i>
+                </a>
+            </li>
+            <li class="nav-item" ng-if="verification" ng-show="_isUtility">
+                <a class="nav-link" data-toggle="collapse" href="#ui-utility" aria-expanded="false" aria-controls="ui-utility">
+                    <span class="menu-title">Utility</span>
+                    <i class="menu-arrow"></i>
+                    <i class="mdi mdi-note-text menu-icon"></i>
+                </a>
+                <div class="collapse" id="ui-utility">
+                    <ul class="nav flex-column sub-menu">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/employer/utility">Setting</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/employer/utility/manage-template">Template</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/employer/utility/manage-template-permission">Template Permission</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/employer/utility/manage-user-rights">User Rights</a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+            <li class="nav-item sidebar-actions" ng-show="redirectMember">
+                <span class="nav-link">
+                    <a href="/member" target="_blank" class="btn btn-block btn-lg btn-gradient-primary">Go to profile</a>
+                </span>
+            </li>
+        </ul>
+    </nav>
+</div>

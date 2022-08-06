@@ -1,0 +1,114 @@
+﻿
+@{
+    ViewBag.Title = "EmployerDataTransfer";
+    Layout = "~/Areas/Employer/Views/Shared/_Layout.cshtml";
+}
+
+<div ng-controller="employer-datatransfer-controller">
+
+    @*Entry List*@
+
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Attendance entries</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Data Transfer and Download</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card m-1">
+                <div class="card-header">
+                    <span class="badge badge-success m-1" ng-show="isConnected">Machine is connected.</span>
+                    <span class="badge badge-warning m-1" ng-show="isNotConnected">Machine not connected.</span>
+                    <span class="badge badge-success m-1" ng-show="isPictureLibraryCreated">Image upload process is working.</span>
+                    <span class="badge badge-warning m-1" ng-show="isNotPictureLibraryCreated">
+                        <a href="#"
+                           ng-click="onClick_PictureCreated()">
+                            Created Picture Library
+                        </a>
+                    </span>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group m-0">
+                                <select ng-model="ddlMachine" class="form-control" ng-change="onChange_loadMachine(ddlMachine)">
+                                    <option value="">-- Select Machine --</option>
+                                    <option ng-repeat="x in fill_masterMachine" ng-value="$index">
+                                        {{x.machineUrl}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group m-0">
+                                <input type="date" class="form-control" ng-model="masterCurrentDate" />
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group m-0">
+                                <button type="button" class="btn btn-primary" 
+                                        ng-show="isAddPermit"
+                                        ng-click="onClick_pushDataToMachine()">Download Data</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <small>Option to connect machine and transfer data from machine to server base on date selection.</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12 mt-1">
+            <div class="card m-1">
+                <div class="card-header">
+                </div>
+                <div class="card-body">
+                    <table class="table table-hover table-responsive-xl">
+                        <thead>
+                            <tr>
+                                <th class="widthLeft">Enrollment</th>
+                                <th>Employee</th>
+                                <th class="widthCenter">State</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-if="!loaded">
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                            </tr>
+                            <tr ng-if="loaded" ng-repeat="x in tableParams">
+                                <td>{{x.employeeEnroll}}</td>
+                                <td>{{x.memberName}}</td>
+
+                                <td class="text-nowrap text-center">
+                                    <a href="#"
+                                       ng-show="isAddPermit"
+                                       ng-click="pushUser(x)">
+                                        <span class="badge badge-primary">Push</span>
+                                    </a>
+                                    <a href="#" 
+                                       ng-show="isDeletePermit"
+                                       ng-click="deleteUser(x)">
+                                        <span class="badge badge-danger">Remove</span>
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/Areas/Employer/_Employer/Code/AttendanceSetting/employer-datatransfer-controller.js?version=@(System.Configuration.ConfigurationManager.AppSettings["version"].ToString())"></script>
+}

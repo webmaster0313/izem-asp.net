@@ -1,0 +1,67 @@
+﻿
+@{
+    ViewBag.Title = "Employer Company-Setting";
+    Layout = "~/Areas/Employer/Views/Shared/_Layout.cshtml";
+}
+
+<div ng-controller="employer-companysetting-controller">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Master entries</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Company Profile</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <div class="col-md-12">
+            <form name="dataForm" autocomplete="off">
+                <div class="card">
+                    <div class="card-header"></div>
+                    <div class="card-body">
+                        <div style="display:none;">
+                            <input type="text" ng-model="settingId" />
+                            <input type="text" ng-model="emailId" />
+                            <input type="text" ng-model="password" />
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mt-1">
+                                <div class="form-group">
+                                    <label>Company Name<span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control form-control-lg"
+                                           ng-model="companyName"
+                                           required>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mt-1">
+                                <div class="form-group">
+                                    <label>Company Phone<span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control form-control-lg"
+                                           ng-model="companyContactEmail"
+                                           required>
+                                </div>
+                            </div>
+                            <div class="col-md-12 mt-1">
+                                <div class="form-group">
+                                    <label>Company Address<span class="text-danger">*</span></label>
+                                    <textarea type="text" class="form-control form-control-lg"
+                                              rows="4"
+                                              ng-model="companyAddress"
+                                              required></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <input type="submit" class="btn btn-outline-primary mt-1"
+                               ng-show="isAddPermit"
+                               ng-click="dataForm.$valid && onClick_Submit()"
+                               value="Submit" />
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script src="~/Areas/Employer/_Employer/Code/MasterSetting/employer-companysetting-controller.js?version=@(System.Configuration.ConfigurationManager.AppSettings["version"].ToString())"></script>
+}

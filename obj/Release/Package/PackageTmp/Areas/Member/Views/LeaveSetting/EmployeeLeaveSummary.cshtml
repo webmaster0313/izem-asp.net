@@ -1,0 +1,67 @@
+﻿
+@{
+    ViewBag.Title = "EmployeeLeaveSummary";
+    Layout = "~/Areas/Member/Views/Shared/_Layout.cshtml";
+}
+
+
+<div ng-controller="member-leavesummary-controller">
+
+    @*Entry List*@
+
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Leave entries</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Leave Report</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                </div>
+                <div class="card-body">
+                    <table class="table table-hover table-responsive-xl">
+                        <thead>
+                            <tr>
+                                <th class="widthLeft">Start Year</th>
+                                <th class="widthLeft">End Year</th>
+                                <th class="widthLeft">Type</th>
+                                <th class="widthCenter">Entitled</th>
+                                <th class="widthCenter">Pre. YearBnf</th>
+                                <th class="widthCenter">Total Entitled</th>
+                                <th class="widthCenter">Taken Leave</th>
+                                <th class="widthCenter">Balance Leave</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="y in subtableParams">
+                                <td class="widthLeft">{{y.currentStartYear}}</td>
+                                <td class="widthLeft">{{y.currentEndYear}}</td>
+                                <td class="widthLeft">{{y.employerleavetypeLeaveType}}</td>
+                                <td class="widthCenter">{{y.totalEntitleForYear}}</td>
+                                <td class="widthCenter">{{y.previousYearBnf}}</td>
+                                <td class="widthCenter">{{y.EntitleDay}}</td>
+                                <td class="widthCenter">{{y.totalLeave}}</td>
+                                <td class="widthCenter">{{y.totalLeaveBalance}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @*Excel Download*@
+    <div style="display:none">
+        <table id="tabledata"></table>
+    </div>
+
+</div>
+
+@section scripts{
+    <script src="~/Areas/Member/_Member/Code/LeaveSetting/member-leavesummary-controller.js?version=@(System.Configuration.ConfigurationManager.AppSettings["version"].ToString())"></script>
+}

@@ -1,0 +1,40 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>@ViewBag.Title - iZem | Employee Benefits | Payroll | Clinic Management | IzemEBS | IzemPAY | IzemCMS</title>
+    <link rel="stylesheet" href="~/Content/assets/vendors/mdi/css/materialdesignicons.min.css">
+    <link rel="stylesheet" href="~/Content/assets/vendors/css/vendor.bundle.base.css">
+    <link rel="stylesheet" href="~/Content/assets/css/style.css">
+    <link rel="stylesheet" href="~/Content/assets/css/manual.css" />
+    <link rel="stylesheet" href="~/Content/toastr.css" />
+    <link rel="shortcut icon" href="~/Content/images/logo.png" />
+    <script>
+        var backlink = '@(System.Configuration.ConfigurationManager.AppSettings["backlink"].ToString())';
+    </script>
+</head>
+<body>
+    <div class="overlay"></div>
+    <div ng-app="client-authentication-app" ng-cloak>
+        <div ng-controller="client-authentication-controller">
+            @RenderBody()
+        </div>
+    </div>
+
+    <script src="~/Content/assets/vendors/js/vendor.bundle.base.js"></script>
+    <script src="~/Content/assets/js/off-canvas.js"></script>
+    <script src="~/Content/assets/js/hoverable-collapse.js"></script>
+    <script src="~/Content/assets/js/misc.js"></script>
+
+    <script src="~/Scripts/angular.min.js"></script>
+    <script src="~/Scripts/toastr.min.js"></script>
+
+    <script src="~/Content/common/common.js"></script>
+
+    <script src="~/Areas/_loginAuthentication/client-authentication-app.js"></script>
+    <script src="~/Areas/_loginAuthentication/client-authentication-controller.js"></script>
+
+    @RenderSection("scripts", required: false)
+</body>
+</html>

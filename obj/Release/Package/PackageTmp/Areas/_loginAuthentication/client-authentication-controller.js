@@ -1,0 +1,1 @@
+﻿app.controller("client-authentication-controller", function ($rootScope, $scope, $http) { });

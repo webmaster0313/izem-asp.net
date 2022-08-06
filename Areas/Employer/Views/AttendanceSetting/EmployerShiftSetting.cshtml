@@ -1,0 +1,619 @@
+﻿
+@{
+    ViewBag.Title = "Employer Shift-Setting";
+    Layout = "~/Areas/Employer/Views/Shared/_Layout.cshtml";
+}
+
+<div ng-controller="employer-shift-controller">
+
+    @*Entry List*@
+
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Attendance entries</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Shift</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <div class="col-md-12" ng-show="hideEntry">
+            <div class="card">
+                <div class="card-header">
+                    <div class="float-right">
+                        <a class="listMenu" data-toggle="tooltip" data-placement="top"
+                           title="Open search" ng-click="onClick_OpenSearch()">
+                            <i class="mdi mdi-filter icon-font-size filterMenu"></i>
+                        </a>
+                        <a class="listMenu" data-toggle="tooltip" data-placement="top"
+                           title="Reset result" ng-click="onClick_ResetSearch()">
+                            <i class="mdi mdi-view-list icon-font-size viewMenu"></i>
+                        </a>
+                        <a class="listMenu" data-toggle="tooltip" data-placement="top"
+                           title="New entry" 
+                           ng-show="isAddPermit"
+                           ng-click="onClick_AddRecord()">
+                            <i class="mdi mdi-plus-box icon-font-size addMenu"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <table class="table table-hover table-responsive-xl">
+                        <thead>
+                            <tr>
+                                <th>Shift</th>
+                                <th class="widthCenter">Type</th>
+                                <th class="widthCenter">In-Time</th>
+                                <th class="widthCenter">Half Out</th>
+                                <th class="widthCenter">Full Out</th>
+                                <th class="widthCenter"
+                                    ng-if="isEditPermit || isDeletePermit">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-if="!loaded">
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"
+                                    ng-if="isEditPermit || isDeletePermit"><div class="bar"></div></td>
+                            </tr>
+                            <tr ng-if="loaded" ng-repeat="x in tableParams">
+                                <td>{{x.shiftName}}</td>
+                                <td>{{x.shiftType}}</td>
+                                <td>{{x.inTimeHHMM}}</td>
+                                <td>{{x.outTimeHHMM}}</td>
+                                <td>{{x.outTime_FullHHMM}}</td>
+                                <td class="text-nowrap"
+                                    ng-if="isEditPermit || isDeletePermit">
+                                    <a class="cursor"
+                                       ng-show="isEditPermit"
+                                       ng-click="onClick_EditRecord(x.employerMasterShiftId)">
+                                        <i class="mdi mdi-pencil-box icon-font-size editMenu"></i>
+                                    </a>
+                                    <a class="cursor"
+                                       ng-show="isDeletePermit"
+                                       ng-click="onClick_DeleteRecord(x.employerMasterShiftId)">
+                                        <i class="mdi mdi-delete-forever icon-font-size deleteMenu"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="float-left">
+                                <select ng-model="pageSizeSelected" ng-change="changePageSize()" class="badge">
+                                    <option value="15">15</option>
+                                    <option value="30">30</option>
+                                    <option value="50">50</option>
+                                </select>
+                            </div>
+                            <div class="float-right">
+                                <pagination total-items="totalCount" ng-change="pageChanged()"
+                                            items-per-page="pageSizeSelected" direction-links="true" ng-model="pageIndex"
+                                            next-text=">" previous-text="<"
+                                            max-size="maxSize" class="pagination" first-text="First" last-text="Last"
+                                            boundary-links="true" rotate="false"
+                                            num-pages="numPages">
+                                </pagination>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @* Entry Form *@
+
+    <div class="row">
+        <div class="col-md-12" ng-show="!hideEntry">
+            <div class="card">
+                <form name="dataForm" autocomplete="off">
+                    <div class="card-header">
+                        Manage Department
+                    </div>
+                    <div class="card-body">
+                        <div style="display:none;">
+                            <input type="text" ng-model="employerMasterShiftId" />
+                        </div>
+                        @*Master Data*@
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group" style="margin-bottom: 1rem !important;">
+                                    <label>Title<span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" style="height: 30px;"
+                                           ng-model="shiftName">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group" style="margin-bottom: 1rem !important;">
+                                    <label>Weekly Hour</label>
+                                    <input type="text" class="form-control" style="height: 30px;"
+                                           ng-model="weeklyHour">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group" style="margin-bottom: 1rem !important;">
+                                    <label>Working Hour</label>
+                                    <input type="text" class="form-control" style="height: 30px;"
+                                           ng-model="dayHour">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group" style="margin-bottom: 1rem !important;">
+                                    <label>In-Min (- T.Hour)</label>
+                                    <input type="text" class="form-control" style="height: 30px;"
+                                           ng-model="halfHour">
+                                </div>
+                            </div>
+                        </div>
+                        <small class="form-text text-muted">In-Time Setting.</small>
+                        <hr />
+                        @*InTime*@
+                        <div class="row">
+                            <div class="col-md-2">
+                                <div class="form-group" style="margin-bottom: 1rem !important;">
+                                    <label>In-Time</label>
+                                    <input type="time" class="form-control" style="height: 30px;"
+                                           ng-model="inTime">
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group" style="margin-bottom: 1rem !important;">
+                                    <label>Range In</label>
+                                    <input type="time" class="form-control" style="height: 30px;"
+                                           ng-disabled="inTime==null"
+                                           ng-model="rangeInTime1">
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group" style="margin-bottom: 1rem !important;">
+                                    <label>Range Out</label>
+                                    <input type="time" class="form-control" style="height: 30px;"
+                                           ng-disabled="rangeInTime1==null"
+                                           ng-model="rangeInTime2">
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group" style="margin-bottom: 1rem !important;">
+                                    <label>Allow Late</label>
+                                    <input type="time" class="form-control" style="height: 30px;"
+                                           ng-disabled="rangeInTime2==null"
+                                           ng-model="allowLateInTime">
+                                </div>
+                            </div>
+                        </div>
+                        <small class="form-text text-muted">Break-Time Setting. <a class="cursor badge badge-outline-danger" ng-click="onClick_ResetBreak1()">Reset</a></small>
+                        <hr />
+                        @*BreakTime*@
+                        <div class="row">
+                            <div class="col-md-2">
+                                <div class="form-group" style="margin-bottom: 1rem !important;">
+                                    <label>Break-In</label>
+                                    <input type="time" class="form-control" style="height: 30px;"
+                                           ng-model="breakInTime1">
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group" style="margin-bottom: 1rem !important;">
+                                    <label>Range In</label>
+                                    <input type="time" class="form-control" style="height: 30px;"
+                                           ng-disabled="breakInTime1==null"
+                                           ng-model="rangebreakInTime1_1">
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group" style="margin-bottom: 1rem !important;">
+                                    <label>Range Out</label>
+                                    <input type="time" class="form-control" style="height: 30px;"
+                                           ng-disabled="rangebreakInTime1_1==null"
+                                           ng-model="rangebreakInTime1_2">
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group" style="margin-bottom: 1rem !important;">
+                                    <label>Break-Out</label>
+                                    <input type="time" class="form-control" style="height: 30px;"
+                                           ng-disabled="rangebreakInTime1_2==null"
+                                           ng-model="breakOutTime1">
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group" style="margin-bottom: 1rem !important;">
+                                    <label>Range In</label>
+                                    <input type="time" class="form-control" style="height: 30px;"
+                                           ng-disabled="breakOutTime1==null"
+                                           ng-model="rangebreakOutTime1_1">
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group" style="margin-bottom: 1rem !important;">
+                                    <label>Range Out</label>
+                                    <input type="time" class="form-control" style="height: 30px;"
+                                           ng-disabled="rangebreakOutTime1_1==null"
+                                           ng-model="rangebreakOutTime1_2">
+                                </div>
+                            </div>
+                        </div>
+                        <small class="form-text text-muted">Lunch-Time Setting. <a class="cursor badge badge-outline-danger" ng-click="onClick_ResetLunch()">Reset</a></small>
+                        <hr />
+                        @*LunchTime*@
+                        <div class="row">
+                            <div class="col-md-2">
+                                <div class="form-group" style="margin-bottom: 1rem !important;">
+                                    <label>Lunch-In</label>
+                                    <input type="time" class="form-control" style="height: 30px;"
+                                           ng-model="lunchInTime">
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group" style="margin-bottom: 1rem !important;">
+                                    <label>Range In</label>
+                                    <input type="time" class="form-control" style="height: 30px;"
+                                           ng-disabled="lunchInTime==null"
+                                           ng-model="rangelunchInTime1">
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group" style="margin-bottom: 1rem !important;">
+                                    <label>Range Out</label>
+                                    <input type="time" class="form-control" style="height: 30px;"
+                                           ng-disabled="rangelunchInTime1==null"
+                                           ng-model="rangelunchInTime2">
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group" style="margin-bottom: 1rem !important;">
+                                    <label>Lunch-Out</label>
+                                    <input type="time" class="form-control" style="height: 30px;"
+                                           ng-disabled="rangelunchInTime2==null"
+                                           ng-model="lunchOutTime">
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group" style="margin-bottom: 1rem !important;">
+                                    <label>Range In</label>
+                                    <input type="time" class="form-control" style="height: 30px;"
+                                           ng-disabled="lunchOutTime==null"
+                                           ng-model="rangelunchOutTime1">
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group" style="margin-bottom: 1rem !important;">
+                                    <label>Range Out</label>
+                                    <input type="time" class="form-control" style="height: 30px;"
+                                           ng-disabled="rangelunchOutTime1==null"
+                                           ng-model="rangelunchOutTime2">
+                                </div>
+                            </div>
+                        </div>
+                        <small class="form-text text-muted">Break-Time Setting. <a class="cursor badge badge-outline-danger" ng-click="onClick_ResetBreak2()">Reset</a></small>
+                        <hr />
+                        @*BreakTime*@
+                        <div class="row">
+                            <div class="col-md-2">
+                                <div class="form-group" style="margin-bottom: 1rem !important;">
+                                    <label>Break-In</label>
+                                    <input type="time" class="form-control" style="height: 30px;"
+                                           ng-model="breakInTime2">
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group" style="margin-bottom: 1rem !important;">
+                                    <label>Range In</label>
+                                    <input type="time" class="form-control" style="height: 30px;"
+                                           ng-disabled="breakInTime2==null"
+                                           ng-model="rangebreakInTime2_1">
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group" style="margin-bottom: 1rem !important;">
+                                    <label>Range Out</label>
+                                    <input type="time" class="form-control" style="height: 30px;"
+                                           ng-disabled="rangebreakInTime2_1==null"
+                                           ng-model="rangebreakInTime2_2">
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group" style="margin-bottom: 1rem !important;">
+                                    <label>Break-Out</label>
+                                    <input type="time" class="form-control" style="height: 30px;"
+                                           ng-disabled="rangebreakInTime2_2==null"
+                                           ng-model="breakOutTime2">
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group" style="margin-bottom: 1rem !important;">
+                                    <label>Range In</label>
+                                    <input type="time" class="form-control" style="height: 30px;"
+                                           ng-disabled="breakOutTime2==null"
+                                           ng-model="rangebreakOutTime2_1">
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group" style="margin-bottom: 1rem !important;">
+                                    <label>Range Out</label>
+                                    <input type="time" class="form-control" style="height: 30px;"
+                                           ng-disabled="rangebreakOutTime2_1==null"
+                                           ng-model="rangebreakOutTime2_2">
+                                </div>
+                            </div>
+                        </div>
+                        <small class="form-text text-muted">Full Out-Time Setting. <a class="cursor badge badge-outline-danger" ng-click="onClick_ResetFull()">Reset</a></small>
+                        <hr />
+                        @*OutTime*@
+                        <div class="row">
+                            <div class="col-md-2">
+                                <div class="form-group" style="margin-bottom: 1rem !important;">
+                                    <label>Out-Time</label>
+                                    <input type="time" class="form-control" style="height: 30px;"
+                                           ng-model="outTime_Full">
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group" style="margin-bottom: 1rem !important;">
+                                    <label>Range In</label>
+                                    <input type="time" class="form-control" style="height: 30px;"
+                                           ng-disabled="outTime_Full==null"
+                                           ng-model="rangeOutTime1_Full">
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group" style="margin-bottom: 1rem !important;">
+                                    <label>Range Out</label>
+                                    <input type="time" class="form-control" style="height: 30px;"
+                                           ng-disabled="rangeOutTime1_Full==null"
+                                           ng-model="rangeOutTime2_Full">
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group" style="margin-bottom: 1rem !important;">
+                                    <label>Early-Out</label>
+                                    <input type="time" class="form-control" style="height: 30px;"
+                                           ng-disabled="rangeOutTime2_Full==null"
+                                           ng-model="allowEarlyOutTime_Full">
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group" style="margin-bottom: 1rem !important;">
+                                    <label>Overtime</label>
+                                    <input type="time" class="form-control" style="height: 30px;"
+                                           ng-disabled="rangeOutTime2_Full==null"
+                                           ng-model="overtimeStartTime_Full">
+                                </div>
+                            </div>
+                        </div>
+                        <small class="form-text text-muted">Half Out-Time Setting.  <a class="cursor badge badge-outline-danger" ng-click="onClick_ResetHalf()">Reset</a></small>
+                        <hr />
+                        @*HalfTime*@
+                        <div class="row">
+                            <div class="col-md-2">
+                                <div class="form-group" style="margin-bottom: 1rem !important;">
+                                    <label>Out-Time</label>
+                                    <input type="time" class="form-control" style="height: 30px;"
+                                           ng-model="outTime">
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group" style="margin-bottom: 1rem !important;">
+                                    <label>Range In</label>
+                                    <input type="time" class="form-control" style="height: 30px;"
+                                           ng-disabled="outTime==null"
+                                           ng-model="rangeOutTime1">
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group" style="margin-bottom: 1rem !important;">
+                                    <label>Range out</label>
+                                    <input type="time" class="form-control" style="height: 30px;"
+                                           ng-disabled="rangeOutTime1==null"
+                                           ng-model="rangeOutTime2">
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group" style="margin-bottom: 1rem !important;">
+                                    <label>Early-Out</label>
+                                    <input type="time" class="form-control" style="height: 30px;"
+                                           ng-disabled="rangeOutTime2==null"
+                                           ng-model="allowEarlyOutTime">
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group" style="margin-bottom: 1rem !important;">
+                                    <label>Overtime</label>
+                                    <input type="time" class="form-control" style="height: 30px;"
+                                           ng-disabled="rangeOutTime2==null"
+                                           ng-model="overtimeStartTime">
+                                </div>
+                            </div>
+                        </div>
+                        <small class="form-text text-muted">Overtime Setting.</small>
+                        <hr />
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group" style="margin-bottom: 1rem !important;">
+                                    <label>OverTime Tag</label>
+                                    <select ng-model="employerotsetupId" class="form-control" style="height: 30px;">
+                                        <option value="">-- Select --</option>
+                                        <option ng-selected="x == employerotsetupId" ng-repeat="x in fill_OvertimeSetting" ng-value="x.employerotsetupId">
+                                            {{x.employerotsetupOTCode}}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group" style="margin-bottom: 1rem !important;">
+                                    <label>Overtime</label>
+                                    <select class="form-control" style="height: 30px;"
+                                            ng-model="isOverTime">
+                                        <option value="">-- select --</option>
+                                        <option value="30min">OT-After 30 Min</option>
+                                        <option value="60min">OT-After 60 Min</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group" style="margin-bottom: 1rem !important;">
+                                    <label>Early Overtime</label>
+                                    <select class="form-control" style="height: 30px;"
+                                            ng-model="isOverTimeEarly">
+                                        <option value="">-- select --</option>
+                                        <option value="30min">OT-Before 30 Min</option>
+                                        <option value="60min">OT-Before 60 Min</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <small class="form-text text-muted">Day's Setting.</small>
+                        <hr />
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group" style="margin-bottom: 1rem !important;">
+                                    <label>Shift</label>
+                                    <select class="form-control" style="height: 30px;"
+                                            ng-model="shiftType">
+                                        <option value="day">Day Shift</option>
+                                        <option value="night">Night Shift</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group" style="margin-bottom: 1rem !important;">
+                                    <input type="checkbox" class="form-check-input d-none" ng-model="isMonday">
+                                    <label>Monday</label>
+                                    <select class="form-control" style="height: 30px;"
+                                            ng-model="mondayType">
+                                        <option value="">-- select --</option>
+                                        <option value="full">Full</option>
+                                        <option value="half">Half</option>
+                                        <option value="off">Off-day</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group" style="margin-bottom: 1rem !important;">
+                                    <input type="checkbox" class="form-check-input d-none" ng-model="isTuesday">
+                                    <label>Tuesday</label>
+                                    <select class="form-control" style="height: 30px;"
+                                            ng-model="tuesdayType">
+                                        <option value="">-- select --</option>
+                                        <option value="full">Full</option>
+                                        <option value="half">Half</option>
+                                        <option value="off">Off-day</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group" style="margin-bottom: 1rem !important;">
+                                    <input type="checkbox" class="form-check-input d-none" ng-model="isWednesday">
+                                    <label>Wednesday</label>
+                                    <select class="form-control" style="height: 30px;"
+                                            ng-model="wednesdayType">
+                                        <option value="">-- select --</option>
+                                        <option value="full">Full</option>
+                                        <option value="half">Half</option>
+                                        <option value="off">Off-day</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group" style="margin-bottom: 1rem !important;">
+                                    <input type="checkbox" class="form-check-input d-none" ng-model="isThursday">
+                                    <label>Thursday</label>
+                                    <select class="form-control" style="height: 30px;"
+                                            ng-model="thursdayType">
+                                        <option value="">-- select --</option>
+                                        <option value="full">Full</option>
+                                        <option value="half">Half</option>
+                                        <option value="off">Off-day</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group" style="margin-bottom: 1rem !important;">
+                                    <input type="checkbox" class="form-check-input d-none" ng-model="isFriday">
+                                    <label>Friday</label>
+                                    <select class="form-control" style="height: 30px;"
+                                            ng-model="fridayType">
+                                        <option value="">-- select --</option>
+                                        <option value="full">Full</option>
+                                        <option value="half">Half</option>
+                                        <option value="off">Off-day</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group" style="margin-bottom: 1rem !important;">
+                                    <input type="checkbox" class="form-check-input d-none" ng-model="isSaturday">
+                                    <label>Saturday</label>
+                                    <select class="form-control" style="height: 30px;"
+                                            ng-model="saturdayType">
+                                        <option value="">-- select --</option>
+                                        <option value="full">Full</option>
+                                        <option value="half">Half</option>
+                                        <option value="off">Off-day</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group" style="margin-bottom: 1rem !important;">
+                                    <input type="checkbox" class="form-check-input d-none" ng-model="isSunday">
+                                    <label>Sunday</label>
+                                    <select class="form-control" style="height: 30px;"
+                                            ng-model="sundayType">
+                                        <option value="">-- select --</option>
+                                        <option value="full">Full</option>
+                                        <option value="half">Half</option>
+                                        <option value="off">Off-day</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <input type="submit" class="btn btn-gradient-primary m-1" ng-click="dataForm.$valid && onClick_Submit()" />
+                        <button type="button" class="btn btn-inverse-dark m-1" ng-click="onClick_Cancel()">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    @*Search Modal*@
+
+    <div class="modal fade" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel"
+         aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog" style="max-width:600px !important;" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="searchModalLabel">Search Result</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Shift</label>
+                                <input type="text" class="form-control"
+                                       ng-model="SearchshiftName">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" ng-click="onClick_CloseSearch()">Close</button>
+                    <button type="button" class="btn btn-primary" ng-click="onClick_SearchResult()">Search</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@section scripts{
+    <script src="~/Areas/Employer/_Employer/Code/AttendanceSetting/employer-shift-controller.js?version=@(System.Configuration.ConfigurationManager.AppSettings["version"].ToString())"></script>
+}

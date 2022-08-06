@@ -1,0 +1,88 @@
+﻿
+@{
+    ViewBag.Title = "Employer User-Rights";
+    Layout = "~/Areas/Employer/Views/Shared/_Layout.cshtml";
+}
+
+<div ng-controller="employer-userright-controller">
+
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Utility</a></li>
+            <li class="breadcrumb-item active" aria-current="page">User Rights</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    Employee List
+                </div>
+                <div class="card-body">
+                    <table class="table table-hover table-responsive-xl">
+                        <thead>
+                            <tr>
+                                <th>Employee</th>
+                                <th class="widthCenter">Template</th>
+                                <th class="widthCenter">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-if="!loaded">
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                            </tr>
+                            <tr ng-if="loaded" ng-repeat="x in tableParams">
+                                <td>{{x.memberName}}</td>
+                                <td>
+                                    <select ng-model="x.employerTemplateId" class="form-control" style="width: 200px !important; height: 30px;" ng-change="onChange_UpdateTemplate(x)">
+                                        <option ng-selected="y == x.employerTemplateId"
+                                                ng-repeat="y in fill_employerMasterTemplate"
+                                                ng-value="y.employerTemplateId">
+                                            {{y.templateName}}
+                                        </option>
+                                    </select>
+                                </td>
+                                <td class="text-nowrap text-center">
+                                    <a class="cursor"
+                                       ng-hide="x.employeruserrightId == 0"
+                                       ng-click="onClick_DeleteRecord(x.employeruserrightId)">
+                                        <i class="mdi mdi-delete-forever icon-font-size deleteMenu"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="float-left">
+                                <select ng-model="pageSizeSelected" ng-change="changePageSize()" class="badge">
+                                    <option value="15">15</option>
+                                    <option value="30">30</option>
+                                    <option value="50">50</option>
+                                </select>
+                            </div>
+                            <div class="float-right">
+                                <pagination total-items="totalCount" ng-change="pageChanged()"
+                                            items-per-page="pageSizeSelected" direction-links="true" ng-model="pageIndex"
+                                            next-text=">" previous-text="<"
+                                            max-size="maxSize" class="pagination" first-text="First" last-text="Last"
+                                            boundary-links="true" rotate="false"
+                                            num-pages="numPages">
+                                </pagination>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/Areas/Employer/_Employer/Code/UtilitySetting/employer-userright-controller.js?version=@(System.Configuration.ConfigurationManager.AppSettings["version"].ToString())"></script>
+}

@@ -1,0 +1,278 @@
+﻿
+@{
+    /**/
+
+    ViewBag.Title = "Employer-Subscription";
+    Layout = "~/Areas/Employer/Views/Shared/_Layout.cshtml";
+}
+
+<div ng-controller="employer-subscription-controller">
+
+    @*Entry List*@
+
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Master entries</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Subscription</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <div class="col-md-12" ng-show="hideEntry">
+            <div class="card">
+                <div class="card-header">
+                    <div class="float-right">
+                        <a class="listMenu" data-toggle="tooltip" data-placement="top"
+                           title="Open search" ng-click="onClick_OpenSearch()">
+                            <i class="mdi mdi-filter icon-font-size filterMenu"></i>
+                        </a>
+                        <a class="listMenu" data-toggle="tooltip" data-placement="top"
+                           title="Reset result" ng-click="onClick_ResetSearch()">
+                            <i class="mdi mdi-view-list icon-font-size viewMenu"></i>
+                        </a>
+                        <a class="listMenu" data-toggle="tooltip" data-placement="top"
+                           title="New entry"
+                           ng-show="isAddPermit"
+                           ng-click="onClick_AddRecord()">
+                            <i class="mdi mdi-plus-box icon-font-size addMenu"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <table class="table table-hover table-responsive-xl">
+                        <thead>
+                            <tr>
+                                <th>Subscription</th>
+                                <th class="widthCenter">Mode</th>
+                                <th class="widthCenter">Purchase</th>
+                                <th class="widthCenter">Activation</th>
+                                <th class="widthCenter">Payment</th>
+                                <th class="widthCenter">Status</th>
+                                <th class="widthCenter"
+                                    ng-if="isEditPermit || isDeletePermit">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-if="!loaded">
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"
+                                    ng-if="isEditPermit || isDeletePermit"><div class="bar"></div></td>
+                            </tr>
+                            <tr ng-if="loaded" ng-repeat="x in tableParams">
+                                <td>{{x.mastersubscriptiontypeTitle}}</td>
+                                <td>{{x.employersubscriptionPaymodeMode}}</td>
+                                <td>{{x.employersubscriptionPurchaseDateDDMMYYYY}}</td>
+                                <td>{{x.employersubscriptionActivationDateDDMMYYYY}}</td>
+                                <td>{{x.employersubscriptionPaymentDateDDMMYYYY}}</td>
+                                <td class="text-nowrap text-center">
+                                    <span style="width: 70px;" ng-if="x.employersubscriptionIsActive.data[0]=='0'" class="badge badge-danger">inactive</span>
+                                    <span style="width: 70px;" ng-if="x.employersubscriptionIsActive.data[0]=='1'" class="badge badge-success">active</span>
+                                </td>
+                                <td class="text-nowrap"
+                                    ng-if="isEditPermit || isDeletePermit">
+                                    <a class="cursor"
+                                       ng-show="isEditPermit"
+                                       ng-click="onClick_EditRecord(x.employersubscriptionId)">
+                                        <i class="mdi mdi-pencil-box icon-font-size text-info"></i>
+                                    </a>
+                                    <a class="cursor"
+                                       ng-show="isDeletePermit"
+                                       ng-click="onClick_DeleteRecord(x.employersubscriptionId)">
+                                        <i class="mdi mdi-delete-forever icon-font-size text-danger"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="float-left">
+                                <select ng-model="pageSizeSelected" ng-change="changePageSize()" class="badge">
+                                    <option value="15">15</option>
+                                    <option value="30">30</option>
+                                    <option value="50">50</option>
+                                </select>
+                            </div>
+                            <div class="float-right">
+                                <pagination total-items="totalCount" ng-change="pageChanged()"
+                                            items-per-page="pageSizeSelected" direction-links="true" ng-model="pageIndex"
+                                            next-text=">" previous-text="<"
+                                            max-size="maxSize" class="pagination" first-text="First" last-text="Last"
+                                            boundary-links="true" rotate="false"
+                                            num-pages="numPages">
+                                </pagination>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @* Entry Form *@
+
+    <div class="row">
+        <div class="col-md-12" ng-show="!hideEntry">
+            <div class="card">
+                <form name="dataForm" autocomplete="off">
+                    <div class="card-header">
+                        Manage Subscription
+                    </div>
+                    <div class="card-body">
+                        <div style="display:none;">
+                            <input type="text" ng-model="employersubscriptionId" />
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group ">
+                                    <label>Subscription<span class="text-danger">*</span></label>
+                                    <select ng-model="mastersubscriptiontypeId" class="form-control"
+                                            ng-change="onChange_UpdateMonth()"
+                                            required chosen>
+                                        <option value="">-- Select --</option>
+                                        <option ng-selected="x == mastersubscriptiontypeId" ng-repeat="x in fill_mastersubscriptiontypeId" ng-value="x.mastersubscriptiontypeId">
+                                            {{x.mastersubscriptiontypeTitle}}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group ">
+                                    <label>Activation Date</label>
+                                    <input type="date" class="form-control form-control-lg"
+                                           ng-change="onChange_UpdateMonth()"
+                                           ng-model="employersubscriptionActivationDate">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group ">
+                                    <label>Valid Up-To</label>
+                                    <input type="date" class="form-control form-control-lg"
+                                           ng-model="employersubscriptionValidUpto">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group ">
+                                    <label>
+                                        Active Employee <small>(initial entry)</small>
+                                        <span class="text-danger">*</span>
+                                    </label>
+                                    <input type="text" class="form-control form-control-lg" required
+                                           ng-keyup="onKeypress_CalculateAmount()"
+                                           onkeypress="preventNonNumericalInput(event)"
+                                           ng-model="employersubscriptionNoOfEmployee">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group ">
+                                    <label>Amount</label>
+                                    <input type="text" class="form-control form-control-lg"
+                                           ng-model="employersubscriptionAmount"
+                                           disabled>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group ">
+                                    <label>Payment Mode</label>
+                                    <select class="form-control" ng-model="employersubscriptionPaymodeMode" chosen>
+                                        <option value="cash">Cash</option>
+                                        <option value="e-payment">E-Payment</option>
+                                        <option value="cheque">Cheque</option>
+                                        <option value="creditcard">Credit card</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group ">
+                                    <label>Payment Date</label>
+                                    <input type="date" class="form-control form-control-lg"
+                                           ng-model="employersubscriptionPaymentDate">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group ">
+                                    <label>Reference No<span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control form-control-lg"
+                                           ng-model="employersubscriptionRefNo" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-check">
+                                    <label class="form-check-label text-muted">
+                                        <input type="checkbox" class="form-check-input"
+                                               ng-model="employersubscriptionIsActive"> Is it active?
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-check">
+                                    <label class="form-check-label text-muted">
+                                        <input type="checkbox" class="form-check-input"
+                                               disabled
+                                               ng-model="employersubscriptionIsVerified"> Is it Verified?
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <input type="submit" class="btn btn-gradient-primary m-1" ng-click="dataForm.$valid && onClick_Submit()" />
+                        <button type="button" class="btn btn-inverse-dark m-1" ng-click="onClick_Cancel()">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    @*Search Modal*@
+
+    <div class="modal fade" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel"
+         aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog" style="max-width:600px !important;" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="searchModalLabel">Search Result</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Status</label>
+                                <select ng-model="SearchEmployersubscriptionIsActive" class="form-control">
+                                    <option value="true">Active</option>
+                                    <option value="false">InActive</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" ng-click="onClick_CloseSearch()">Close</button>
+                    <button type="button" class="btn btn-primary" ng-click="onClick_SearchResult()">Search</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@section scripts{
+    <script src="~/Areas/Employer/_Employer/Code/MasterSetting/employer-subscription-controller.js?version=@(System.Configuration.ConfigurationManager.AppSettings["version"].ToString())"></script>
+}
+
+

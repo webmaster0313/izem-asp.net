@@ -1,0 +1,178 @@
+﻿
+@{
+    ViewBag.Title = "EmployeeDetail";
+    Layout = "~/Areas/Member/Views/Shared/_Layout.cshtml";
+}
+
+<div ng-controller="member-employeedetail-controller">
+    <div class="row">
+        <div class="col-md-3 mb-1">
+            <div class="card">
+                <div class="card-body">
+                    <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="horizontal">
+                        <a class="nav-link btn btn-outline-secondary mb-2 active" id="v-pills-Biodata-tab" data-toggle="pill"
+                           href="#v-pills-Biodata" role="tab" aria-controls="v-pills-Biodata" aria-selected="true">
+                            Biodata
+                        </a>
+                        <a class="nav-link btn btn-outline-secondary mb-2" id="v-pills-Salary-Info-tab" data-toggle="pill"
+                           href="#v-pills-Salary-Info" role="tab" aria-controls="v-pills-Salary-Info" aria-selected="false">
+                            Salary-Info
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-9 mb-1">
+            <div class="card">
+                <div class="tab-content" id="v-pills-tabContent">
+                    <div class="tab-pane fade show active" id="v-pills-Biodata" role="tabpanel" aria-labelledby="v-pills-Biodata-tab">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div style="border: 1px solid #e1e1e1; height: 300px;">
+                                            <img class="thumb fullImage"
+                                                 style="width:100%; height:100%;"
+                                                 ng-src="~/Image/{{_employerId}}/{{_employeeEnroll}}.jpg"
+                                                 on-error-src="~/Image/NoPhoto.jpg" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <ul class="list-group list-group-flush">
+                                            <li class="list-group-item">
+                                                Full Name: {{_memberName}} ({{_employeeEnroll}})
+                                            </li>
+                                            <li class="list-group-item">
+                                                Mobile No: {{_memberMobile}}
+                                            </li>
+                                            <li class="list-group-item">
+                                                Email: {{_memberEmail}}
+                                            </li>
+                                            <li class="list-group-item">
+                                                NRIC: {{_memberNric}}
+                                            </li>
+                                            <li class="list-group-item">
+                                                Passport: {{_memberPassport}}
+                                            </li>
+                                            <li class="list-group-item">
+                                                Date of Birth: {{_memberDobDDMMYYYY}}
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <hr />
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <ul class="list-group list-group-flush">
+                                            <li class="list-group-item">
+                                                Gender: {{_memberGender}}
+                                            </li>
+                                            <li class="list-group-item">
+                                                Marital Status : {{_memberMaritalStatus}}
+                                            </li>
+                                            <li class="list-group-item">
+                                                Race: {{_masterrace}}
+                                            </li>
+                                            <li class="list-group-item">
+                                                Citizenship: {{_mastercitizenship}}
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <ul class="list-group list-group-flush">
+                                            <li class="list-group-item">
+                                                Designation: {{_employeeDesignation}}
+                                            </li>
+                                            <li class="list-group-item">
+                                                Branch: {{_employerbranchName}}
+                                            </li>
+                                            <li class="list-group-item">
+                                                Department: {{_employerdepartmentTitle}}
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <hr />
+                                <p>Address</p>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <ul class="list-group list-group-flush">
+                                            <li class="list-group-item">
+                                                Fax: {{_memberFax}}
+                                            </li>
+                                            <li class="list-group-item">
+                                                City: {{_memberCity}}, State: {{_masterstate}}, Country: {{_mastercountry}}, Postcode: {{_memberPostcode}}
+                                            </li>
+                                            <li class="list-group-item">
+                                                Address1: {{_memberAddress1}}
+                                            </li>
+                                            <li class="list-group-item">
+                                                Address2: {{_memberAddress2}}
+                                            </li>
+                                            <li class="list-group-item">
+                                                Address3: {{_memberAddress3}}
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="v-pills-Salary-Info" role="tabpanel" aria-labelledby="v-pills-Salary-Info-tab">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <ul class="list-group list-group-flush">
+                                            <li class="list-group-item">
+                                                BankName: {{_memberBankName}}
+                                            </li>
+                                            <li class="list-group-item">
+                                                Account: {{_memberAccount}}
+                                            </li>
+                                            <li class="list-group-item">
+                                                Current Basic: {{_employeesalarysetupCurrentBasicRound2}}
+                                            </li>
+                                            <li class="list-group-item">
+                                                Payment Rate: {{_employeesalarysetupPaymentRate}}
+                                            </li>
+                                            <li class="list-group-item">
+                                                Payment Type: {{_employeesalarysetupPaymentType}}
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <ul class="list-group list-group-flush">
+                                            <li class="list-group-item">
+                                                EPF Number: {{_memberEPF}}
+                                            </li>
+                                            <li class="list-group-item">
+                                                SOCSO Number: {{_memberSocso}}
+                                            </li>
+                                            <li class="list-group-item">
+                                                EIS Number: {{_memberEIS}}
+                                            </li>
+                                            <li class="list-group-item">
+                                                HRDF Number: {{_memberOther}}
+                                            </li>
+                                            <li class="list-group-item">
+                                                PTPTN Number: {{_memberPTPTN}}
+                                            </li>
+                                            <li class="list-group-item">
+                                                Income Tax-Number: {{_memberIncomeTax}}
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/Areas/Member/_Member/Code/Home/member-employeedetail-controller.js"></script>
+}

@@ -1,0 +1,273 @@
+﻿
+@{
+    ViewBag.Title = "profile";
+    Layout = "~/Areas/Employer/Views/Shared/_Layout.cshtml";
+}
+
+<div ng-controller="client-profile-controller">
+    <form name="dataForm" autocomplete="off">
+        <div class="row">
+            <div class="col-md-4 mt-1">
+                <div class="row">
+                    <div class="col-md-12 mt-1">
+                        <div class="card">
+                            <div class="card-body">
+                                <p><b>Login time Information</b></p>
+                                <hr />
+                                <div class="py-2">
+                                    <p class="clearfix">
+                                        <span class="float-left"> Full Name </span>
+                                        <span class="float-right text-muted"> {{name}} </span>
+                                    </p>
+                                    <p class="clearfix">
+                                        <span class="float-left"> Email </span>
+                                        <span class="float-right text-muted"> {{email}} </span>
+                                    </p>
+                                    <p class="clearfix">
+                                        <span class="float-left"> Mobile </span>
+                                        <span class="float-right text-muted"> {{mobile}} </span>
+                                    </p>
+                                    <p class="clearfix">
+                                        <span class="float-left"> Role </span>
+                                        <span class="float-right text-muted"> {{role}} </span>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <input type="button" class="btn btn-block btn-outline-primary mt-1" ng-click="onClick_CancelData()" value="Back to home" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 mt-1" ng-hide="!employerIsActive">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="py-2">
+                                    <p>
+                                        Congratulations,
+                                    </p>
+                                    <p>
+                                        Your profile is submitted to verification!<br />
+                                        Please wait till approval.
+                                    </p>
+                                    <p>
+                                        Thank You.
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <input type="button" class="btn btn-dark btn-block" value="Log-out" ng-click="onClick_SignOut()" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-md-8 mt-1">
+                <div class="card">
+                    <div class="card-body">
+                        <p><b>Personal Information</b></p>
+                        <hr />
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Employer Name<span class="text-danger">*</span></label>
+                                    <span class="float-right text-danger cursor" ng-click="updateFromSignIn('name')">
+                                        <small>Use Sign-In</small>
+                                    </span>
+                                    <input type="text" class="form-control form-control-lg"
+                                           ng-disabled="verification"
+                                           ng-model="employerName"
+                                           required>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Registration Number<span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control form-control-lg"
+                                           ng-model="employerRegistration"
+                                           required>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Employer Email<span class="text-danger">*</span></label>
+                                    <span class="float-right text-danger cursor" ng-click="updateFromSignIn('email')">
+                                        <small>Use Sign-In</small>
+                                    </span>
+                                    <input type="email" class="form-control form-control-lg"
+                                           ng-disabled="verification"
+                                           ng-model="employerEmail"
+                                           required>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Employer Phone Number<span class="text-danger">*</span></label>
+                                    <span class="float-right text-danger cursor" ng-click="updateFromSignIn('mobile')">
+                                        <small>Use Sign-In</small>
+                                    </span>
+                                    <input type="text" class="form-control form-control-lg"
+                                           ng-disabled="verification"
+                                           ng-model="employerContactno"
+                                           required>
+                                </div>
+                            </div>
+                        </div>
+                        <hr />
+                        <p><b>Business Address</b></p>
+                        <hr />
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Country<span class="text-danger">*</span></label>
+                                    <select ng-model="mastercountryId" class="form-control"
+                                            ng-change="fillState()" required chosen>
+                                        <option value="">-- Select --</option>
+                                        <option ng-selected="x == mastercountryId" ng-repeat="x in fill_mastercountryId" ng-value="x.mastercountryId">
+                                            {{x.mastercountryTitle}}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>State<span class="text-danger">*</span></label>
+                                    <select ng-model="masterstateId" class="form-control" required chosen>
+                                        <option value="">-- Select --</option>
+                                        <option ng-selected="x == masterstateId" ng-repeat="x in fill_masterstateId" ng-value="x.masterstateId">
+                                            {{x.masterstateTitle}}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>City<span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control form-control-lg"
+                                           ng-model="employerCity" required>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Postcode<span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control form-control-lg"
+                                           ng-model="employerPostcode" required>
+                                </div>
+                            </div>
+                            <div class="col-md-4" style="display:none;">
+                                <div class="form-group">
+                                    <label>Fax</label>
+                                    <input type="text" class="form-control form-control-lg"
+                                           ng-model="employerFax">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Address1<span class="text-danger">*</span></label>
+                                    <textarea class="form-control form-control-lg"
+                                              ng-model="employerAddress1" rows="3" required></textarea>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Address2</label>
+                                    <textarea class="form-control form-control-lg"
+                                              ng-model="employerAddress2" rows="3"></textarea>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Address3</label>
+                                    <textarea class="form-control form-control-lg"
+                                              ng-model="employerAddress3" rows="3"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <hr />
+                        <p><b>Person In-Charge Information</b></p>
+                        <hr />
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>In-Charge Name<span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control form-control-lg"
+                                           ng-model="employerInchargeName" required>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>In-Charge Mobile</label>
+                                    <input type="text" class="form-control form-control-lg"
+                                           ng-model="employerInchargeMobile">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>In-Charge Email<span class="text-danger">*</span></label>
+                                    <input type="email" class="form-control form-control-lg"
+                                           ng-model="employerInchargeEmail" required>
+                                </div>
+                            </div>
+                        </div>
+                        <hr />
+                        <p><b>Other Information</b></p>
+                        <hr />
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Google Tag</label>
+                                    <input type="text" class="form-control form-control-lg"
+                                           ng-model="employerGoogleTag">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label> Managed By</label>
+                                    <select ng-model="employerManagedBy" class="form-control">
+                                        <option value="">-- Select --</option>
+                                        <option value="admin">By Admin</option>
+                                        <option value="employer">By Employer</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer" ng-hide="verification">
+                        <input type="submit" class="btn btn-block btn-outline-primary mt-1"
+                               ng-click="dataForm.$valid && onClick_Submit()"
+                               ng-hide="employerIsActive"
+                               value="Update above information" />
+
+                        <input type="submit" class="btn btn-block btn-behance mt-1"
+                               ng-disabled="employerId == 0"
+                               ng-hide="employerIsActive"
+                               ng-click="dataForm.$valid && onClick_SendToVerify()"
+                               value="Submit profile to verification" />
+
+                        <span class="btn btn-block btn-success mt-1"
+                              ng-hide="!employerIsActive"
+                              value="Submit to verify">Profile submitted for the verification process! We'll update you soon.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+
+    <div class="modal fade" id="modalCookie1" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" data-backdrop="static" data-keyboard="false" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/Areas/Employer/_Employer/Code/Home/client-profile-controller.js?version=@(System.Configuration.ConfigurationManager.AppSettings["version"].ToString())"></script>
+}

@@ -1,0 +1,155 @@
+﻿
+<div ng-controller="employee-leaveentitlementsetup-controller">
+    <div class="row">
+        <div class="col-md-12 m-1">
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card">
+                        <form name="dataForm">
+                            <div class="card-header">
+                                Manage Leave Entitlement
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label>
+                                                Leave Type<span class="text-danger">*</span>
+                                                <a class="cursor text-danger" data-toggle="tooltip"
+                                                   title="fill records from master setting to leave-type!">
+                                                    <i class="mdi mdi-message-alert"></i>
+                                                </a>
+                                            </label>
+                                            <select ng-model="employerleavetypeId" class="form-control" ng-change="onChange_LeaveType()"
+                                                    required chosen>
+                                                <option value="">-- Select --</option>
+                                                <option ng-selected="x == employerleavetypeId" ng-repeat="x in fill_employerleavetypeId" ng-value="x.employerleavetypeId">
+                                                    {{x.employerleavetypeLeaveType}}
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group" ng-hide="true">
+                                            <label>Entitlement (In Days) <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control form-control-lg decimalInputValidation" disabled
+                                                   required
+                                                   ng-model="employeeleaveentitlementEntitled">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>PreviousBnf<span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control form-control-lg decimalInputValidation"
+                                                   required
+                                                   ng-model="employeeleaveentitlementPreviousYearBnf">
+                                        </div>
+                                        <div class="row" ng-hide="true">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>Allowed-BNF</label>
+                                                    <input type="text" class="form-control form-control-lg decimalInputValidation" disabled
+                                                           disabled
+                                                           ng-model="employeeleaveentitlementAllowendbnf">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>Allowed-BNF <small>Override</small><span class="text-danger">*</span></label>
+                                                    <input type="text" class="form-control form-control-lg decimalInputValidation" disabled
+                                                           required
+                                                           ng-model="employeeleaveentitlementAllowedbnfOverride">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+
+                                <input type="submit" class="btn btn-gradient-primary"
+                                       ng-click="dataForm.$valid && onClick_Submit()"
+                                       value="Save" />
+
+                                <input type="button" class="btn btn-inverse-dark"
+                                       ng-click="onClick_CloseEmployeeLeaveEntitlementSetup()"
+                                       value="Cancel" />
+
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            Leave Entitlement List
+                        </div>
+                        <div class="card-body">
+                            <table class="table table-hover table-responsive">
+                                <thead>
+                                    <tr>
+                                        <th>Leave</th>
+                                        <th>PreviousBnf</th>
+                                        <th class="widthCenter">Status</th>
+                                        <th class="widthCenter">Edit</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-if="!loaded">
+                                        <td class="loading"><div class="bar"></div></td>
+                                        <td class="loading"><div class="bar"></div></td>
+                                        <td class="loading"><div class="bar"></div></td>
+                                        <td class="loading"><div class="bar"></div></td>
+                                    </tr>
+                                    <tr ng-if="loaded" ng-repeat="x in tableParams">
+                                        <td>{{x.employerleavetypeLeaveType}}</td>
+                                        <td>{{x.employeeleaveentitlementPreviousYearBnf}}</td>
+                                        <td>
+                                            <a class="cursor" ng-show="{{x.employeeleaveentitlementIsActive == '1'}}" ng-click="onClick_UpdateStatusRecord(x.employeeleaveentitlementId, 'false')">
+                                                <span class="badge badge-primary" style="width: 100px"> Active </span>
+                                            </a>
+                                            <a class="cursor" ng-show="{{x.employeeleaveentitlementIsActive == '0'}}" ng-click="onClick_UpdateStatusRecord(x.employeeleaveentitlementId, 'true')">
+                                                <span class="badge badge-dark" style="width: 100px"> In-Active </span>
+                                            </a>
+                                        </td>
+                                        <td class="text-nowrap">
+                                            <a class="cursor" ng-click="onClick_EditRecord(x.employeeleaveentitlementId)">
+                                                <i class="mdi mdi-pencil-box icon-font-size text-info"></i>
+                                            </a>
+                                            @*<a class="cursor" ng-click="onClick_DeleteRecord(x.employeeleaveentitlementId)">
+                                                    <i class="mdi mdi-delete-forever icon-font-size text-danger"></i>
+                                                </a>*@
+
+
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="card-footer">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="float-left">
+                                        <select ng-model="pageSizeSelected" ng-change="changePageSize()" class="badge">
+                                            <option value="10">10</option>
+                                            <option value="30">30</option>
+                                            <option value="50">50</option>
+                                        </select>
+                                    </div>
+                                    <div class="float-right">
+                                        <pagination total-items="totalCount" ng-change="pageChanged()"
+                                                    items-per-page="pageSizeSelected" direction-links="true" ng-model="pageIndex"
+                                                    next-text=">" previous-text="<"
+                                                    max-size="maxSize" class="pagination" first-text="First" last-text="Last"
+                                                    boundary-links="true" rotate="false"
+                                                    num-pages="numPages">
+                                        </pagination>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+

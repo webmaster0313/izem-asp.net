@@ -1,0 +1,713 @@
+﻿
+@{
+    ViewBag.Title = "Employer Payroll-Process";
+    Layout = "~/Areas/Employer/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .txtWidth1 {
+        width: 60px;
+        height: 25px;
+    }
+
+    .txtWidth {
+        width: 95px;
+        height: 25px;
+    }
+
+    .txtHeader {
+        padding: 0.50rem 0.50rem;
+        font-size: 14px;
+    }
+
+    .txtUlLi {
+        border: none;
+        padding: 0.30rem 0.25rem;
+    }
+</style>
+
+<div ng-controller="employer-payrollprocess-controller">
+
+    @*Entry List*@
+
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Payroll Process</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Payroll Process</li>
+        </ol>
+    </nav>
+
+    <div ng-show="isMasterList">
+        <div class="row mb-1">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group m-0">
+                                    <input type="month" class="form-control"
+                                           ng-click="onClick_CheckDate()"
+                                           ng-model="processDate">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group m-0">
+                                    <select class="form-control" ng-model="salaryProcessType"
+                                            ng-change="onChange_SalaryProcessType()">
+                                        <option value="all">All</option>
+                                        <option value="employeewise">Employee Wise</option>
+                                        <option value="departmentwise">Department Wise</option>
+                                        <option value="branchwise">Branch Wise</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <button type="button" class="btn btn-primary" ng-click="onLoad_MasterService()">
+                            Search
+                        </button>
+                        <button type="button" class="btn btn-success"
+                                ng-show="isAddPermit"
+                                ng-click="onClick_SalaryProcessExection()">
+                            Execute
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-md-12 m-1">
+                <div class="row">
+                    <div class="col-md-4 stretch-card grid-margin" ng-repeat="x in payrollData">
+                        <div class="card bg-gradient-dark card-img-holder text-white">
+                            <div class="card-body">
+                                <h4 class="font-weight-normal mb-3">
+                                    {{x._payrollDate}}
+
+                                    <a href="#" ng-show="x.isLocked == 'true'" style="color:#ffd800" ng-click="onClick_LockPayroll(x.payrollId,'false')">
+                                        <i class="mdi mdi-lock-outline mdi-24px float-right"></i>
+                                    </a>
+
+                                    <a href="#" ng-show="x.isLocked == 'false'" style="color:#ffd800" ng-click="onClick_LockPayroll(x.payrollId,'true')">
+                                        <i class="mdi mdi-lock-open-outline mdi-24px float-right"></i>
+                                    </a>
+
+                                    <a href="#" ng-hide="x.isLocked == 'true'" style="color:white" ng-click="onClick_RemovePayroll(x.payrollId)">
+                                        <i class="mdi mdi-delete-circle mdi-24px float-right"></i>
+                                    </a>
+                                </h4>
+                                <h2 class="mb-5"><span class="mdi mdi-account-multiple-outline"></span> {{x.employeeCount | number}}</h2>
+                                <h6 class="card-text">
+                                    <a href="#" style="color:white" ng-click="onClick_ShowSalaryDetail(x.payrollId,x.payrollDateYYYYMMDD,x.isLocked)"> View Detail </a>
+                                </h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div ng-show="isSubMasterList">
+        <div class="card">
+            <div class="card-header">
+                <div class="float-left">
+                    <a href="#" class="badge badge-gradient-danger" ng-click="onClick_Backtomain()"> Go Back </a>
+                    &nbsp;&nbsp;&nbsp;
+                    <span class="badge badge-primary">Selected Month: {{displayDate}}</span>
+                </div>
+                <div class="float-right">
+
+                    <a class="listMenu" data-toggle="tooltip" data-placement="top"
+                       title="Download Salary Data" ng-click="onClick_DownloadExcelFile()">
+                        <i class="mdi mdi-download icon-font-size filterMenu"></i>
+                    </a>
+
+                    <a class="listMenu" data-toggle="tooltip" data-placement="top"
+                       title="Upload Salary Data" ng-click="onClick_UploadExcelFile()">
+                        <i class="mdi mdi-upload icon-font-size filterMenu" style="color: #047edf !important;"></i>
+                    </a>
+
+                    <a class="listMenu" data-toggle="tooltip" data-placement="top"
+                       title="Open search" ng-click="onClick_OpenSearch()">
+                        <i class="mdi mdi-filter icon-font-size filterMenu"></i>
+                    </a>
+                    <a class="listMenu" data-toggle="tooltip" data-placement="top"
+                       title="Reset result" ng-click="onClick_ResetSearch()">
+                        <i class="mdi mdi-view-list icon-font-size viewMenu"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="card-body">
+                <table class="table table-hover table-responsive-xl">
+                    <thead>
+                        <tr>
+                            <th class="widthCenter">Joining</th>
+                            <th class="widthCenter">Leaving</th>
+                            <th>Name</th>
+                            <th class="widthLeft">Branch</th>
+                            <th class="widthLeft">Department</th>
+                            <th class="widthRight">Basic</th>
+                            <th class="widthRight">Gross</th>
+                            <th class="widthRight">Net</th>
+                            <th class="widthCenter">Detail</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-if="!loaded">
+                            <td class="loading"><div class="bar"></div></td>
+                            <td class="loading"><div class="bar"></div></td>
+                            <td class="loading"><div class="bar"></div></td>
+                            <td class="loading"><div class="bar"></div></td>
+                            <td class="loading"><div class="bar"></div></td>
+                            <td class="loading"><div class="bar"></div></td>
+                            <td class="loading"><div class="bar"></div></td>
+                            <td class="loading"><div class="bar"></div></td>
+                            <td class="loading"><div class="bar"></div></td>
+                        </tr>
+                        <tr ng-if="loaded" ng-repeat="x in tableParams">
+                            <td class="widthleft">{{x.employeeJoiningDDMMYYYY}}</td>
+                            <td class="widthleft">{{x.employeeLeavingDDMMYYYY}}</td>
+                            <td>{{x.memberName}}</td>
+                            <td>{{x.employerbranchName}}</td>
+                            <td>{{x.employerdepartmentTitle}}</td>
+                            <td class="text-right">{{x.payrollsalaryBasicRound4}}</td>
+                            <td class="text-right">{{x.payrollsalaryGrossRound4}}</td>
+                            <td class="text-right">{{x.payrollsalaryNetRound4}}</td>
+                            <td class="text-center">
+                                <a href="#" ng-click="onClick_ShowSalaryListDetail(x)">
+                                    <i class="mdi mdi-view-list icon-font-size editMenu"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="card-footer">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="float-left">
+                            <select ng-model="pageSizeSelected" ng-change="changePageSize()" class="badge">
+                                <option value="15">15</option>
+                                <option value="30">30</option>
+                                <option value="50">50</option>
+                            </select>
+                        </div>
+                        <div class="float-right">
+                            <pagination total-items="totalCount" ng-change="pageChanged()"
+                                        items-per-page="pageSizeSelected" direction-links="true" ng-model="pageIndex"
+                                        next-text=">" previous-text="<"
+                                        max-size="maxSize" class="pagination" first-text="First" last-text="Last"
+                                        boundary-links="true" rotate="false"
+                                        num-pages="numPages">
+                            </pagination>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div ng-show="isSubMasterListDetail">
+        <div class="row">
+            <div class="col-md-12 mb-1">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6 float-left">
+                                <ul class="list-group">
+                                    <li class="list-group-item txtUlLi">Employee: <b>{{memberName}}</b></li>
+                                    <li class="list-group-item txtUlLi">
+                                        <label>
+                                            <input type="checkbox" ng-model="_statutoryManualUpdate">
+                                            Overwrite EPF,Socso,PCB & EIS deduction
+                                        </label>
+                                    </li>
+                                    <li class="list-group-item txtUlLi">
+                                        <label>
+                                            <input type="checkbox" ng-model="_otherManualUpdate">
+                                            Overwrite NPL, OT, Add Pay, Shift Rates
+                                        </label>
+                                    </li>
+
+                                </ul>
+                            </div>
+                            <div class="col-md-6 float-right">
+                                <ul class="list-group">
+                                    <li class="list-group-item txtUlLi text-right">Basic Salary : <b>{{basicpay}}</b></li>
+                                    <li class="list-group-item txtUlLi text-right">
+                                        Working Day : <b><input type="text" class="text-right" style="width:100px;" ng-model="payrollsalaryWorkingDay"></b>
+                                    </li>
+                                    <li class="list-group-item txtUlLi text-right">
+                                        Generated Salary : <b><input type="text" class="text-right" disabled style="width:100px;" ng-model="generated"></b>
+                                    </li>
+                                    <li class="list-group-item txtUlLi text-right">Gross Salary : <b>{{grosspay}}</b></li>
+                                    <li class="list-group-item txtUlLi text-right">NetPay Salary : <b>{{netpay}}</b></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4 mb-1">
+                <div class="card">
+                    <div class="card-header txtHeader">
+                        Statutory
+                    </div>
+                    <div class="card-body table-responsive p-0" style="height: 260px;">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th class="widthRight">Wages</th>
+                                    <th class="widthRight">Employee</th>
+                                    <th class="widthRight">Employer</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>EPF</td>
+                                    <td><input type="text" class="form-control text-right txtWidth" ng-disabled="!_statutoryManualUpdate == true" ng-model="epfWages"></td>
+                                    <td><input type="text" class="form-control text-right txtWidth" ng-disabled="!_statutoryManualUpdate" ng-model="epfEmployee"></td>
+                                    <td><input type="text" class="form-control text-right txtWidth" ng-disabled="!_statutoryManualUpdate" ng-model="epfEmployer"></td>
+                                </tr>
+                                <tr>
+                                    <td>SOCSO</td>
+                                    <td><input type="text" class="form-control text-right txtWidth" ng-disabled="!_statutoryManualUpdate" ng-model="socsoWages"></td>
+                                    <td><input type="text" class="form-control text-right txtWidth" ng-disabled="!_statutoryManualUpdate" ng-model="socsoEmployee"></td>
+                                    <td><input type="text" class="form-control text-right txtWidth" ng-disabled="!_statutoryManualUpdate" ng-model="socsoEmployer"></td>
+                                </tr>
+                                <tr>
+                                    <td>EIS</td>
+                                    <td><input type="text" class="form-control text-right txtWidth" ng-disabled="!_statutoryManualUpdate" ng-model="esiWages"></td>
+                                    <td><input type="text" class="form-control text-right txtWidth" ng-disabled="!_statutoryManualUpdate" ng-model="esiEmployee"></td>
+                                    <td><input type="text" class="form-control text-right txtWidth" ng-disabled="!_statutoryManualUpdate" ng-model="esiEmployer"></td>
+                                </tr>
+                                <tr>
+                                    <td>HRDF</td>
+                                    <td><input type="text" class="form-control text-right txtWidth" ng-disabled="!_statutoryManualUpdate" ng-model="hrdfWages"></td>
+                                    <td><input type="text" class="form-control text-right txtWidth" ng-disabled="!_statutoryManualUpdate" ng-model="hrdfEmployee"></td>
+                                    <td><input type="text" class="form-control text-right txtWidth" ng-disabled="!_statutoryManualUpdate" ng-model="hrdfEmployer"></td>
+                                </tr>
+                                <tr>
+                                    <td>PCB</td>
+                                    <td><input type="text" class="form-control text-right txtWidth" disabled value="0"></td>
+                                    <td><input type="text" class="form-control text-right txtWidth" ng-disabled="!_statutoryManualUpdate" ng-model="pcbEmployee"></td>
+                                    <td><input type="text" class="form-control text-right txtWidth" disabled value="0"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-1">
+                <div class="card">
+                    <div class="card-header txtHeader">
+                        Non Paid Leave
+                    </div>
+                    <div class="card-body table-responsive p-0" style="height: 260px;">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Non Paid Leave</th>
+                                    <th class="widthRight">Rate</th>
+                                    <th class="widthRight">Unit</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>NPL Days</td>
+                                    <td><input type="text" class="form-control text-right txtWidth decimalInputValidation" ng-disabled="!_otherManualUpdate" ng-model="nplDays"></td>
+                                    <td><input type="text" class="form-control text-right txtWidth decimalInputValidation" ng-model="nplDaysUnit"></td>
+                                </tr>
+                                <tr>
+                                    <td>NPL Hours</td>
+                                    <td><input type="text" class="form-control text-right txtWidth decimalInputValidation" ng-disabled="!_otherManualUpdate" ng-model="nplHours"></td>
+                                    <td><input type="text" class="form-control text-right txtWidth decimalInputValidation" ng-model="nplHoursUnit"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-1">
+                <div class="card">
+                    <div class="card-header txtHeader">
+                        Allowance & Deduction
+                        <a class="cursor text-danger float-right" data-toggle="tooltip"
+                           ng-hide="_isLocked == 'true'"
+                           ng-click="onClick_AddNewAllowance()"
+                           title="Add New!">
+                            <i class="mdi mdi-library-plus text-pinterest"></i>
+                        </a>
+
+                    </div>
+                    <div class="card-body table-responsive p-0" style="height: 260px;">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Code</th>
+                                    <th class="widthRight">Amount</th>
+                                    <th class="widthCenter">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="x in AllowanceMaster">
+                                    <td ng-class="x.isLoanRecord == true ? 'text-danger' : ''">{{x.Description}}</td>
+                                    <td>
+
+                                        <input type="text" class="form-control text-right txtWidth" style="width:100px;" ng-disabled="x.isLoanRecord == true || x.employerallowanceBenefitInKind.data[0] == 1"
+                                               ng-model="x.Amount">
+                                    </td>
+                                    <td class="text-nowrap widthCenter">
+                                        <a class="cursor"
+                                           ng-hide="x.isLoanRecord == true || _isLocked == 'true'   || x.employerallowanceBenefitInKind.data[0] == 1"
+                                           ng-click="onClick_RemoveAllowanceDeduction(x.payrollallowancendeductionId,$index)">
+                                            <i class="mdi mdi-delete-forever icon-font-size text-danger"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-1">
+
+                <div class="card">
+                    <div class="card-header txtHeader">
+                        Additional-Pay
+                    </div>
+                    <div class="card-body table-responsive p-0" style="height: 260px;">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Description</th>
+                                    <th class="widthRight">Rate</th>
+                                    <th class="widthRight">Unit</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="x in PayrollAdditionalPayMaster">
+                                    <td>{{x.employeradditionalpaysetupDescription}}</td>
+                                    <td>
+                                        <input type="text" class="form-control text-right txtWidth" ng-disabled="!_otherManualUpdate" ng-model="x.payrolladditionalpayRateRound4">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control text-right txtWidth1" ng-disabled="x.payrolladditionalpayRateRound4 == 0" ng-model="x.payrolladditionalpayUnit">
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-1">
+                <div class="card">
+                    <div class="card-header txtHeader">
+                        Overtime
+                    </div>
+                    <div class="card-body table-responsive p-0" style="height: 260px;">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Description</th>
+                                    <th class="widthRight">Rate</th>
+                                    <th class="widthRight">Unit</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="x in PayrollOvertimeMaster">
+                                    <td>{{x.employerotsetupDescription}}</td>
+
+                                    <td>
+                                        <input type="text" class="form-control text-right txtWidth" ng-disabled="!_otherManualUpdate" ng-model="x.payrollovertimeRateRound4">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control text-right txtWidth1" ng-disabled="x.payrollovertimeRateRound4 == 0" ng-model="x.payrollovertimeUnit">
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-1">
+                <div class="card">
+                    <div class="card-header txtHeader">
+                        Shift
+                    </div>
+                    <div class="card-body table-responsive p-0" style="height: 260px;">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Description</th>
+                                    <th class="widthRight">Rate</th>
+                                    <th class="widthRight">Unit</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="x in PayrollShiftMaster">
+                                    <td>{{x.employershiftsetupDescription}}</td>
+                                    <td>
+                                        <input type="text" class="form-control text-right txtWidth" ng-disabled="!_otherManualUpdate" ng-model="x.payrollShiftRateRound4">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control text-right txtWidth1" ng-disabled="x.payrollShiftRateRound4 == 0" ng-model="x.payrollShiftUnit">
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12 mb-1">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="float-right">
+                            <button type="button" class="btn btn-gradient-dark" ng-click="onClick_gotosalarylist()">Go Back</button>
+                            <button type="button" class="btn btn-gradient-primary" ng-hide="_isLocked == 'true'" ng-click="onClick_SalaryRecalculation('save')">Save & Close</button>
+                            <button type="button" class="btn btn-gradient-info" ng-hide="_isLocked == 'true'" ng-click="onClick_SalaryRecalculation('calculation')">Recalculate</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @*employee list with type selection*@
+
+    <div class="modal fade" id="employeeListModal" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Employee list</h5>
+                </div>
+                <div class="modal-body" style=" height: 500px; max-height: 500px; overflow: auto;">
+                    <div class="col-md-10" ng-show="isShowDepartment">
+                        <div class="form-group">
+                            <label>Department</label>
+                            <select ng-model="SearchEmployerdepartmentId" class="form-control" chosen
+                                    ng-change="onChange_SelectionType()">
+                                <option value="">-- Select --</option>
+                                <option ng-repeat="x in fill_SearchEmployerdepartmentId" ng-value="x.employerdepartmentId">
+                                    {{x.employerdepartmentTitle}}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-10" ng-show="isShowBranch">
+                        <div class="form-group">
+                            <label>Branch</label>
+                            <select ng-model="SearchEmployerbranchId" class="form-control" chosen
+                                    ng-change="onChange_SelectionType()">
+                                <option value="">-- Select --</option>
+                                <option ng-repeat="x in fill_SearchEmployerbranchId" ng-value="x.employerbranchId">
+                                    {{x.employerbranchName}}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <table class="table table-hover table-responsive-xl">
+                            <thead>
+                                <tr>
+                                    <th style="width: 1%;"><input type="checkbox" class="cursor" ng-model="masterCheckBox" ng-change="toggleAll()" /></th>
+                                    <th>Employee Name</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="x in tableParams_Employee">
+                                    <td> <input type="checkbox" class="cursor" id="data_{{x.employeeId}}" ng-model="x.flag" ng-change="toggleFlag($index)" /></td>
+                                    <td>{{x.memberName}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" ng-click="onClick_EmployeeListModalClose()">Close</button>
+                    <button type="button" class="btn btn-success"
+                            ng-show="isAddPermit"
+                            ng-click="onClick_SalaryProcessExection()">
+                        Execute
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @*search*@
+
+    <div class="modal fade" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel"
+         aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog" style="max-width:600px !important;" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="searchModalLabel">Search Result</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Employee</label>
+                                <select ng-model="_SearchEmployeeId" class="form-control" chosen>
+                                    <option value="">-- Select --</option>
+                                    <option ng-repeat="x in _fill_SearchEmployeeId" ng-value="x.employeeId">
+                                        {{x.memberName}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Department</label>
+                                <select ng-model="_SearchEmployerdepartmentId" class="form-control" chosen>
+                                    <option value="">-- Select --</option>
+                                    <option ng-repeat="x in _fill_SearchEmployerdepartmentId" ng-value="x.employerdepartmentId">
+                                        {{x.employerdepartmentTitle}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Branch</label>
+                                <select ng-model="_SearchEmployerbranchId" class="form-control" chosen>
+                                    <option value="">-- Select --</option>
+                                    <option ng-repeat="x in _fill_SearchEmployerbranchId" ng-value="x.employerbranchId">
+                                        {{x.employerbranchName}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Sort by</label>
+                                <select ng-model="_sortBy" class="form-control" chosen>
+                                    <option value="memberName">EmployeeName</option>
+                                    <option value="employeeEnroll">Employee Enroll</option>
+                                    <option value="employeeJoining">Joining Date</option>
+                                    <option value="employerdepartmentTitle">Department</option>
+                                    <option value="employerbranchName">Branch</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" ng-click="onClick_CloseSearch()">Close</button>
+                    <button type="button" class="btn btn-primary" ng-click="onClick_SearchResult()">Search</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @* manage allowance *@
+    <div class="modal fade" id="allowanceModal" tabindex="-1" role="dialog" aria-labelledby="allowanceModalLabel"
+         data-backdrop="static" data-keyboard="false" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Update Allowance and Deduction</h5>
+                </div>
+                <div class="modal-body">
+                    <form name="allowancedeductionForm">
+                        <div class="col-md-12">
+                            <div class="form-group mb-2">
+                                <div class="form-group">
+                                    <label>Allowance</label>
+                                    <select ng-model="employerallowanceId" class="form-control" chosen>
+                                        <option value="">-- Select --</option>
+                                        <option ng-selected="x == employerallowanceId" ng-repeat="x in fill_employerallowanceId" ng-value="x.employerallowanceId">
+                                            {{x.employerallowanceCode}}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group mb-2">
+                                <label>Amount<span class="text-danger">*</span></label>
+                                <input type="text" class="form-control form-control-lg"
+                                       ng-model="payrollallowancendeductionAmount">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" ng-click="onClick_InsertAllowance()">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="id_UploadExcelFile" tabindex="-1" role="dialog" aria-labelledby="excelUploaderModalLabel"
+         aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="card">
+                    <div class="card-header">
+                        Upload Salary Data
+                    </div>
+                    <div class="card-body">
+                        <div class="col-md-12 mb-1">
+                            <input type="file" ID="fuUpload" name="fuUpload" />
+                            <div class="float-right">
+                                <a href="#" ID="btnUpload" value="Upload" class="badge badge-dark"
+                                   ng-click="onClick_CloseBulkUpload('reset')">Reset</a>
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="col-md-12">
+                            <div class="badge badge-dark" ng-show="fileUploading">Please wait file is uploading..</div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <button type="button" class="btn btn-gradient-primary m-1" ng-click="onClick_UploadExcel()">Submit</button>
+                        <button type="button" class="btn btn-inverse-dark m-1" ng-click="onClick_CloseBulkUpload()">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="id_DataUnlock" tabindex="-1" role="dialog" aria-labelledby="id_DataUnlockModalLabel"
+         aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="card">
+                    <div class="card-header">
+                        Password Entry
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label>Password<span class="text-danger">*</span></label>
+                            <input type="text" class="form-control form-control-lg"
+                                   ng-model="confirmPassword">
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <button type="button" class="btn btn-gradient-primary m-1" ng-click="onClick_UnlockData()">Submit</button>
+                        <button type="button" class="btn btn-inverse-dark m-1" ng-click="onClick_CloseUnlockData()">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div style="display:none">
+        <table id="tabledata"></table>
+    </div>
+
+</div>
+
+@section scripts{
+    <script src="~/Areas/Employer/_Employer/Code/PayrollSetting/employer-payrollprocess-controller.js?version=@(System.Configuration.ConfigurationManager.AppSettings["version"].ToString())"></script>
+}

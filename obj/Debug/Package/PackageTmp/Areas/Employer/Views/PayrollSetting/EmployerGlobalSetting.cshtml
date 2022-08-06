@@ -1,0 +1,108 @@
+﻿
+@{
+    ViewBag.Title = "Employer-Global-Setting";
+    Layout = "~/Areas/Employer/Views/Shared/_Layout.cshtml";
+}
+
+<div ng-controller="employer-globalsetting-controller">
+
+    @*Entry List*@
+
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Payroll Process</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Global Setup</li>
+        </ol>
+    </nav>
+
+    @* Entry Form *@
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <form name="dataForm" autocomplete="off">
+                    <div class="card-header">
+                        Manage Global Setting
+                    </div>
+                    <div class="card-body">
+                        <div style="display:none;">
+                            <input type="text" ng-model="employerglobalpayrollId" />
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>EPF Number </label>
+                                    <input type="text" class="form-control form-control-lg"
+                                           ng-model="employerglobalpayrollEPFNumber">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>SOCSO Number </label>
+                                    <input type="text" class="form-control form-control-lg"
+                                           ng-model="employerglobalpayrollSocsoNumber">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>PCB Number </label>
+                                    <input type="text" class="form-control form-control-lg"
+                                           ng-model="employerglobalpayrollPCBNumber">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>EIS Number </label>
+                                    <input type="text" class="form-control form-control-lg"
+                                           ng-model="employerglobalpayrollEISNumber">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Income Tax Number </label>
+                                    <input type="text" class="form-control form-control-lg"
+                                           ng-model="employerglobalpayrollIncomeTaxNumber">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>HRDF </label>
+                                    <input type="text" class="form-control form-control-lg"
+                                           ng-model="employerglobalpayrollOther1">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Other </label>
+                                    <input type="text" class="form-control form-control-lg"
+                                           ng-model="employerglobalpayrollOther2">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Payslip Template </label>
+                                    <select ng-model="employerglobalpayrollPayslipTemplateType" disabled class="form-control">
+                                        <option value="0">-- Select --</option>
+                                        <option value="1">Template Type 1</option>
+                                        <option value="2">Template Type 2</option>
+                                        <option value="3">Template Type 3</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <input type="submit" class="btn btn-gradient-primary m-1"
+                               ng-show="isAddPermit"
+                               ng-click="dataForm.$valid && onClick_Submit()" />
+                        <button type="button" class="btn btn-inverse-dark m-1" ng-click="onClick_Cancel()">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/Areas/Employer/_Employer/Code/PayrollSetting/employer-globalsetting-controller.js"></script>
+}

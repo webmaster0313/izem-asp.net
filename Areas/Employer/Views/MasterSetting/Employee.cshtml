@@ -1,0 +1,763 @@
+﻿
+@{
+    ViewBag.Title = "Employee";
+    Layout = "~/Areas/Employer/Views/Shared/_Layout.cshtml";
+}
+
+<div ng-controller="employer-employee-controller">
+
+    @*Entry List*@
+
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Master entries</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Employee</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <div class="col-md-12" ng-show="hideEntry">
+            <div class="card">
+                <div class="card-header">
+                    <div class="float-right">
+                        <a class="listMenu" data-toggle="tooltip" data-placement="top"
+                           title="Open search" ng-click="onClick_OpenSearch()">
+                            <i class="mdi mdi-filter icon-font-size filterMenu"></i>
+                        </a>
+                        <a class="listMenu" data-toggle="tooltip" data-placement="top"
+                           title="Reset result" ng-click="onClick_ResetSearch()">
+                            <i class="mdi mdi-view-list icon-font-size viewMenu"></i>
+                        </a>
+                        <a class="listMenu" data-toggle="tooltip" data-placement="top"
+                           ng-if="isReportPermit"
+                           ng-click="onClick_Download()"
+                           title="Export excel">
+                            <i class="mdi mdi-download icon-font-size exportMenu"></i>
+                        </a>
+                        <a class="listMenu" data-toggle="tooltip" data-placement="top"
+                           ng-if="isReportPermit"
+                           ng-click="onClick_GeneratePDF()"
+                           title="Export excel">
+                            <i class="mdi mdi-printer icon-font-size exportMenu"></i>
+                        </a>
+                        <a class="listMenu" data-toggle="tooltip" data-placement="top"
+                           title="New entry"
+                           ng-show="isAddPermit"
+                           ng-click="onClick_AddRecord()">
+                            <i class="mdi mdi-plus-box icon-font-size addMenu"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <table class="table table-hover table-responsive-xl">
+                        <thead>
+                            <tr>
+                                <th class="widthCenter"
+                                    ng-if="isEditPermit || isDeletePermit">Action</th>
+                                <th class="widthCenter">Status</th>
+                                <th class="widthCenter">Login</th>
+                                <th class="widthLeft"></th>
+                                <th class="widthLeft">EnrollNo</th>
+                                <th class="widthLeft">NRIC/Pass</th>
+                                <th>Full-Name</th>
+                                <th class="widthLeft">Branch</th>
+                                <th class="widthLeft">Department</th>
+                                <th class="widthLeft">Joining</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-if="!loaded">
+                                <td class="loading"
+                                    ng-if="isEditPermit || isDeletePermit">
+                                    <div class="bar"></div>
+                                </td>
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                            </tr>
+                            <tr ng-if="hideEntry" ng-repeat="x in tableParams">
+                                <td class="text-nowrap"
+                                    ng-if="isEditPermit">
+                                    <a class="cursor"
+                                       ng-click="onClick_EditMember(x)">
+                                        <i class="mdi mdi-pencil-box icon-font-size editMenu"></i>
+                                    </a>
+                                    <a class="cursor"
+                                       ng-click="onClick_EditEmployee(x)">
+                                        <i class="mdi mdi-settings-box icon-font-size deleteMenu"></i>
+                                    </a>
+                                </td>
+                                <td class="text-nowrap text-center">
+                                    <span ng-show="{{x.employeeIsActive.data[0] == 1}}" class="badge badge-success">{{x.employeeIsActive.data[0] == 1 ? 'Active' : 'In-Active'}}</span>
+                                    <span ng-show="{{x.employeeIsActive.data[0] == 0}}" class="badge badge-danger">{{x.employeeIsActive.data[0] == 1 ? 'Active' : 'In-Active'}}</span>
+                                </td>
+
+                                <td class="widthCenter text-nowrap"
+                                    ng-if="isEditPermit || isDeletePermit">
+                                    <a class="cursor" ng-click="onClick_AllowSignIn(x)"
+                                       ng-show="x.signupId == 0 ">
+                                        <i class="mdi mdi-login icon-font-size text-success"></i>
+                                    </a>
+                                    <a class="cursor" ng-hide="x.signupId == 0 ">
+                                        <i class="mdi mdi-login icon-font-size text-danger"></i>
+                                    </a>
+                                </td>
+
+                                <td>
+                                    <a href="#"
+                                       ng-show="isAddPermit"
+                                       ng-click="onClick_OpenImageUploadModal(x)">
+                                        <img class="imageclass"
+                                             style="border-radius: 50%;" width="100%"
+                                             ng-src="~/Image/{{x.employerId}}/{{x.employeeEnroll}}.jpg?{{milisec}}"
+                                             on-error-src="~/Image/NoPhoto.jpg" />
+                                    </a>
+                                    <a href="#"
+                                       ng-show="!isAddPermit">
+                                        <img class="imageclass"
+                                             style="border-radius: 50%;" width="100%"
+                                             ng-src="~/Image/{{x.employerId}}/{{x.employeeEnroll}}.jpg?{{milisec}}"
+                                             on-error-src="~/Image/NoPhoto.jpg" />
+                                    </a>
+                                </td>
+                                <td>{{x.employeeEnroll}}</td>
+                                <td>
+                                    <span ng-class="x.memberNric == '' ? 'text-danger' : 'text-dark'"
+                                          ng-bind="x.memberNric == '' ? x.memberPassport : x.memberNric">
+                                    </span>
+                                </td>
+                                <td>{{x.memberName}}</td>
+                                <td>{{x.employerbranchName}}</td>
+                                <td>{{x.employerdepartmentTitle}}</td>
+                                <td>{{x.employeeJoiningDDMMYYYY}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="float-left">
+                                <select ng-model="pageSizeSelected" ng-change="changePageSize()" class="badge">
+                                    <option value="15">15</option>
+                                    <option value="30">30</option>
+                                    <option value="50">50</option>
+                                </select>
+                            </div>
+                            <div class="float-right">
+                                <pagination total-items="totalCount" ng-change="pageChanged()"
+                                            items-per-page="pageSizeSelected" direction-links="true" ng-model="pageIndex"
+                                            next-text=">" previous-text="<"
+                                            max-size="maxSize" class="pagination" first-text="First" last-text="Last"
+                                            boundary-links="true" rotate="false"
+                                            num-pages="numPages">
+                                </pagination>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @*Employer Form*@
+    <div class="row" ng-show="hideMasterForm">
+        <div class="col-md-12 m-1">
+            <div class="card">
+                <div class="card-header">
+                    <label> Manage Setting for <u class="text-behance"> {{_memberName}}</u>.</label>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3 mb-1">
+                            <button type="button" class="btn btn-success fontStyleHeader btn-block"
+                                    ng-click="onClick_EmployeeSalarySetup()">
+                                Salary Setup
+                            </button>
+                        </div>
+                        <div class="col-md-3 mb-1">
+                            <button type="button" class="btn btn-success fontStyleHeader btn-block"
+                                    ng-click="onClick_EmployeeAllowanceDeductionSetup()">
+                                Allowance-Deduction Setup
+                            </button>
+                        </div>
+                        <div class="col-md-3 mb-1">
+                            <button type="button" class="btn btn-success fontStyleHeader btn-block"
+                                    ng-click="onClick_EmployeeCustomRateSetup()">
+                                Rates Setup
+                            </button>
+                        </div>
+                        <div class="col-md-3 mb-1">
+                            <button type="button" class="btn btn-success fontStyleHeader btn-block"
+                                    ng-click="onClick_EmployeeLoanSetup()">
+                                Loan Entries
+                            </button>
+                        </div>
+                        <div class="col-md-3 mb-1">
+                            <button type="button" class="btn btn-success fontStyleHeader btn-block"
+                                    ng-click="onClick_EmployeeLeaveEntitlementSetup()"
+                                    ng-disabled="!employeeIsFixJoining">
+                                Leave Entitlement Setup
+                            </button>
+                        </div>
+                        <div class="col-md-3 mb-1">
+                            <button type="button" class="btn btn-success fontStyleHeader btn-block"
+                                    ng-click="onClick_EmployeeEntitlementSetup()"
+                                    ng-disabled="employerentitlementId == 0">
+                                Entitlement Setup
+                            </button>
+                        </div>
+                        <div class="col-md-3 mb-1">
+                            <button type="button" class="btn btn-success fontStyleHeader btn-block"
+                                    ng-click="onClick_EmployeeDependentSetup()">
+                                Dependent Entries
+                            </button>
+                        </div>
+                        <div class="col-md-3 mb-1">
+                            <button type="button" class="btn btn-success fontStyleHeader btn-block"
+                                    ng-click="onClick_EmployeeShiftSetup()">
+                                Shift Setup
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" ng-show="hideEmployeeForm">
+        <div class="col-md-12 m-1">
+            <form name="employeeform">
+                <div class="card">
+                    <div class="card-header">
+                        Update Employee
+                    </div>
+                    <div class="card-body">
+                        <div style="display:none;">
+                            <input type="text" ng-model="employeeId" />
+                            <input type="text" ng-model="employeeIsCustomEntitled" />
+                            <input type="text" ng-model="employeeLimitCategroy" />
+                            <input type="text" ng-model="employeeLimitEmployee" />
+                            <input type="text" ng-model="employeeLimitDependent" />
+                            <input type="text" ng-model="employeeVisitLimitEmployee" />
+                            <input type="text" ng-model="employeeVisitLimitDependent" />
+                            <input type="text" ng-model="employeeVisitAllowed" />
+                            <input type="text" ng-model="employeeVisitDuration" />
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>
+                                        Enrollment No<span class="text-danger">*</span>
+                                        <a class="cursor text-danger" data-toggle="tooltip"
+                                           title="Enrollment is auto generated!">
+                                            <i class="mdi mdi-message-alert"></i>
+                                        </a>
+                                    </label>
+                                    <input type="text" class="form-control form-control-lg"
+                                           ng-model="employeeEnroll"
+                                           disabled
+                                           required>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>
+                                        Employee No
+                                        <a class="cursor text-danger" data-toggle="tooltip"
+                                           title="Employee No is for company sequence!">
+                                            <i class="mdi mdi-message-alert"></i>
+                                        </a>
+                                    </label>
+                                    <input type="text" class="form-control form-control-lg"
+                                           ng-model="employeeAlternativeEnroll">
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Branch Name<span class="text-danger">*</span></label>
+                                    <select ng-model="employerbranchId" class="form-control" chosen required>
+                                        <option value="">-- Select --</option>
+                                        <option ng-selected="x == employerbranchId"
+                                                ng-repeat="x in fill_employerbranchId"
+                                                ng-value="x.employerbranchId">
+                                            {{x.employerbranchName}}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Department Name<span class="text-danger">*</span></label>
+                                    <select ng-model="employerdepartmentId" class="form-control" chosen required">
+                                        <option value="">-- Select --</option>
+                                        <option ng-selected="x == employerdepartmentId"
+                                                ng-repeat="x in fill_employerdepartmentId"
+                                                ng-value="x.employerdepartmentId">
+                                            {{x.employerdepartmentTitle}}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Date of Joining<span class="text-danger">*</span></label>
+                                    <input type="date" class="form-control form-control-lg"
+                                           ng-disabled="employeeIsFixJoining"
+                                           ng-model="employeeJoining"
+                                           required>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Date of Leaving</label>
+                                    <input type="date" class="form-control form-control-lg"
+                                           ng-disabled="employeeIsActive"
+                                           ng-model="employeeLeaving">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Entitlement</label>
+                                    <select ng-model="employerentitlementId" class="form-control" chosen>
+                                        <option value="">-- Select --</option>
+                                        <option ng-selected="x == employerentitlementId"
+                                                ng-repeat="x in fill_employerentitlementId"
+                                                ng-value="x.employerentitlementId">
+                                            {{x.employerentitlementTitle}}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Manager</label>
+                                    <input type="text" class="form-control form-control-lg"
+                                           ng-model="employeeManagerId">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Job Designation</label>
+                                    <input type="text" class="form-control form-control-lg"
+                                           ng-model="employeeDesignation">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Company Email</label>
+                                    <input type="email" class="form-control form-control-lg"
+                                           ng-model="employeeCompanyEmail">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Company Email</label>
+                                    <input type="email" class="form-control form-control-lg"
+                                           ng-model="employeeCompanyEmail">
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Login Type<span class="text-danger">*</span></label>
+                                    <select ng-model="employeeType" class="form-control">
+                                        <option value="">-- Select --</option>
+                                        <option value="system">System Access</option>
+                                        <option value="branch">Branch Access</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-check">
+                                    <label class="form-check-label cursor text-muted">
+                                        <input type="checkbox" class="form-check-input" ng-change="onClick_SetJoiningDate()"
+                                               ng-model="employeeIsFixJoining"> Confirm join date?
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-check">
+                                    <label class="form-check-label cursor text-muted">
+                                        <input type="checkbox" class="form-check-input"
+                                               ng-change="onClick_PushRecordToMachine()"
+                                               ng-model="employeeIsMachine"> Push to machine?
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-check">
+                                    <label class="form-check-label cursor text-muted">
+                                        <input type="checkbox" class="form-check-input" ng-change="onClick_SetLeavingDate()"
+                                               ng-model="employeeIsActive"> Is Active?
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-3 d-none">
+                                <div class="form-check">
+                                    <label class="form-check-label cursor text-muted">
+                                        <input type="checkbox" class="form-check-input"
+                                               ng-model="isMultiShift"> Multiple Shift?
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-3 d-none">
+                                <div class="form-check">
+                                    <label class="form-check-label cursor text-muted">
+                                        <input type="checkbox" class="form-check-input"
+                                               ng-model="employeeIsManualAttendance"> Mobile Attendance?
+                                    </label>
+                                </div>
+                            </div>
+
+
+                            @*<div class="col-md-3">
+                                    <div class="form-check">
+                                        <label class="form-check-label cursor text-muted">
+                                            <input type="checkbox" class="form-check-input"
+                                                   ng-model="employeeIsMultipleLogin"> Is Multiple Login?
+                                        </label>
+                                    </div>
+                                </div>*@
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <input type="submit" class="btn btn-gradient-primary"
+                               value="Update Employee"
+                               ng-click="employeeform.$valid && onClick_SubmitEmployee()" />
+                        <input type="button" class="btn btn-inverse-dark"
+                               ng-click="onClick_CloseEmployeeForm()"
+                               value="Cancel" />
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="row" ng-show="hideMemberForm">
+        @Html.Partial("Partial/Employee/MemberForm")
+    </div>
+
+    <div ng-show="hideEmployeeAllowanceDeductionSetup">
+        @Html.Partial("Partial/Employee/EmployeeAllowanceDeductionSetup")
+    </div>
+
+    <div ng-show="hideEmployeeCustomRateSetup">
+        @Html.Partial("Partial/Employee/EmployeeCustomRateSetup")
+    </div>
+
+    <div ng-show="hideEmployeeDependentSetup">
+        @Html.Partial("Partial/Employee/EmployeeDependentSetup")
+    </div>
+
+    <div ng-show="hideEmployeeEntitlementSetup">
+        @Html.Partial("Partial/Employee/EmployeeEntitlementSetup")
+    </div>
+
+    <div ng-show="hideEmployeeLeaveEntitlementSetup">
+        @Html.Partial("Partial/Employee/EmployeeLeaveEntitlementSetup")
+    </div>
+
+    <div ng-show="hideEmployeeLoanSetup">
+        @Html.Partial("Partial/Employee/EmployeeLoanSetup")
+    </div>
+
+    <div ng-show="hideEmployeeSalarySetup">
+        @Html.Partial("Partial/Employee/EmployeeSalarySetup")
+    </div>
+
+    <div ng-show="hideEmployeeShiftSetup">
+        @Html.Partial("Partial/Employee/EmployeeShiftSetup")
+    </div>
+
+    @*Member Setup*@
+    <div class="row" ng-show="hideMemberTable">
+        <div class="col-md-12 mb-1">
+            <div class="card">
+                <div class="card-header">
+                    Member search
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Search by Name</label>
+                                <input type="text" class="form-control"
+                                       ng-model="searchbymember"
+                                       placeholder="Enter Name">
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Search by NRIC</label>
+                                <input type="text" class="form-control"
+                                       ng-model="searchbynric"
+                                       placeholder="Enter NRIC">
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Search by Passport</label>
+                                <input type="text" class="form-control"
+                                       ng-model="searchbypassport"
+                                       placeholder="Enter Passport">
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <br />
+                                <input type="button" class="btn btn-gradient-primary"
+                                       ng-click="onLoad_MasterMemberService()"
+                                       value="Search" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+
+                    <input type="button" class="btn btn-inverse-primary"
+                           ng-if="!memberloaded"
+                           ng-click="onClick_AddNewMember()"
+                           value="Add Member" />
+
+                    <input type="button" class="btn btn-inverse-danger"
+                           ng-click="onClick_ResetMemberForm()"
+                           value="Reset" />
+
+                    <input type="button" class="btn btn-inverse-dark"
+                           ng-click="onClick_CancelMember()"
+                           value="Cancel" />
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12 mb-1">
+            <div class="card">
+                <div class="card-header">
+                    Member list
+                </div>
+                <div class="card-body">
+                    <table class="table table-hover table-responsive-xl">
+                        <thead>
+                            <tr>
+                                <th>Action</th>
+                                <th>Full-Name</th>
+                                <th>Email</th>
+                                <th>NRIC</th>
+                                <th>Passport</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-if="!memberloaded">
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                            </tr>
+                            <tr ng-if="memberloaded" ng-repeat="x in memberTableParams">
+                                <td class="text-nowrap">
+                                    <a class="cursor" ng-click="onClick_Submit_MemberToEmployee(x)" ng-hide="x.flag == 1">
+                                        <span class="badge badge-dark">Add</span>
+                                    </a>
+                                    <a class="cursor" ng-hide="x.flag == 0">
+                                        <span class="badge badge-success">Added</span>
+                                    </a>
+                                </td>
+                                <td>{{x.memberName}}</td>
+                                <td>{{x.memberEmail}}</td>
+                                <td>{{x.memberNric}}</td>
+                                <td>{{x.memberPassport}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @*Image Upload Modal*@
+    <div class="modal fade" id="imageUploadModal" tabindex="-1" data-backdrop="static" data-keyboard="false"
+         aria-labelledby="imageUploadeModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="imageUploadModalLabel">Upload User Image</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <div>
+                            <div style="border: 1px solid #e1e1e1; height: 300px;">
+                                <img ngf-src="userImage" id="id_userImage" class="thumb fullImage" style="width:100%; height:100%;">
+                            </div>
+                            <input type="file" id="userImageUpload"
+                                   ngf-select="userImageUpload($files)"
+                                   class="form-control"
+                                   data-image-id="PhotoImage" />
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" ng-click="onClick_CloseImageUpload()">Close</button>
+                    <button type="button" class="btn btn-primary" ng-click="onClick_RemoveImage()">Remove Image</button>
+                    <button type="button" class="btn btn-primary" ng-click="loadImage()">Upload Image</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @* Search Modal *@
+    <div class="modal fade" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel"
+         aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog" style="max-width:600px !important;" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="searchModalLabel">Search Result</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <label>Employee</label>
+                                <select ng-model="SearchEmployeeId" class="form-control" chosen>
+                                    <option value="">-- Select --</option>
+                                    <option ng-repeat="x in fill_SearchEmployeeId" ng-value="x.employeeId">
+                                        {{x.memberName}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Status</label>
+                                <select ng-model="SearchEmployeeIsActive" class="form-control">
+                                    <option value="true">Active</option>
+                                    <option value="false">InActive</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Department</label>
+                                <select ng-model="SearchEmployerdepartmentId" class="form-control" chosen>
+                                    <option value="">-- Select --</option>
+                                    <option ng-repeat="x in fill_SearchEmployerdepartmentId" ng-value="x.employerdepartmentId">
+                                        {{x.employerdepartmentTitle}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Branch</label>
+                                <select ng-model="SearchEmployerbranchId" class="form-control" chosen>
+                                    <option value="">-- Select --</option>
+                                    <option ng-repeat="x in fill_SearchEmployerbranchId" ng-value="x.employerbranchId">
+                                        {{x.employerbranchName}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-9">
+                            <div class="form-group">
+                                <label>Sort by</label>
+                                <select ng-model="sortBy" class="form-control" chosen>
+                                    <option value="employeeEnroll">Employee Enroll</option>
+                                    <option value="memberName">EmployeeName</option>
+                                    <option value="employeeJoining">Joining Date</option>
+                                    <option value="employerdepartmentTitle">Department</option>
+                                    <option value="employerbranchName">Branch</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>level</label>
+                                <select ng-model="pageName" class="form-control">
+                                    <option value="normal">All employee</option>
+                                    <option value="abnormal">branch / system</option>
+                                </select>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" ng-click="onClick_CloseSearch()">Close</button>
+                    <button type="button" class="btn btn-primary" ng-click="onClick_SearchResult()">Search</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @* SignIn *@
+    <div class="modal fade" id="signInModal" tabindex="-1" role="dialog" aria-labelledby="signInModalLabel"
+         aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog" style="max-width:600px !important;" role="document">
+            <div class="modal-content">
+                <form name="signInForm">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="signInModalLabel">Search Result</h5>
+                    </div>
+                    <div class="modal-body">
+                        <div style="display:none;">
+                            <input type="text" class="form-control" ng-model="loginMemberId">
+                            <input type="text" class="form-control" ng-model="loginName">
+                        </div>
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="form-group">
+                                    <label>Email for login</label>
+                                    <input type="email" class="form-control"
+                                           ng-model="loginEmail"
+                                           required>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Password</label>
+                                    <input type="password" class="form-control"
+                                           ng-model="loginPassword"
+                                           required>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" ng-click="onClick_CancelSignInAccount()">Close</button>
+                        <button type="button" class="btn btn-primary" ng-click="signInForm.$valid && onClick_SignInAccount()">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    @*Excel Download*@
+    <div style="display:none">
+        <table id="tabledata"></table>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/Areas/Employer/_Employer/Code/MasterSetting/Partial/Employee/employee-leaveentitlementsetup-controller.js?version=@(System.Configuration.ConfigurationManager.AppSettings["version"].ToString())"></script>
+    <script src="~/Areas/Employer/_Employer/Code/MasterSetting/Partial/Employee/employee-dependentsetup-controller.js?version=@(System.Configuration.ConfigurationManager.AppSettings["version"].ToString())"></script>
+    <script src="~/Areas/Employer/_Employer/Code/MasterSetting/Partial/Employee/employee-entitlementsetup-controller.js?version=@(System.Configuration.ConfigurationManager.AppSettings["version"].ToString())"></script>
+    <script src="~/Areas/Employer/_Employer/Code/MasterSetting/Partial/Employee/employee-customratesetup-controller.js?version=@(System.Configuration.ConfigurationManager.AppSettings["version"].ToString())"></script>
+    <script src="~/Areas/Employer/_Employer/Code/MasterSetting/Partial/Employee/employee-shiftsetup-controller.js?version=@(System.Configuration.ConfigurationManager.AppSettings["version"].ToString())"></script>
+    <script src="~/Areas/Employer/_Employer/Code/MasterSetting/Partial/Employee/employee-loansetup-controller.js?version=@(System.Configuration.ConfigurationManager.AppSettings["version"].ToString())"></script>
+    <script src="~/Areas/Employer/_Employer/Code/MasterSetting/Partial/Employee/employee-allowancedeductionsetup-controller.js?version=@(System.Configuration.ConfigurationManager.AppSettings["version"].ToString())"></script>
+    <script src="~/Areas/Employer/_Employer/Code/MasterSetting/Partial/Employee/employee-salarysetup-controller.js?version=@(System.Configuration.ConfigurationManager.AppSettings["version"].ToString())"></script>
+    <script src="~/Areas/Employer/_Employer/Code/MasterSetting/Partial/Employee/employee-member-controller.js?version=@(System.Configuration.ConfigurationManager.AppSettings["version"].ToString())"></script>
+    <script src="~/Areas/Employer/_Employer/Code/MasterSetting/employer-employee-controller.js?version=@(System.Configuration.ConfigurationManager.AppSettings["version"].ToString())"></script>
+}

@@ -1,0 +1,181 @@
+﻿
+@{
+    ViewBag.Title = "Employer Leave-Summary";
+    Layout = "~/Areas/Employer/Views/Shared/_Layout.cshtml";
+}
+
+<div ng-controller="employer-leavesummary-controller">
+
+    @*Entry List*@
+
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Leave entries</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Leave Report</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="float-right">
+                        <a class="listMenu" data-toggle="tooltip" data-placement="top"
+                           title="Open search" ng-click="onClick_OpenSearch()">
+                            <i class="mdi mdi-filter icon-font-size filterMenu"></i>
+                        </a>
+                        <a class="listMenu" data-toggle="tooltip" data-placement="top"
+                           title="Reset result" ng-click="onClick_ResetSearch()">
+                            <i class="mdi mdi-view-list icon-font-size viewMenu"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <table class="table table-hover table-responsive-xl">
+                        <thead>
+                            <tr>
+                                <th class="widthLeft">NRIC/Pass</th>
+                                <th>Full-Name</th>
+                                <th class="widthLeft">Joining</th>
+                                <th class="widthLeft">Department</th>
+                                <th class="widthCenter">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-if="!loaded">
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                            </tr>
+                            <tr ng-if="loaded" ng-repeat="x in tableParams">
+                                <td>
+                                    <span ng-class="x.memberNric == '' ? 'text-danger' : 'text-dark'"
+                                          ng-bind="x.memberNric == '' ? x.memberPassport : x.memberNric">
+                                    </span>
+                                </td>
+                                <td>{{x.memberName}}</td>
+                                <td class="widthLeft">{{x.employeeJoiningDDMMYYYY}}</td>
+                                <td class="widthLeft">{{x.employerdepartmentTitle}}</td>
+                                <td class="text-nowrap widthCenter">
+                                    <a class="cursor"
+                                       ng-click="onClick_ViewYearReport(x)">
+                                        <i class="mdi mdi-view-list icon-font-size editMenu"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="float-left">
+                                <select ng-model="pageSizeSelected" ng-change="changePageSize()" class="badge">
+                                    <option value="15">15</option>
+                                    <option value="30">30</option>
+                                    <option value="50">50</option>
+                                </select>
+                            </div>
+                            <div class="float-right">
+                                <pagination total-items="totalCount" ng-change="pageChanged()"
+                                            items-per-page="pageSizeSelected" direction-links="true" ng-model="pageIndex"
+                                            next-text=">" previous-text="<"
+                                            max-size="maxSize" class="pagination" first-text="First" last-text="Last"
+                                            boundary-links="true" rotate="false"
+                                            num-pages="numPages">
+                                </pagination>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @*Search Modal*@
+
+    <div class="modal fade" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel"
+         aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog" style="max-width:600px !important;" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="searchModalLabel">Search Result</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Year</label>
+                                <input type="text" class="form-control"
+                                       maxlength="4"
+                                       ng-model="SearchYear" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" ng-click="onClick_CloseSearch()">Close</button>
+                    <button type="button" class="btn btn-primary" ng-click="onClick_SearchResult()">Download</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    @*Year Modal*@
+
+    <div class="modal fade" id="yearModal" tabindex="-1" role="dialog" aria-labelledby="yearModalLabel"
+         aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content h-auto">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="yearModalLabel">Search Result</h5>
+                </div>
+                <div class="modal-body" style="max-height: 500px; overflow: auto;">
+                    <table class="table table-hover table-responsive-xl">
+                        <thead>
+                            <tr>
+                                <th class="widthLeft">Start Year</th>
+                                <th class="widthLeft">End Year</th>
+                                <th class="widthLeft">Type</th>
+                                <th class="widthCenter">Entitled</th>
+                                <th class="widthCenter">Pre. YearBnf</th>
+                                <th class="widthCenter">Total Entitled</th>
+                                <th class="widthCenter">Taken Leave</th>
+                                <th class="widthCenter">Balance Leave</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="y in subtableParams">
+                                <td class="widthLeft">{{y.currentStartYear}}</td>
+                                <td class="widthLeft">{{y.currentEndYear}}</td>
+                                <td class="widthLeft">{{y.employerleavetypeLeaveType}}</td>
+                                <td class="widthCenter">{{y.totalEntitleForYear}}</td>
+                                <td class="widthCenter">{{y.previousYearBnf}}</td>
+                                <td class="widthCenter">{{y.EntitleDay}}</td>
+                                <td class="widthCenter">{{y.totalLeave}}</td>
+                                <td class="widthCenter">{{y.totalLeaveBalance}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" ng-click="onClick_CloseYearProcess()">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @*Excel Download*@
+    <div style="display:none">
+        <table id="tabledata"></table>
+    </div>
+
+</div>
+
+@section scripts{
+    <script src="~/Areas/Employer/_Employer/Code/LeaveSetting/employer-leavesummary-controller.js?version=@(System.Configuration.ConfigurationManager.AppSettings["version"].ToString())"></script>
+}
+

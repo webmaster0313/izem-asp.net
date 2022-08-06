@@ -1,0 +1,77 @@
+﻿
+<div ng-controller="backoffice-sidemenu-controller">
+    <nav class="sidebar sidebar-offcanvas" id="sidebar">
+        <ul class="nav">
+            <li class="nav-item nav-profile border-top border-bottom">
+                <a href="#" class="nav-link">
+                    <div class="d-flex flex-column">
+                        <span class="font-weight-bold mb-2">{{loginName}}</span>
+                        <span class="text-secondary text-small">{{loginRole}}</span>
+                    </div>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/backoffice/dashboard">
+                    <span class="menu-title">Dashboard</span>
+                    <i class="mdi mdi-home menu-icon"></i>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/backoffice/home/manage-exesetup">
+                    <span class="menu-title">EXE Setup</span>
+                    <i class="mdi mdi-settings menu-icon"></i>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
+                    <span class="menu-title">Master entries</span>
+                    <i class="menu-arrow"></i>
+                    <i class="mdi mdi-library-books menu-icon"></i>
+                </a>
+                <div class="collapse" id="ui-basic">
+                    <ul class="nav flex-column sub-menu">
+                        <li class="nav-item"> <a class="nav-link" href="/backoffice/master/manage-citizenship">Citizenship</a></li>
+                        <li class="nav-item"> <a class="nav-link" href="/backoffice/master/manage-country">Country</a></li>
+                        <li class="nav-item"> <a class="nav-link" href="/backoffice/master/manage-state">State</a></li>
+                        <li class="nav-item"> <a class="nav-link" href="/backoffice/master/manage-facility">Facility</a></li>
+                        <li class="nav-item"> <a class="nav-link" href="/backoffice/master/manage-race">Race</a></li>
+                        <li class="nav-item"> <a class="nav-link" href="/backoffice/master/manage-relationship">Relationship</a></li>
+                        <li class="nav-item"> <a class="nav-link" href="/backoffice/master/manage-subscription">Subscription</a></li>
+                        <li class="nav-item"> <a class="nav-link" href="/backoffice/master/manage-term">Term</a></li>
+                        <li class="nav-item"> <a class="nav-link" href="/backoffice/master/master-employee-bank">Employee Bank</a></li>
+                        <li class="nav-item"> <a class="nav-link" href="/backoffice/master/master-employer-bank">Employer Bank</a></li>
+                    </ul>
+                </div>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="collapse" href="#ui-payroll-deduction" aria-expanded="false" aria-controls="ui-payroll-deduction">
+                    <span class="menu-title">Payroll deduction</span>
+                    <i class="menu-arrow"></i>
+                    <i class="mdi mdi-currency-inr menu-icon"></i>
+                </a>
+                <div class="collapse" id="ui-payroll-deduction">
+                    <ul class="nav flex-column sub-menu">
+                        <li class="nav-item"> <a class="nav-link" href="/backoffice/master/manage-epf">EPF</a></li>
+                        <li class="nav-item"> <a class="nav-link" href="/backoffice/master/manage-hrdf">HRDF</a></li>
+                        <li class="nav-item"> <a class="nav-link" href="/backoffice/master/manage-socso">SOCSO</a></li>
+                        <li class="nav-item"> <a class="nav-link" href="/backoffice/master/manage-eis">EIS</a></li>
+                    </ul>
+                </div>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="collapse" href="#ui-user" aria-expanded="false" aria-controls="ui-user">
+                    <span class="menu-title">Users</span>
+                    <i class="menu-arrow"></i>
+                    <i class="mdi mdi-account-network menu-icon"></i>
+                </a>
+                <div class="collapse" id="ui-user">
+                    <ul class="nav flex-column sub-menu">
+                        <li class="nav-item"> <a class="nav-link" href="/backoffice/user/manage-signin">Sign-Up</a></li>
+                        <li class="nav-item"> <a class="nav-link" href="/backoffice/user/manage-member">Member</a></li>
+                        <li class="nav-item"> <a class="nav-link" href="/backoffice/user/manage-employer">Employer</a></li>
+                    </ul>
+                </div>
+            </li>
+        </ul>
+    </nav>
+</div>

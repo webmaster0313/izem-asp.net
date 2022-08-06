@@ -1,0 +1,193 @@
+﻿
+<div ng-controller="employee-entitlementsetup-controller">
+    <div class="row d-flex justify-content-center">
+        <div class="col-md-6 mb-1">
+            <div class="card">
+                <div class="card-header">
+                    Employee Entitlement
+                </div>
+                <div class="card-body">
+                    <div class="form-group">
+                        <label>Entitlement</label>
+                        <input type="text" class="form-control form-control-lg"
+                               disabled
+                               ng-model="employerentitlementTitle">
+                    </div>
+                    <hr />
+                    <div class="form-check">
+                        <label class="form-check-label text-muted">
+                            <input type="checkbox" class="form-check-input"
+                                   ng-click="onClick_ResetOnCheck('a')"
+                                   ng-model="employerentitlementLimitCategroy1"> Individual • Employee and Individual • Dependent
+
+                        </label>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group mb-2">
+                                <label>
+                                    Description
+                                </label>
+                            </div>
+                            <div class="form-group mb-2">
+                                <label>Annual Limit</label>
+                            </div>
+                            <div class="form-group mb-2">
+                                <label>Visit Limit</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group mb-2">
+                                <label>Employee</label>
+                            </div>
+                            <div class="form-group mb-2">
+                                <input type="text" class="form-control form-control-lg decimalInputValidation" style="height:30px"
+                                       ng-model="employerentitlementLimitEmployee1">
+                            </div>
+                            <div class="form-group mb-2">
+                                <input type="text" class="form-control form-control-lg decimalInputValidation" style="height:30px"
+                                       ng-model="employerentitlementVisitLimitEmployee1">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group mb-2">
+                                <label>Dependent</label>
+                            </div>
+                            <div class="form-group mb-2">
+                                <input type="text" class="form-control form-control-lg decimalInputValidation" style="height:30px"
+                                       ng-model="employerentitlementLimitDependent1">
+                            </div>
+                            <div class="form-group mb-2">
+                                <input type="text" class="form-control form-control-lg decimalInputValidation" style="height:30px"
+                                       ng-model="employerentitlementVisitLimitDependent1">
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="form-check">
+                        <label class="form-check-label text-muted">
+                            <input type="checkbox" class="form-check-input"
+                                   ng-click="onClick_ResetOnCheck('b')"
+                                   ng-model="employerentitlementLimitCategroy2"> Individual • Employee and Combined • Dependent
+                        </label>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group mb-2">
+                                <label>Description</label>
+                            </div>
+                            <div class="form-group mb-2">
+                                <label>Annual Limit</label>
+                            </div>
+                            <div class="form-group mb-2">
+                                <label>Visit Limit</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group mb-2">
+                                <label>Employee</label>
+                            </div>
+                            <div class="form-group mb-2">
+                                <input type="text" class="form-control form-control-lg decimalInputValidation" style="height:30px"
+                                       ng-model="employerentitlementLimitEmployee2">
+                            </div>
+                            <div class="form-group mb-2">
+                                <input type="text" class="form-control form-control-lg decimalInputValidation" style="height:30px"
+                                       ng-model="employerentitlementVisitLimitEmployee2">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group mb-2">
+                                <label>Dependent</label>
+                            </div>
+                            <div class="form-group mb-2">
+                                <input type="text" class="form-control form-control-lg decimalInputValidation" style="height:30px"
+                                       ng-model="employerentitlementLimitDependent2">
+                            </div>
+                            <div class="form-group mb-2">
+                                <input type="text" class="form-control form-control-lg decimalInputValidation" style="height:30px"
+                                       ng-model="employerentitlementVisitLimitDependent2">
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="form-check">
+                        <label class="form-check-label text-muted">
+                            <input type="checkbox" class="form-check-input"
+                                   ng-click="onClick_ResetOnCheck('c')"
+                                   ng-model="employerentitlementLimitCategroy3"> Combined • Employee + Dependent
+                        </label>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group mb-2">
+                                <label>Description</label>
+                            </div>
+                            <div class="form-group mb-2">
+                                <label>Annual Limit</label>
+                            </div>
+                            <div class="form-group mb-2">
+                                <label>Visit Limit</label>
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="form-group mb-2">
+                                <label>Employee + Dependent</label>
+                            </div>
+                            <div class="form-group mb-2">
+                                <input type="text" class="form-control form-control-lg decimalInputValidation" style="height:30px"
+                                       ng-model="employerentitlementLimitEmployee3">
+                            </div>
+                            <div class="form-group mb-2">
+                                <input type="text" class="form-control form-control-lg decimalInputValidation" style="height:30px"
+                                       ng-model="employerentitlementVisitLimitEmployee3">
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Visitation Limit :</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <input type="text" class="form-control form-control-lg decimalInputValidation" style="height:30px"
+                                       ng-model="employerentitlementVisitAllowed">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <select class="form-control form-control-lg" ng-model="employerentitlementVisitDuration" style="height:30px">
+                                    <option value="">-- Select --</option>
+                                    <option value="Y">Per Year</option>
+                                    <option value="M">Per Month</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Remarks </label>
+                                <input type="text" class="form-control form-control-lg" style="height:30px"
+                                       ng-model="employerentitlementRemarks">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <input type="submit" class="btn btn-gradient-primary"
+                           ng-click="onClick_Submit()"
+                           value="Submit Entitlement" />
+
+                    <button type="button" class="btn btn-inverse-dark" value="Cancel"
+                            ng-click="onClick_CloseEmployeeEntitlementSetup()">
+                        Cancel
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,124 @@
+﻿
+<div ng-controller="employee-allowancedeductionsetup-controller">
+    <div class="row">
+        <div class="col-md-12 m-1">
+            <div class="row">
+                <div class="col-md-4">
+                    <form name="allowancedeductionForm">
+                        <div class="card">
+                            <div class="card-header">
+                                Manage Allowance Deduction
+                            </div>
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <div class="form-group">
+                                        <label>
+                                            Allowance<span class="text-danger">*</span>
+                                            <a class="cursor text-danger" data-toggle="tooltip"
+                                               title="fill records from payroll setting to allowance-deduction!">
+                                                <i class="mdi mdi-message-alert"></i>
+                                            </a>
+                                        </label>
+                                        <select ng-model="employerallowanceId" class="form-control" required chosen>
+                                            <option value="">-- Select --</option>
+                                            <option ng-selected="x == employerallowanceId" ng-repeat="x in fill_employerallowanceId" ng-value="x.employerallowanceId">
+                                                {{x.employerallowanceCode}}
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>From Date<span class="text-danger">*</span></label>
+                                    <input type="month" class="form-control form-control-lg" required
+                                           ng-model="employeeallowancendeductionFromDate">
+                                </div>
+                                <div class="form-group">
+                                    <label>To Date<span class="text-danger">*</span></label>
+                                    <input type="month" class="form-control form-control-lg" required
+                                           ng-model="employeeallowancendeductionToDate">
+                                </div>
+                                <div class="form-group">
+                                    <label>Amount<span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control form-control-lg" required
+                                           ng-model="employeeallowancendeductionAmount">
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <input type="submit" class="btn btn-gradient-primary"
+                                       ng-click="allowancedeductionForm.$valid && onClick_Submit()" />
+
+                                <input type="button" class="btn btn-inverse-dark"
+                                       ng-click="onClick_CloseEmployeeAllowanceDeductionSetup()" value="Cancel" />
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-header">
+                            Allowance Deduction List
+                        </div>
+                        <div class="card-body">
+                            <table class="table table-hover table-responsive-xl">
+                                <thead>
+                                    <tr>
+                                        <th>Allowance</th>
+                                        <th>From</th>
+                                        <th>To</th>
+                                        <th class="widthRight">Amount</th>
+                                        <th class="widthCenter">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-if="!loaded">
+                                        <td class="loading"><div class="bar"></div></td>
+                                        <td class="loading"><div class="bar"></div></td>
+                                        <td class="loading"><div class="bar"></div></td>
+                                        <td class="loading"><div class="bar"></div></td>
+                                        <td class="loading"><div class="bar"></div></td>
+                                    </tr>
+                                    <tr ng-if="loaded" ng-repeat="x in tableParams">
+                                        <td>{{x.employerallowanceCode}}</td>
+                                        <td>{{x.employeeallowancendeductionFromDateMMMYYYY}}</td>
+                                        <td>{{x.employeeallowancendeductionToDateMMMYYYY}}</td>
+                                        <td class="text-right">{{x.employeeallowancendeductionAmountRound2}}</td>
+                                        <td class="text-nowrap">
+                                            <a class="cursor" ng-click="onClick_EditRecord(x.employeeallowancendeductionId)">
+                                                <i class="mdi mdi-pencil-box icon-font-size text-info"></i>
+                                            </a>
+                                            <a class="cursor" ng-click="onClick_DeleteRecord(x.employeeallowancendeductionId)">
+                                                <i class="mdi mdi-delete-forever icon-font-size text-danger"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="card-footer">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="float-left">
+                                        <select ng-model="pageSizeSelected" ng-change="changePageSize()" class="badge">
+                                            <option value="15">15</option>
+                                            <option value="30">30</option>
+                                            <option value="50">50</option>
+                                        </select>
+                                    </div>
+                                    <div class="float-right">
+                                        <pagination total-items="totalCount" ng-change="pageChanged()"
+                                                    items-per-page="pageSizeSelected" direction-links="true" ng-model="pageIndex"
+                                                    next-text=">" previous-text="<"
+                                                    max-size="maxSize" class="pagination" first-text="First" last-text="Last"
+                                                    boundary-links="true" rotate="false"
+                                                    num-pages="numPages">
+                                        </pagination>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

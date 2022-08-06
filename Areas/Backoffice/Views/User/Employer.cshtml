@@ -1,0 +1,327 @@
+﻿
+@{
+    ViewBag.Title = "Employer";
+    Layout = "~/Areas/Backoffice/Views/Shared/_Layout.cshtml";
+}
+
+<div ng-controller="user-employer-controller">
+
+    @*Entry List*@
+
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Users</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Employer</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <div class="col-md-12" ng-show="hideEntry">
+            <div class="card">
+                <div class="card-header">
+                    <div class="float-right">
+                        <a class="listMenu" data-toggle="tooltip" data-placement="top"
+                           title="Open search" ng-click="onClick_OpenSearch()">
+                            <i class="mdi mdi-filter icon-font-size filterMenu"></i>
+                        </a>
+                        <a class="listMenu" data-toggle="tooltip" data-placement="top"
+                           title="Reset result" ng-click="onClick_ResetSearch()">
+                            <i class="mdi mdi-view-list icon-font-size viewMenu"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <table class="table table-hover table-responsive-xl">
+                        <thead>
+                            <tr>
+                                <th class="widthCenter">Id</th>
+                                <th>Full-Name</th>
+                                <th>Registration</th>
+                                <th>ContactNo</th>
+                                <th>Email</th>
+                                <th class="widthCenter">Verification</th>
+                                <th class="widthCenter">Status</th>
+                                <th class="widthCenter">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-if="!loaded">
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                            </tr>
+                            <tr ng-if="loaded" ng-repeat="x in tableParams">
+                                <td>{{x.employerId}}</td>
+                                <td>{{x.employerName}}</td>
+                                <td>{{x.employerRegistration}}</td>
+                                <td>{{x.employerContactno}}</td>
+                                <td>{{x.employerEmail}}</td>
+                                <td class="text-nowrap text-center">
+                                    <span ng-if="x.employerIsActive.data[0] == '0'" class="badge badge-danger">Pending</span>
+                                    <span ng-if="x.employerIsActive.data[0] == '1'" class="badge badge-success">Submitted</span>
+                                </td>
+                                <td class="text-nowrap text-center">
+                                    <span ng-if="x.isVerify.data[0] == '0'" class="badge badge-danger">Pending</span>
+                                    <span ng-if="x.isVerify.data[0] == '1'" class="badge badge-success">Verified</span>
+                                </td>
+                                <td class="text-nowrap text-center">
+                                    <a class="cursor" ng-click="onClick_EditRecord(x.employerId)">
+                                        <i class="mdi mdi-pencil-box icon-font-size text-info"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="float-left">
+                                <select ng-model="pageSizeSelected" ng-change="changePageSize()" class="badge">
+                                    <option value="15">15</option>
+                                    <option value="30">30</option>
+                                    <option value="50">50</option>
+                                </select>
+                            </div>
+                            <div class="float-right">
+                                <pagination total-items="totalCount" ng-change="pageChanged()"
+                                            items-per-page="pageSizeSelected" direction-links="true" ng-model="pageIndex"
+                                            next-text=">" previous-text="<"
+                                            max-size="maxSize" class="pagination" first-text="First" last-text="Last"
+                                            boundary-links="true" rotate="false"
+                                            num-pages="numPages">
+                                </pagination>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @* Entry Form *@
+
+    <div class="row">
+        <div class="col-md-12" ng-show="!hideEntry">
+            <div class="card">
+                <form name="dataForm" autocomplete="off">
+                    <div class="card-header">
+                        Manage Employer
+                    </div>
+                    <div class="card-body">
+                        <div style="display:none;">
+                            <input type="text" ng-model="employerId" />
+                            <input type="text" ng-model="signupId" />
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group ">
+                                    <label>Employer/Company Name<span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control"
+                                           ng-model="employerName" required>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group ">
+                                    <label>Registration</label>
+                                    <input type="text" class="form-control form-control-lg"
+                                           ng-model="employerRegistration">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group ">
+                                    <label>Contact</label>
+                                    <input type="text" class="form-control form-control-lg"
+                                           ng-model="employerContactno">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group ">
+                                    <label>Email</label>
+                                    <input type="email" class="form-control form-control-lg"
+                                           ng-model="employerEmail">
+                                </div>
+                            </div>
+                        </div>
+                        <p class="card-description"> Address info </p>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Country</label>
+                                    <select ng-model="mastercountryId" class="form-control" ng-change="fillState()">
+                                        <option value="">-- Select --</option>
+                                        <option ng-selected="x == mastercountryId" ng-repeat="x in fill_mastercountryId" ng-value="x.mastercountryId">
+                                            {{x.mastercountryTitle}}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>State</label>
+                                    <select ng-model="masterstateId" class="form-control">
+                                        <option value="">-- Select --</option>
+                                        <option ng-selected="x == masterstateId" ng-repeat="x in fill_masterstateId" ng-value="x.masterstateId">
+                                            {{x.masterstateTitle}}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group ">
+                                    <label>City</label>
+                                    <input type="text" class="form-control form-control-lg"
+                                           ng-model="employerCity">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group ">
+                                    <label>Postcode</label>
+                                    <input type="text" class="form-control form-control-lg"
+                                           ng-model="employerPostcode">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group ">
+                                    <label>Address1</label>
+                                    <textarea type="text" class="form-control form-control-lg" rows="3"
+                                              ng-model="employerAddress1"></textarea>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group ">
+                                    <label>Address2</label>
+                                    <textarea type="text" class="form-control form-control-lg" rows="3"
+                                              ng-model="employerAddress2"></textarea>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group ">
+                                    <label>Address2</label>
+                                    <textarea type="text" class="form-control form-control-lg" rows="3"
+                                              ng-model="employerAddress3"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="card-description"> In-Charge info </p>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group ">
+                                    <label>InchargeName</label>
+                                    <input type="text" class="form-control form-control-lg"
+                                           ng-model="employerInchargeName">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group ">
+                                    <label>InchargeMobile</label>
+                                    <input type="text" class="form-control form-control-lg"
+                                           ng-model="employerInchargeMobile">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group ">
+                                    <label>InchargeEmail</label>
+                                    <input type="text" class="form-control form-control-lg"
+                                           ng-model="employerInchargeEmail">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group ">
+                                    <label>Fax</label>
+                                    <input type="text" class="form-control form-control-lg"
+                                           ng-model="employerFax">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group ">
+                                    <label>GoogleTag</label>
+                                    <input type="text" class="form-control form-control-lg"
+                                           ng-model="employerGoogleTag">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group ">
+                                    <label>ManagedBy</label>
+                                    <input type="text" class="form-control form-control-lg"
+                                           ng-model="employerManagedBy">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-check">
+                                    <label class="form-check-label text-muted">
+                                        <input type="checkbox" class="form-check-input"
+                                               ng-model="employerIsActive"> Is it Active?
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-check">
+                                    <label class="form-check-label text-muted">
+                                        <input type="checkbox" class="form-check-input" ng-change="onClick_AccountVerified()"
+                                               ng-model="isVerify"> Is it Verified?
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <input type="submit" class="btn btn-gradient-primary m-1" ng-click="dataForm.$valid && onClick_Submit()" />
+                        <button type="button" class="btn btn-inverse-dark m-1" ng-click="onClick_Cancel()">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    @*Search Modal*@
+
+    <div class="modal fade" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel"
+         aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="searchModalLabel">Search Result</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Country</label>
+                                <input type="text" class="form-control"
+                                       ng-model="SearchMasterCountryTitle">
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Status</label>
+                                <select ng-model="SearchMastercountryIsActive" class="form-control">
+                                    <option value="true">Active</option>
+                                    <option value="false">InActive</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" ng-click="onClick_CloseSearch()">Close</button>
+                    <button type="button" class="btn btn-primary" ng-click="onClick_SearchResult()">Search</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@section scripts{
+    <script src="~/Areas/Backoffice/_Backoffice/Code/User/user-employer-controller.js"></script>
+}

@@ -1,0 +1,136 @@
+﻿
+<div ng-controller="employee-loansetup-controller">
+
+    <div class="row">
+        <div class="col-md-12 m-1">
+
+
+            <div class="row">
+                <div class="col-md-4">
+                    <form name="loanMasterForm">
+                        <div class="card">
+                            <div class="card-header">
+                                Loan Master
+                            </div>
+                            <div class="card-body">
+                                <div class="d-none">
+                                    <input type="date" class="form-control form-control-lg"
+                                           ng-model="employeeloanId">
+                                </div>
+                                <div class="form-group">
+                                    <label>Entry Date<span class="text-danger">*</span></label>
+                                    <input type="date" class="form-control form-control-lg"
+                                           ng-model="employeeloanTakenDate">
+                                </div>
+                                <div class="form-group">
+                                    <label>From Date<span class="text-danger">*</span></label>
+                                    <input type="date" class="form-control form-control-lg"
+                                           ng-model="employeeloanFromDate">
+                                </div>
+                                <div class="form-group">
+                                    <label>To Date<span class="text-danger">*</span></label>
+                                    <input type="date" class="form-control form-control-lg"
+                                           ng-model="employeeloanToDate">
+                                </div>
+                                <div class="form-group">
+                                    <label>Loan Amount<span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control form-control-lg decimalInputValidation" required
+                                           ng-model="employeeloanAmount">
+                                </div>
+                                <div class="form-group">
+                                    <label>Loan Deduction Amount<span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control form-control-lg decimalInputValidation" required
+                                           ng-model="employeeloanDeductionAmount">
+                                </div>
+                                <div class="form-group">
+                                    <label>Note<span class="text-danger">*</span></label>
+                                    <textarea type="text" class="form-control form-control-lg" required
+                                              rows="3"
+                                              ng-model="employeeloanNote"></textarea>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <input type="submit" class="btn btn-gradient-primary mb-1"
+                                       ng-click="loanMasterForm.$valid && onClick_Submit()" />
+
+                                <input type="button" class="btn btn-inverse-dark mb-1"
+                                       ng-click="onClick_CloseEmployeeLoanSetup()" value="Cancel" />
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-header">
+                            Loan History
+                        </div>
+                        <div class="card-body">
+                            <table class="table table-hover table-responsive-xl">
+                                <thead>
+                                    <tr>
+                                        <th class="widthCenter">Entry</th>
+                                        <th class="widthCenter">From</th>
+                                        <th class="widthCenter">To</th>
+                                        <th class="widthRight">Amount</th>
+                                        <th class="widthRight">Ded.Amount</th>
+                                        <th>Note</th>
+                                        <th class="widthCenter">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-if="!loaded">
+                                        <td class="loading"><div class="bar"></div></td>
+                                        <td class="loading"><div class="bar"></div></td>
+                                        <td class="loading"><div class="bar"></div></td>
+                                        <td class="loading"><div class="bar"></div></td>
+                                        <td class="loading"><div class="bar"></div></td>
+                                        <td class="loading"><div class="bar"></div></td>
+                                        <td class="loading"><div class="bar"></div></td>
+                                    </tr>
+                                    <tr ng-if="loaded" ng-repeat="x in tableParams">
+                                        <td>{{x.employeeloanTakenDateDDMMYYYY}}</td>
+                                        <td>{{x.employeeloanFromDateDDMMYYYY}}</td>
+                                        <td>{{x.employeeloanToDateDDMMYYYY}}</td>
+                                        <td class="text-right">{{x.employeeloanAmountRound4}}</td>
+                                        <td class="text-right">{{x.employeeloanDeductionAmountRound4}}</td>
+                                        <td>{{x.employeeloanNote}}</td>
+                                        <td class="text-nowrap">
+                                            <a class="cursor" ng-click="onClick_EditRecord(x.employeeloanId)">
+                                                <i class="mdi mdi-pencil-box icon-font-size text-info"></i>
+                                            </a>
+                                            <a class="cursor" ng-click="onClick_DeleteRecord(x.employeeloanId)">
+                                                <i class="mdi mdi-delete-forever icon-font-size text-danger"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="card-footer">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="float-left">
+                                        <select ng-model="pageSizeSelected" ng-change="changePageSize()" class="badge">
+                                            <option value="15">15</option>
+                                            <option value="30">30</option>
+                                            <option value="50">50</option>
+                                        </select>
+                                    </div>
+                                    <div class="float-right">
+                                        <pagination total-items="totalCount" ng-change="pageChanged()"
+                                                    items-per-page="pageSizeSelected" direction-links="true" ng-model="pageIndex"
+                                                    next-text=">" previous-text="<"
+                                                    max-size="maxSize" class="pagination" first-text="First" last-text="Last"
+                                                    boundary-links="true" rotate="false"
+                                                    num-pages="numPages">
+                                        </pagination>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

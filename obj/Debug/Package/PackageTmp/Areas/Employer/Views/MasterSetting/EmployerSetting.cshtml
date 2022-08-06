@@ -1,0 +1,153 @@
+﻿
+@{
+    ViewBag.Title = "Employer-Setting";
+    Layout = "~/Areas/Employer/Views/Shared/_Layout.cshtml";
+}
+
+<div ng-controller="employer-setting-controller">
+
+    @*Entry List*@
+
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Master entries</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Setting</li>
+        </ol>
+    </nav>
+
+    @* Entry Form *@
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <form name="dataForm" autocomplete="off">
+                    <div class="card-header">
+                        Manage Setting
+                    </div>
+                    <div class="card-body">
+                        <div style="display:none;">
+                            <input type="text" ng-model="employersettingId" />
+                        </div>
+                        <table class="table table-hover table-responsive-xl">
+                            <tbody>
+                                <tr>
+                                    <td class="widthLeft">
+                                        Clinic submission date-time <b class="text-danger">In Days</b>
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control textboxHeight decimalInputValidation" ng-model="employersettingClinicSubmissionDatetime">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="widthLeft">
+                                        Auto approve claims if less claims less than RM
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control textboxHeight decimalInputValidation" ng-model="employersettingAutoApproveClaimLimit">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                        <b>Auto claims review & rejection rules</b>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="widthLeft">
+                                        Total Claims above <b class="text-danger">In RM</b> :
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control form-control-lg textboxHeight decimalInputValidation"
+                                               ng-model="employersettingTotalClaimsLimit">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="widthLeft">
+                                        Consultation above <b class="text-danger">In RM</b> :
+
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control form-control-lg textboxHeight decimalInputValidation"
+                                               ng-model="employersettingConsultationLimit">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="widthLeft">
+                                        Medication above <b class="text-danger">In RM</b> :
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control form-control-lg textboxHeight decimalInputValidation"
+                                               ng-model="employersettingMedicationLimit">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="widthLeft">
+                                        Treatment/Procedure above <b class="text-danger">In RM</b> :
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control form-control-lg textboxHeight decimalInputValidation"
+                                               ng-model="employersettingTreatementLimit">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="widthLeft">
+                                        Medical Leave more than <b class="text-danger">In RM</b> :
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control form-control-lg textboxHeight decimalInputValidation"
+                                               ng-model="employersettingMedicalLeaveLimit">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="widthLeft">
+                                        Medication prescribed more than <b class="text-danger">In Days</b> :
+
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control form-control-lg textboxHeight decimalInputValidation"
+                                               ng-model="employersettingMedicationPrescribedLimit">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="widthLeft">
+                                        Claims submitted exceeding Annual Limit <b class="text-danger">RM</b>
+                                    </td>
+                                    <td>
+                                        <input type="checkbox"
+                                               ng-model="employersettingAllowClaimSubmittedAnnualLimit">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="widthLeft">
+                                        Claims submitted exceeding Per Visit Limit <b class="text-danger">RM</b>
+                                    </td>
+                                    <td>
+                                        <input type="checkbox"
+                                               ng-model="employersettingAllowClaimSubmittedPerVisitLimit">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="widthLeft">
+                                        Claims submitted exceeding Annual Visit Limit <b class="text-danger">Days</b>
+                                    </td>
+                                    <td>
+                                        <input type="checkbox"
+                                               ng-model="employersettingAllowClaimSubmittedToExceedAnnualVisitLimit">
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="card-footer">
+                        <input type="submit" class="btn btn-gradient-primary m-1" 
+                               ng-show="isAddPermit"
+                               ng-click="dataForm.$valid && onClick_Submit()" />
+                        <button type="button" class="btn btn-inverse-dark m-1" ng-click="onClick_Cancel()">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/Areas/Employer/_Employer/Code/MasterSetting/employer-setting-controller.js?version=@(System.Configuration.ConfigurationManager.AppSettings["version"].ToString())"></script>
+}

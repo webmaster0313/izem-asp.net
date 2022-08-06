@@ -1,0 +1,504 @@
+﻿
+@{
+    ViewBag.Title = "Employer Leave-Application";
+    Layout = "~/Areas/Employer/Views/Shared/_Layout.cshtml";
+}
+
+<div ng-controller="employer-leaveapplication-controller">
+
+    @*Entry List*@
+
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Leave entries</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Leave Application</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <div class="col-md-12" ng-show="hideEntry">
+            <div class="card">
+                <div class="card-header">
+                    <div class="float-right">
+                        <a class="listMenu" data-toggle="tooltip" data-placement="top"
+                           title="Open search" ng-click="onClick_OpenSearch()">
+                            <i class="mdi mdi-filter icon-font-size filterMenu"></i>
+                        </a>
+                        <a class="listMenu" data-toggle="tooltip" data-placement="top"
+                           title="Reset result" ng-click="onClick_ResetSearch()">
+                            <i class="mdi mdi-view-list icon-font-size viewMenu"></i>
+                        </a>
+                        <a class="listMenu" data-toggle="tooltip" data-placement="top"
+                           ng-if="isReportPermit"
+                           ng-click="onClick_GeneratePDF()"
+                           title="Export excel">
+                            <i class="mdi mdi-printer icon-font-size exportMenu"></i>
+                        </a>
+                        <a class="listMenu" data-toggle="tooltip" data-placement="top"
+                           title="New entry"
+                           ng-show="isAddPermit"
+                           ng-click="onClick_AddRecord()">
+                            <i class="mdi mdi-plus-box icon-font-size addMenu"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <table class="table table-hover table-responsive-xl">
+                        <thead>
+                            <tr>
+                                <th>FullName</th>
+                                <th class="widthCenter">Type</th>
+                                <th class="widthCenter">From</th>
+                                <th class="widthCenter">To</th>
+                                <th class="widthCenter">Days</th>
+                                <th class="widthCenter">Emergency</th>
+                                <th class="widthCenter">Partial</th>
+                                <th class="widthCenter">Status</th>
+                                <th class="widthCenter">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-if="!loaded">
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                            </tr>
+                            <tr ng-if="loaded" ng-repeat="x in tableParams">
+                                <td>{{x.memberName}}</td>
+                                <td class="widthCenter">{{x.employerleavetypeLeaveCode}}</td>
+                                <td class="widthCenter">{{x.employeeleaveapplicationLeaveFromDDMMYYYY}}</td>
+                                <td class="widthCenter">{{x.employeeleaveapplicationLeaveToDDMMYYYY}}</td>
+                                <td class="widthCenter">{{x.employeeleaveapplicationNoOfDays}}</td>
+                                <td class="widthCenter">
+                                    <span ng-show="x.employeeleaveapplicationIsEmergency.data[0] == 1" class="badge badge-success" style="width:60px;">Yes</span>
+                                    <span ng-show="x.employeeleaveapplicationIsEmergency.data[0] == 0" class="badge badge-dark" style="width:60px;">No</span>
+                                </td>
+                                <td class="widthCenter">
+                                    <span ng-show="x.employeeleaveapplicationIsPartialday.data[0] == 0" class="badge badge-dark" style="width:60px;">No</span>
+                                    <span ng-show="x.employeeleaveapplicationIsStartPartialday.data[0] == 1" class="badge badge-success" style="width:60px;">Yes</span>
+                                    <span ng-show="x.employeeleaveapplicationIsEndPartialday.data[0] == 1" class="badge badge-success" style="width:60px;">Yes</span>
+                                </td>
+                                <td class="widthCenter">
+                                    <span class="badge badge-primary" style="width:80px;"
+                                          ng-show="x.employeeleaveapplicationLeaveStatus == 'Pending'">
+                                        {{x.employeeleaveapplicationLeaveStatus}}
+                                    </span>
+                                    <span class="badge badge-success" style="width:80px;"
+                                          ng-show="x.employeeleaveapplicationLeaveStatus == 'Approved'">
+                                        {{x.employeeleaveapplicationLeaveStatus}}
+                                    </span>
+                                    <span class="badge badge-danger" style="width:80px;"
+                                          ng-show="x.employeeleaveapplicationLeaveStatus == 'Rejected'">
+                                        {{x.employeeleaveapplicationLeaveStatus}}
+                                    </span>
+                                </td>
+                                <td class="text-nowrap">
+                                    <a class="cursor" ng-click="onClick_ShowReason(x)">
+                                        <i class="mdi mdi-comment-question-outline icon-font-size text-info"></i>
+                                    </a>
+                                    <a class="cursor"
+                                       ng-if="isEditPermit"
+                                       ng-click="onClick_EditRecord(x.employeeleaveapplicationId)">
+                                        <i class="mdi mdi-pencil-box icon-font-size text-info"></i>
+                                    </a>
+                                    <a class="cursor"
+                                       ng-if="isDeletePermit"
+                                       ng-click="onClick_DeleteRecord(x.employeeleaveapplicationId)">
+                                        <i class="mdi mdi-delete-forever icon-font-size text-danger"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="float-left">
+                                <select ng-model="pageSizeSelected" ng-change="changePageSize()" class="badge">
+                                    <option value="15">15</option>
+                                    <option value="30">30</option>
+                                    <option value="50">50</option>
+                                </select>
+                            </div>
+                            <div class="float-right">
+                                <pagination total-items="totalCount" ng-change="pageChanged()"
+                                            items-per-page="pageSizeSelected" direction-links="true" ng-model="pageIndex"
+                                            next-text=">" previous-text="<"
+                                            max-size="maxSize" class="pagination" first-text="First" last-text="Last"
+                                            boundary-links="true" rotate="false"
+                                            num-pages="numPages">
+                                </pagination>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @* Entry Form *@
+
+    <div class="row">
+        <div class="col-md-12" ng-show="!hideEntry">
+            <div class="card">
+                <form name="dataForm" autocomplete="off">
+                    <div class="card-header">
+                        Manage Leave Application
+                    </div>
+                    <div class="card-body">
+                        <div style="display:none;">
+                            <input type="text" ng-model="employeeleaveapplicationId" />
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group mb-0">
+                                    <span class="badge badge-outline-dark mb-1" style="font-size: 14px;">
+                                        <b> Leave Year Period </b> : {{currentYearStart}} To {{currentYearEnd}}
+                                    </span>
+                                    <span class="badge badge-outline-info mb-1" style="font-size: 14px;">
+                                        Total Entitlement Day :
+                                        <span ng-bind="lblEntitlementLeave"></span>
+                                    </span>
+                                    <span class="badge badge-outline-info mb-1" style="font-size: 14px;">
+                                        Total Taken Leave :
+                                        <span ng-bind="lblTakenLeave"></span>
+                                    </span>
+                                    <span class="badge badge-outline-info mb-1" style="font-size: 14px;">
+                                        Total Balance Leave :
+                                        <span ng-bind="lblBalanceLeave"></span>
+                                    </span>
+                                    <small class="badge badge-primary cursor mb-1" style="font-size: 14px;"
+                                           ng-show="isUpdateDate"
+                                           ng-click="onChange_LeaveType()">
+                                        <i class="mdi mdi-refresh"></i> Refresh please!
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Employee<span class="text-danger">*</span></label>
+                                    <select ng-model="employeeId" class="form-control" ng-change="onChange_Employee()" required chosen>
+                                        <option value="">-- Select --</option>
+                                        <option ng-selected="x == employeeId" ng-repeat="x in fill_employeeId" ng-value="x.employeeId">
+                                            {{x.memberName}}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Leave Type<span class="text-danger">*</span></label>
+                                    <select ng-model="employerleavetypeId" class="form-control" ng-change="onChange_LeaveType()"
+                                            ng-disabled="employeeId == ''" required chosen>
+                                        <option value="">-- Select --</option>
+                                        <option ng-selected="x == employerleavetypeId" ng-repeat="x in fill_employerleavetypeId" ng-value="x.employerleavetypeId">
+                                            {{x.employerleavetypeLeaveCode}} - {{x.employerleavetypeLeaveType}}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12" ng-show="isValueDate">
+                                <div class="alert alert-warning" role="alert">
+                                    Warning! You can access this leave type after {{isValueDays}}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group ">
+                                    <label>Apply Date<span class="text-danger">*</span></label>
+                                    <input id="id_applydate" type="date" class="form-control"
+                                           max="9999-12-31"
+                                           ng-change="onClick_UpdateDateChange()"
+                                           ng-model="employeeleaveapplicationLeaveApply"
+                                           required>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group ">
+                                    <label>From Date<span class="text-danger">*</span></label>
+                                    <input type="date" class="form-control"
+                                           id="fromDateValidation"
+                                           max="9999-12-31"
+                                           ng-change="onClick_UpdateDateChange1()"
+                                           ng-model="employeeleaveapplicationLeaveFrom"
+                                           required>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group ">
+                                    <label>To Date<span class="text-danger">*</span></label>
+                                    <input type="date" class="form-control"
+                                           id="toDateValidation"
+                                           max="9999-12-31"
+                                           ng-model="employeeleaveapplicationLeaveTo"
+                                           ng-blur="onChange_LeaveCount()"
+                                           required>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group ">
+                                    <label>Number of days<span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control"
+                                           ng-model="employeeleaveapplicationNoOfDays"
+                                           required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group ">
+                                            <div class="form-check">
+                                                <label>Emergency Leave?</label>
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <input type="radio" ng-model="employeeleaveapplicationIsEmergency" id="EmergencyYes" name="Emergency" value="1">
+                                                        <label for="EmergencyYes">Yes</label><br>
+                                                        <input type="radio" ng-model="employeeleaveapplicationIsEmergency" id="EmergencyNo" name="Emergency" value="0">
+                                                        <label for="EmergencyNo">No</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group ">
+                                            <div class="form-check">
+                                                <label class="form-check-label text-muted">
+                                                    <input type="checkbox" class="form-check-input"
+                                                           ng-change="onChecked_UpdateStatus()"
+                                                           ng-model="employeeleaveapplicationIsPartialday"> Is Contain partial Day ?
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6" ng-show="isPartialDay">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-check">
+                                            <div class="form-check">
+                                                <label class="form-check-label text-muted">
+                                                    <input type="checkbox" class="form-check-input"
+                                                           ng-change="onChecked_UpdateCount(1)"
+                                                           ng-model="employeeleaveapplicationIsStartPartialday"> Start Partial Days (AM)
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-check">
+                                            <div class="form-check">
+                                                <label class="form-check-label text-muted">
+                                                    <input type="checkbox" class="form-check-input"
+                                                           ng-change="onChecked_UpdateCount(0)"
+                                                           ng-model="employeeleaveapplicationIsEndPartialday"> End Partial Days (PM)
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group ">
+                                    <label>Document RefNo</label>
+                                    <input type="text" class="form-control"
+                                           ng-model="employeeleaveapplicationDocumentRefNo">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group ">
+                                    <label>Reason for leave</label>
+                                    <textarea type="text" class="form-control"
+                                              ng-model="employeeleaveapplicationReason"
+                                              rows="5"></textarea>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group ">
+                                    <label>
+                                        Remark
+                                        <a class="cursor text-danger" data-toggle="tooltip"
+                                           title="Remark is mandatory for emergency leave!">
+                                            <i class="mdi mdi-message-alert"></i>
+                                        </a>
+                                    </label>
+                                    <textarea type="text" id="txtRemark" class="form-control"
+                                              ng-model="employeeleaveapplicationRemarks"
+                                              rows="5"></textarea>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group ">
+                                    <label>
+                                        Reason for rejection
+                                        <a class="cursor text-danger" data-toggle="tooltip"
+                                           title="You must have to enter, If you select status REJECTED!">
+                                            <i class="mdi mdi-message-alert"></i>
+                                        </a>
+                                    </label>
+
+                                    <textarea type="text" id="txtRejection" class="form-control"
+                                              ng-model="employeeleaveapplicationReasonReject"
+                                              rows="5"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Leave Status</label>
+                                    <select ng-model="employeeleaveapplicationLeaveStatus" class="form-control" chosen>
+                                        <option value="Pending">Pending</option>
+                                        <option value="Approved">Approved</option>
+                                        <option value="Rejected">Rejected</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <input type="submit" class="btn btn-gradient-primary m-1" ng-click="dataForm.$valid && onClick_Submit()" />
+                        <input type="button" class="btn btn-gradient-success" ng-show="employeeleaveapplicationId == 0"
+                               ng-click="dataForm.$valid && onClick_AddNewSubmit()" value="Save & Add New" />
+                        <button type="button" class="btn btn-inverse-dark m-1" ng-click="onClick_Cancel()">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    @*Search Modal*@
+
+    <div class="modal fade" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel"
+         aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog" style="max-width:600px !important;" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="searchModalLabel">Search Result</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group ">
+                                <label>From Date</label>
+                                <input type="date" class="form-control form-control-lg"
+                                       ng-model="searchFromDate">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group ">
+                                <label>To Date</label>
+                                <input type="date" class="form-control form-control-lg"
+                                       ng-model="searchToDate">
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Employee</label>
+                                <select ng-model="searchMasterEmployeeId" class="form-control" chosen>
+                                    <option value="">-- Select --</option>
+                                    <option ng-selected="x == employeeId" ng-repeat="x in fill_searchMasterEmployeeId" ng-value="x.employeeId">
+                                        {{x.memberName}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Leave Status</label>
+                                <select ng-model="searchLeaveStatus" class="form-control" chosen>
+                                    <option value="">-- Select --</option>
+                                    <option value="Pending">Pending</option>
+                                    <option value="Approved">Approved</option>
+                                    <option value="Rejected">Rejected</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Leave Emergency</label>
+                                <select ng-model="searchEmergency" class="form-control" chosen>
+                                    <option value="all">All</option>
+                                    <option value="yes">Yes</option>
+                                    <option value="no">No</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group ">
+                                <label>Leave Type Category</label>
+                                <select class="form-control" ng-model="searchLeaveType" chosen>
+                                    <option value="">--Select--</option>
+                                    <option value="UL">Unpaid Leave</option>
+                                    <option value="AL">Annual Leave</option>
+                                    <option value="MC">Medical Leave</option>
+                                    <option value="HL">Hospitalization Leave</option>
+                                    <option value="OL">Other Leave</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" ng-click="onClick_CloseSearch()">Close</button>
+                    <button type="button" class="btn btn-primary" ng-click="onClick_SearchResult()">Search</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @*Show Reason Modal*@
+
+    <div class="modal fade" id="reasonModal" tabindex="-1" role="dialog" aria-labelledby="reasonModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="reasonModalLabel">Leave Reason</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <p>
+                                <span class="text-danger">Leave reason: </span>  {{leaveReasonList}}
+                            </p>
+                            <hr />
+                            <p>
+                                <span class="text-danger">Reject reason: </span> {{leaveRejectList}}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-inverse-dark" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@section scripts{
+    <script src="~/Areas/Employer/_Employer/Code/LeaveSetting/employer-leaveapplication-controller.js?version=@(System.Configuration.ConfigurationManager.AppSettings["version"].ToString())"></script>
+}
+
+

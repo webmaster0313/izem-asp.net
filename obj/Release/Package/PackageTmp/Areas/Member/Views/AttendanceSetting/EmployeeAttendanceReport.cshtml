@@ -1,0 +1,341 @@
+﻿
+@{
+    ViewBag.Title = "EmployeeAttendanceReport";
+    Layout = "~/Areas/Member/Views/Shared/_Layout.cshtml";
+}
+
+
+<div ng-controller="member-attendancereport-controller">
+
+    @*Entry List*@
+
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Attendance entries</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Attendance Report</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="float-right">
+                        <a class="listMenu" data-toggle="tooltip" data-placement="top"
+                           title="Open search" ng-click="onClick_OpenSearch()">
+                            <i class="mdi mdi-filter icon-font-size filterMenu"></i>
+                        </a>
+                        <a class="listMenu" data-toggle="tooltip" data-placement="top"
+                           title="Reset result" ng-click="onClick_ResetSearch()">
+                            <i class="mdi mdi-view-list icon-font-size viewMenu"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <table class="table table-hover table-responsive">
+                        <thead>
+                            <tr>
+                                <th class="widthleft">Date</th>
+                                <th>Employee</th>
+                                <th class="widthCenter">InTime</th>
+                                <th class="widthCenter">OutTime</th>
+                                <th class="widthCenter">LunchIn</th>
+                                <th class="widthCenter">LunchOut</th>
+                                <th class="widthCenter">BreakIn</th>
+                                <th class="widthCenter">BreakOut</th>
+                                <th class="widthCenter">BreakIn</th>
+                                <th class="widthCenter">BreakOut</th>
+                                <th class="widthCenter">OverTime</th>
+                                <th class="widthCenter">Detail</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-if="!loaded">
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                            </tr>
+                            <tr ng-if="loaded" ng-repeat="x in tableParams">
+                                <td>{{x.entryDateDDMMYYYY}}</td>
+                                <td>{{x.memberName}}</td>
+                                <td class="text-center">{{x._actInTime}}</td>
+                                <td class="text-center" ng-show="{{x.dayType == 'half'}}">{{x._actOutTime}}</td>
+                                <td class="text-center" ng-show="{{x.dayType == 'full' || x.dayType == 'off' || x.dayType == 'holiday' }}">{{x._actOutTime_Full}}</td>
+                                <td class="text-center" ng-show="{{x.dayType == ''}}">{{x._actOutTime_Full}}</td>
+                                <td class="text-center">{{x._actLunchInTime}}</td>
+                                <td class="text-center">{{x._actLunchOutTime}}</td>
+                                <td class="text-center">{{x._actBreakInTime1}}</td>
+                                <td class="text-center">{{x._actBreakOutTime1}}</td>
+                                <td class="text-center">{{x._actBreakInTime2}}</td>
+                                <td class="text-center">{{x._actBreakOutTime2}}</td>
+                                <td class="text-center" ng-show="{{x.dayType == 'half'}}">{{x.finalOverTime}}</td>
+                                <td class="text-center" ng-show="{{x.dayType == 'full' || x.dayType == 'off'|| x.dayType == 'holiday' }}">{{x.finalOverTime_Full}}</td>
+                                <td class="text-center" ng-show="{{x.dayType == ''}}">{{x.finalOverTime_Full}}</td>
+                                <td class="text-nowrap text-center">
+                                    <a class="cursor" ng-click="onClick_ShowDetail(x)">
+                                        <i class="mdi mdi-view-list icon-font-size editMenu"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="float-left">
+                                <select ng-model="pageSizeSelected" ng-change="changePageSize()" class="badge">
+                                    <option value="15">15</option>
+                                    <option value="30">30</option>
+                                    <option value="50">50</option>
+                                </select>
+                            </div>
+                            <div class="float-right">
+                                <pagination total-items="totalCount" ng-change="pageChanged()"
+                                            items-per-page="pageSizeSelected" direction-links="true" ng-model="pageIndex"
+                                            next-text=">" previous-text="<"
+                                            max-size="maxSize" class="pagination" first-text="First" last-text="Last"
+                                            boundary-links="true" rotate="false"
+                                            num-pages="numPages">
+                                </pagination>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @*Search Modal*@
+
+    <div class="modal fade" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel"
+         aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog" style="max-width:800px !important;" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="searchModalLabel">Search Result</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Excel Report</label>
+                                <select ng-model="excelReport" class="form-control"
+                                        ng-change="onChange_Reports('Excel')"
+                                        chosen>
+                                    <option value="">-- Select --</option>
+                                    <option value="startend1">Start End - Report 1</option>
+                                    <option value="startend2">Start End - Report 2</option>
+                                    <option value="startend3">Start End - Report 3</option>
+                                    <option value="startend4">Start End - Report 4</option>
+                                    <option value="startend5">Start End - Report 5</option>
+                                    <option value="overtime">Overtime-Unit Report</option>
+                                    <option value="addpay">Addpay-Unit Report</option>
+                                    <option value="shift">Shift-Unit Report</option>
+                                    <option value="lateinentries">LateIn Report</option>
+                                    <option value="earlyoutentries">EarlyOut Report</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>PDF Report</label>
+                                <select ng-model="pdfReport" class="form-control"
+                                        ng-change="onChange_Reports('PDF')"
+                                        chosen>
+                                    <option value="">-- Select --</option>
+                                    <option value="attendance">Attendance Report</option>
+                                    <option value="startend1">Start End - Report 1</option>
+                                    <option value="startend2">Start End - Report 2</option>
+                                    <option value="startend3">Start End - Report 3</option>
+                                    <option value="overtime">Overtime-Unit Report</option>
+                                    <option value="addpay">Addpay-Unit Report</option>
+                                    <option value="shift">Shift-Unit Report</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>From Date</label>
+                                <input type="date" class="form-control"
+                                       ng-model="SearchFromDate">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>To Date</label>
+                                <input type="date" class="form-control"
+                                       ng-model="SearchToDate">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 text-right">
+                            <button type="button" class="btn btn-behance" ng-show="isExcel" ng-click="onClick_DownloadExcel()">Download Excel</button>
+                            <button type="button" class="btn btn-behance" ng-show="isPDF" ng-click="onClick_DownloadPDF()">Open Print</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" ng-click="onClick_CloseSearch()">Close</button>
+                    <button type="button" class="btn btn-primary" ng-click="onClick_SearchResult()">Search</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="listModal" tabindex="-1" role="dialog" aria-labelledby="listModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="listModalLabel">Detail Timing</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <ul class="list-group">
+                                <li class="list-group-item">
+                                    <div class="float-left">Overtime Unit</div>
+                                    <div class="float-right">
+                                        <span class="badge badge-success">{{finalOverTime_min}}</span>
+                                    </div>
+                                </li>
+                                <li class="list-group-item">
+                                    <div class="float-left">
+                                        Additional Unit
+                                    </div>
+                                    <div class="float-right">
+                                        <span class="badge badge-success">{{employeradditionalpaysetupCode_count}}</span>
+                                    </div>
+                                </li>
+                                <li class="list-group-item">
+                                    <div class="float-left">
+                                        Shift Unit
+                                    </div>
+                                    <div class="float-right">
+                                        <span class="badge badge-success">{{employershiftsetupCode_count}}</span>
+                                    </div>
+                                </li>
+                                <li class="list-group-item">
+                                    <div class="float-left">In-Time</div>
+                                    <div class="float-right">
+                                        <span class="badge badge-primary">{{inTime}}</span> vs <span class="badge badge-success">{{_actInTime}}</span>
+                                    </div>
+                                </li>
+                                <li class="list-group-item">
+                                    <div class="float-left">
+                                        Half-Time<small>Out</small>
+                                    </div>
+                                    <div class="float-right">
+                                        <span class="badge badge-primary">{{outTime}}</span> vs <span class="badge badge-success">{{_actOutTime}}</span>
+                                    </div>
+                                </li>
+                                <li class="list-group-item">
+                                    <div class="float-left">
+                                        Full-Time<small>Out</small>
+                                    </div>
+                                    <div class="float-right">
+                                        <span class="badge badge-primary">{{outTime_Full}}</span> vs <span class="badge badge-success">{{_actOutTime_Full}}</span>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <ul class="list-group">
+                                <li class="list-group-item">
+                                    <div class="float-left">
+                                        Overtime Half
+                                    </div>
+                                    <div class="float-right">
+                                        <span class="badge badge-success">{{finalOverTime}}</span>
+                                    </div>
+                                </li>
+                                <li class="list-group-item">
+                                    <div class="float-left">
+                                        Overtime Full
+                                    </div>
+                                    <div class="float-right">
+                                        <span class="badge badge-success">{{finalOverTime_Full}}</span>
+                                    </div>
+                                </li>
+                                <li class="list-group-item">
+                                    <div class="float-left">
+                                        Lunch In-Time
+                                    </div>
+                                    <div class="float-right">
+                                        <span class="badge badge-primary">{{lunchInTime}}</span> vs <span class="badge badge-success">{{_actLunchInTime}}</span>
+                                    </div>
+                                </li>
+                                <li class="list-group-item">
+                                    <div class="float-left">
+                                        Lunch Out-Time
+                                    </div>
+                                    <div class="float-right">
+                                        <span class="badge badge-primary">{{lunchOutTime}}</span> vs <span class="badge badge-success">{{_actLunchOutTime}}</span>
+                                    </div>
+                                </li>
+                                <li class="list-group-item">
+                                    <div class="float-left">
+                                        Break In-Time
+                                    </div>
+                                    <div class="float-right">
+                                        <span class="badge badge-primary">{{breakInTime1}}</span> vs <span class="badge badge-success">{{_actBreakInTime1}}</span>
+                                    </div>
+                                </li>
+                                <li class="list-group-item">
+                                    <div class="float-left">
+                                        Break Out-Time
+                                    </div>
+                                    <div class="float-right">
+                                        <span class="badge badge-primary">{{breakOutTime1}}</span> vs <span class="badge badge-success">{{_actBreakOutTime1}}</span>
+                                    </div>
+                                </li>
+                                <li class="list-group-item">
+                                    <div class="float-left">
+                                        Break In-Time
+                                    </div>
+                                    <div class="float-right">
+                                        <span class="badge badge-primary">{{breakInTime2}}</span> vs <span class="badge badge-success">{{_actBreakInTime2}}</span>
+                                    </div>
+                                </li>
+                                <li class="list-group-item">
+                                    <div class="float-left">
+                                        Break Out-Time
+                                    </div>
+                                    <div class="float-right">
+                                        <span class="badge badge-primary">{{breakOutTime2}}</span> vs <span class="badge badge-success">{{_actBreakOutTime2}}</span>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @*Excel Download*@
+    <div style="display:none">
+        <table id="tabledata"></table>
+    </div>
+
+</div>
+
+@section scripts{
+    <script src="~/Areas/Member/_Member/Code/AttendanceSetting/member-attendancereport-controller.js?version=@(System.Configuration.ConfigurationManager.AppSettings["version"].ToString())"></script>
+}

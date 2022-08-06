@@ -1,0 +1,285 @@
+﻿<div ng-controller="employee-member-controller">
+    <div class="col-md-12 mb-1">
+        <form name="memberform" autocomplete="off">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            Manage Member
+                        </div>
+                        <div class="card-body">
+                            <div class="d-none">
+                                <input type="text" ng-model="memberId">
+                            </div>
+                            <p class="card-description"> Personal info </p>
+                            @*<div class="row">
+                                    <div class="col-md-3">
+                                        <div class="form-check">
+                                            <label class="form-check-label cursor text-muted">
+                                                <input type="checkbox" class="form-check-input"
+                                                       ng-model="ignoreValidation"> Ignore NRIC and Passport for this employee?
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>*@
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Full Name<span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control form-control-lg"
+                                               required
+                                               ng-model="memberName">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Mobile No</label>
+                                        <input type="text" class="form-control form-control-lg"
+                                               onkeypress="preventNonNumericalInput(event)"
+                                               ng-model="memberMobile">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Email</label>
+                                        <input type="email" class="form-control form-control-lg"
+                                               ng-model="memberEmail">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>
+                                            NRIC
+                                            <span class="text-danger">*</span>
+                                            <a class="cursor text-danger" data-toggle="tooltip" title="Either NRIC or Passport!">
+                                                <i class="mdi mdi-message-alert"></i>
+                                            </a>
+                                        </label>
+                                        <input type="text" id="nricpattern" class="form-control form-control-lg"
+                                               placeholder="000000-00-0000"
+                                               ng-disabled="ignoreValidation"
+                                               ng-model="memberNric">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>
+                                            Passport
+                                            <span class="text-danger">*</span>
+                                            <a class="cursor text-danger" data-toggle="tooltip" title="Either NRIC or Passport!">
+                                                <i class="mdi mdi-message-alert"></i>
+                                            </a>
+                                        </label>
+                                        <input type="text" id="passportpattern" class="form-control form-control-lg"
+                                               ng-disabled="ignoreValidation"
+                                               ng-model="memberPassport">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Date of Birth<span class="text-danger">*</span></label>
+                                        <input type="date" class="form-control form-control-lg"
+                                               max="2999-12-31"
+                                               required
+                                               ng-model="memberDob">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Gender<span class="text-danger">*</span></label>
+                                        <select ng-model="memberGender" class="form-control" chosen required>
+                                            <option value="">-- Select --</option>
+                                            <option value="Male">Male</option>
+                                            <option value="Female">Female</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Marital Status<span class="text-danger">*</span></label>
+                                        <select ng-model="memberMaritalStatus" class="form-control" chosen required>
+                                            <option value="">-- Select --</option>
+                                            <option value="Married">Married</option>
+                                            <option value="Single">Single</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Race<span class="text-danger">*</span></label>
+                                        <select ng-model="masterraceId" class="form-control" chosen required>
+                                            <option value="">-- Select --</option>
+                                            <option ng-selected="x == masterraceId" ng-repeat="x in fill_masterraceId" ng-value="x.masterraceId">
+                                                {{x.masterraceTitle}}
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Citizenship<span class="text-danger">*</span></label>
+                                        <select ng-model="mastercitizenshipId" class="form-control" chosen required>
+                                            <option value="">-- Select --</option>
+                                            <option ng-selected="x == mastercitizenshipId" ng-repeat="x in fill_mastercitizenshipId" ng-value="x.mastercitizenshipId">
+                                                {{x.mastercitizenshipTitle}}
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Fax</label>
+                                        <input type="text" class="form-control form-control-lg"
+                                               ng-model="memberFax">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Google Tag</label>
+                                        <input type="text" class="form-control form-control-lg"
+                                               ng-model="memberGoogleTag">
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="card-description"> Account info </p>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    @*<div class="form-group">
+                                            <label>BankName</label>
+                                            <input type="text" class="form-control form-control-lg"
+                                                   ng-model="memberBankName">
+                                        </div>*@
+                                    <div class="form-group">
+                                        <label>BankName</label>
+                                        <select ng-model="memberBankName" class="form-control" chosen>
+                                            <option value="">-- Select --</option>
+                                            <option ng-selected="x == masteremployeebankName" ng-repeat="x in fill_mastermemberBankName" ng-value="x.masteremployeebankName">
+                                                {{x.masteremployeebankName}}
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Account</label>
+                                        <input type="text" class="form-control form-control-lg"
+                                               ng-model="memberAccount">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>EPF Number</label>
+                                        <input type="text" class="form-control form-control-lg"
+                                               ng-model="memberEPF">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>SOCSO Number</label>
+                                        <input type="text" class="form-control form-control-lg"
+                                               ng-model="memberSocso">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>EIS Number</label>
+                                        <input type="text" class="form-control form-control-lg"
+                                               ng-model="memberEIS">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>PTPTN Number</label>
+                                        <input type="text" class="form-control form-control-lg"
+                                               ng-model="memberPTPTN">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Income Tax-Number</label>
+                                        <input type="text" class="form-control form-control-lg"
+                                               ng-model="memberIncomeTax">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>HRDF Number</label>
+                                        <input type="text" class="form-control form-control-lg"
+                                               ng-model="memberOther">
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="card-description"> Address info </p>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Country</label>
+                                        <select ng-model="mastercountryId" class="form-control" chosen ng-change="fillState()">
+                                            <option value="">-- Select --</option>
+                                            <option ng-selected="x == mastercountryId" ng-repeat="x in fill_mastercountryId" ng-value="x.mastercountryId">
+                                                {{x.mastercountryTitle}}
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>State</label>
+                                        <select ng-model="masterstateId" class="form-control" chosen>
+                                            <option value="">-- Select --</option>
+                                            <option ng-selected="x == masterstateId" ng-repeat="x in fill_masterstateId" ng-value="x.masterstateId">
+                                                {{x.masterstateTitle}}
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>City</label>
+                                        <input type="text" class="form-control form-control-lg"
+                                               ng-model="memberCity">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Postcode</label>
+                                        <input type="text" class="form-control form-control-lg"
+                                               ng-model="memberPostcode">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>Address1</label>
+                                        <textarea class="form-control form-control-lg"
+                                                  ng-model="memberAddress1" rows="3"></textarea>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>Address2</label>
+                                        <textarea class="form-control form-control-lg"
+                                                  ng-model="memberAddress2" rows="3"></textarea>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>Address3</label>
+                                        <textarea class="form-control form-control-lg"
+                                                  ng-model="memberAddress3" rows="3"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <input type="submit" class="btn btn-gradient-primary" id="submitMember_Id"
+                                   ng-click="memberform.$valid && onClick_SubmitMember()" />
+                            <input type="button" class="btn btn-inverse-dark"
+                                   ng-click="onClick_CloseMemberForm()"
+                                   value="Cancel" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

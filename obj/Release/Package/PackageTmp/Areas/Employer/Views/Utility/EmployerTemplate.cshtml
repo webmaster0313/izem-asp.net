@@ -1,0 +1,114 @@
+﻿
+@{
+    ViewBag.Title = "EmployerTemplate";
+    Layout = "~/Areas/Employer/Views/Shared/_Layout.cshtml";
+}
+
+<div ng-controller="employer-template-controller">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Utility</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Template</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <div class="col-md-4 mt-1">
+            <div class="card">
+                <form name="dataForm" autocomplete="off">
+                    <div class="card-header">
+                        Manage Template
+                    </div>
+                    <div class="card-body">
+                        <div style="display:none;">
+                            <input type="text" ng-model="employerTemplateId" />
+                        </div>
+
+                        <div class="form-group">
+                            <label>Template<span class="text-danger">*</span></label>
+                            <input type="text" class="form-control form-control-lg"
+                                   ng-model="templateName"
+                                   required>
+                        </div>
+                        <div class="form-check">
+                            <label class="form-check-label text-muted">
+                                <input type="checkbox" class="form-check-input"
+                                       ng-model="isFullAccess"> Is it full-access?
+                            </label>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <input type="submit" class="btn btn-gradient-primary" ng-click="dataForm.$valid && onClick_Submit()" />
+                        <button type="button" class="btn btn-inverse-dark" ng-click="onClick_Cancel()">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="col-md-8 mt-1">
+            <div class="card">
+                <div class="card-header">
+                    Template List
+                </div>
+                <div class="card-body">
+                    <table class="table table-hover table-responsive-xl">
+                        <thead>
+                            <tr>
+                                <th>Template</th>
+                                <th class="widthCenter">Access</th>
+                                <th class="widthCenter">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-if="!loaded">
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                            </tr>
+                            <tr ng-if="loaded" ng-repeat="x in tableParams">
+                                <td>{{x.templateName}}</td>
+                                <td class="text-nowrap text-center">
+                                    <span style="width: 100px;" ng-if="x.isFullAccess.data[0]=='0'" class="badge badge-danger">Limited Access</span>
+                                    <span style="width: 100px;" ng-if="x.isFullAccess.data[0]=='1'" class="badge badge-success">Full Access</span>
+                                </td>
+                                <td class="text-nowrap">
+                                    <a class="cursor" ng-click="onClick_EditRecord(x.employerTemplateId)">
+                                        <i class="mdi mdi-pencil-box icon-font-size text-info"></i>
+                                    </a>
+                                    <a class="cursor" ng-click="onClick_DeleteRecord(x.employerTemplateId)">
+                                        <i class="mdi mdi-delete-forever icon-font-size text-danger"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="float-left">
+                                <select ng-model="pageSizeSelected" ng-change="changePageSize()" class="badge">
+                                    <option value="15">15</option>
+                                    <option value="30">30</option>
+                                    <option value="50">50</option>
+                                </select>
+                            </div>
+                            <div class="float-right">
+                                <pagination total-items="totalCount" ng-change="pageChanged()"
+                                            items-per-page="pageSizeSelected" direction-links="true" ng-model="pageIndex"
+                                            next-text=">" previous-text="<"
+                                            max-size="maxSize" class="pagination" first-text="First" last-text="Last"
+                                            boundary-links="true" rotate="false"
+                                            num-pages="numPages">
+                                </pagination>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/Areas/Employer/_Employer/Code/UtilitySetting/employer-template-controller.js?version=@(System.Configuration.ConfigurationManager.AppSettings["version"].ToString())"></script>
+}

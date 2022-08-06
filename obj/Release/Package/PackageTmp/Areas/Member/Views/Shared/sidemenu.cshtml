@@ -1,0 +1,59 @@
+﻿
+<div ng-controller="member-sidemenu-controller">
+    <nav class="sidebar sidebar-offcanvas" id="sidebar">
+        <ul class="nav">
+            <li class="nav-item nav-profile border-top border-bottom">
+                <a href="#" class="nav-link">
+                    <div class="d-flex flex-column">
+                        <span class="font-weight-bold mb-2">{{report_companyName}}</span>
+                        <span class="text-secondary text-small">{{loginRole}}</span>
+                    </div>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/member">
+                    <span class="menu-title">Dashboard</span>
+                    <i class="mdi mdi-home menu-icon"></i>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/member/home/employee-detail">
+                    <span class="menu-title">Profile</span>
+                    <i class="mdi mdi-note-text menu-icon"></i>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="collapse" href="#ui-attendance" aria-expanded="false" aria-controls="ui-attendance">
+                    <span class="menu-title">Attendance</span>
+                    <i class="menu-arrow"></i>
+                    <i class="mdi mdi-note-text menu-icon"></i>
+                </a>
+                <div class="collapse" id="ui-attendance">
+                    <ul class="nav flex-column sub-menu">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/member/attendancesetting/manage-your-attendancereport">Attendance Report</a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
+                    <span class="menu-title">Leave</span>
+                    <i class="menu-arrow"></i>
+                    <i class="mdi mdi-library-books menu-icon"></i>
+                </a>
+                <div class="collapse" id="ui-basic">
+                    <ul class="nav flex-column sub-menu">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/member/leavesetting/manage-your-leaveapplication">Leave Application</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/member/leavesetting/manage-your-leavesummary">Leave Report</a>
+                        </li>
+
+                    </ul>
+                </div>
+            </li>
+        </ul>
+    </nav>
+</div>

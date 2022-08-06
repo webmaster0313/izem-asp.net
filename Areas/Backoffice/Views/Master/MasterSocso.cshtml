@@ -1,0 +1,336 @@
+﻿
+@{
+    ViewBag.Title = "Master-Socso";
+    Layout = "~/Areas/Backoffice/Views/Shared/_Layout.cshtml";
+}
+
+<div ng-controller="master-socso-controller">
+
+    @*Entry List*@
+
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Payroll deduction</a></li>
+            <li class="breadcrumb-item active" aria-current="page">SOCSO</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <div class="col-md-12" ng-show="hideEntry">
+            <div class="card">
+                <div class="card-header">
+                    <div class="float-right">
+                        <a class="listMenu" data-toggle="tooltip" data-placement="top"
+                           href="~/Content/format/socsoData.xls"
+                           download
+                           title="Download">
+                            <i class="mdi mdi-download icon-font-size filterMenu"></i>
+                        </a>
+                        <a class="listMenu" data-toggle="tooltip" data-placement="top"
+                           title="Open search" ng-click="onClick_OpenSearch()">
+                            <i class="mdi mdi-filter icon-font-size filterMenu"></i>
+                        </a>
+                        <a class="listMenu" data-toggle="tooltip" data-placement="top"
+                           title="Reset result" ng-click="onClick_ResetSearch()">
+                            <i class="mdi mdi-view-list icon-font-size viewMenu"></i>
+                        </a>
+                        <a class="listMenu" data-toggle="tooltip" data-placement="top"
+                           title="New entry" ng-click="onClick_AddRecord()">
+                            <i class="mdi mdi-plus-box icon-font-size addMenu"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <table class="table table-hover table-responsive-xl">
+                        <thead>
+                            <tr>
+                                <th class="widthCenter">Code</th>
+                                <th>SOCSO</th>
+                                <th class="widthCenter">Status</th>
+                                <th class="widthCenter">Upload</th>
+                                <th class="widthCenter">Epf List</th>
+                                <th class="widthCenter">Active</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-if="!loaded">
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                            </tr>
+                            <tr ng-if="loaded" ng-repeat="x in tableParams">
+                                <td>{{x.mastersocsoCode}}</td>
+                                <td>{{x.mastersocsoTitle}}</td>
+                                <td class="text-nowrap text-center">
+                                    <span style="width: 70px;" ng-if="x.mastersocsoIsActive.data[0]=='0'" class="badge badge-danger">inactive</span>
+                                    <span style="width: 70px;" ng-if="x.mastersocsoIsActive.data[0]=='1'" class="badge badge-success">active</span>
+                                </td>
+                                <td class="text-nowrap">
+                                    <span style="width: 70px;" class="badge badge-info">
+                                        <a class="cursor" ng-click="onClick_UploadRecord(x.mastersocsoId)">
+                                            Upload
+                                        </a>
+                                    </span>
+                                </td>
+                                <td class="text-nowrap">
+                                    <span style="width: 70px;" class="badge badge-dark">
+                                        <a class="cursor" ng-click="onClick_LoadSocsoListRecord(x.mastersocsoId)">
+                                            List
+                                        </a>
+                                    </span>
+                                </td>
+                                <td class="text-nowrap">
+                                    <a class="cursor" ng-click="onClick_EditRecord(x.mastersocsoId)">
+                                        <i class="mdi mdi-pencil-box icon-font-size text-info"></i>
+                                    </a>
+                                    <a class="cursor" ng-click="onClick_DeleteRecord(x.mastersocsoId)">
+                                        <i class="mdi mdi-delete-forever icon-font-size text-danger"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="float-left">
+                                <select ng-model="pageSizeSelected" ng-change="changePageSize()" class="badge">
+                                    <option value="15">15</option>
+                                    <option value="30">30</option>
+                                    <option value="50">50</option>
+                                </select>
+                            </div>
+                            <div class="float-right">
+                                <pagination total-items="totalCount" ng-change="pageChanged()"
+                                            items-per-page="pageSizeSelected" direction-links="true" ng-model="pageIndex"
+                                            next-text=">" previous-text="<"
+                                            max-size="maxSize" class="pagination" first-text="First" last-text="Last"
+                                            boundary-links="true" rotate="false"
+                                            num-pages="numPages">
+                                </pagination>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @* Entry Form *@
+
+    <div class="row">
+        <div class="col-md-12" ng-show="!hideEntry">
+            <div class="card">
+                <form name="dataForm" autocomplete="off">
+                    <div class="card-header">
+                        Manage Citizenship
+                    </div>
+                    <div class="card-body">
+                        <div style="display:none;">
+                            <input type="text" ng-model="mastersocsoId" />
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group ">
+                                    <label>SOCSO Code<span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control form-control-lg"
+                                           ng-model="mastersocsoCode"
+                                           id="mastersocsoCode"
+                                           required>
+                                </div>
+                                <div class="form-group ">
+                                    <label>SOCSO Title<span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control form-control-lg"
+                                           ng-model="mastersocsoTitle"
+                                           required>
+                                </div>
+                                <div class="form-check">
+                                    <label class="form-check-label text-muted">
+                                        <input type="checkbox" class="form-check-input"
+                                               ng-model="mastersocsoIsActive"> Is it active?
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <input type="submit" class="btn btn-gradient-primary m-1" ng-click="dataForm.$valid && onClick_Submit()" />
+                        <button type="button" class="btn btn-inverse-dark m-1" ng-click="onClick_Cancel()">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    @*Search Modal*@
+
+    <div class="modal fade" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel"
+         aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="searchModalLabel">Search Result</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>socso</label>
+                                <input type="text" class="form-control"
+                                       ng-model="SearchMasterSOCSOTitle">
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Status</label>
+                                <select ng-model="SearchMastersocsoIsActive" class="form-control">
+                                    <option value="true">Active</option>
+                                    <option value="false">InActive</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" ng-click="onClick_CloseSearch()">Close</button>
+                    <button type="button" class="btn btn-primary" ng-click="onClick_SearchResult()">Search</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @* Upload Excel File *@
+
+    <div class="modal fade bd-example-modal-lg" id="excelUpload" tabindex="-1" role="dialog" aria-labelledby="excelUploadModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="card">
+                    <div class="card-header">
+                        Upload SOCSO Data
+                    </div>
+                    <div class="card-body">
+                        <div class="col-md-12 mb-1">
+                            <input type="file" ID="fuUpload" name="fuUpload" />
+                            <div class="float-right">
+                                <a href="#" ID="btnUpload" value="Upload" class="badge badge-dark"
+                                   ng-click="onClick_CancelExcelProcess('reset')">Reset</a>
+
+                                <a href="#" ID="btnUpload" value="Upload" class="badge badge-info"
+                                   ng-click="onClick_UploadExcel()">Upload Excel</a>
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="col-md-12">
+                            <div class="badge badge-dark" ng-show="fileUploading">Please wait file is uploading..</div>
+                            <div style="overflow:auto; height: 70vh;" ng-show="fileUploadedList">
+                                <table class="table table-hover">
+                                    <thead>
+                                    <th class="widthRight">RangeFrom</th>
+                                    <th class="widthRight">RangeTo</th>
+                                    <th class="widthRight">Employer Contribution</th>
+                                    <th class="widthRight">Employee Contribution</th>
+                                    <th class="widthRight">Total Contribution</th>
+                                    <th class="widthRight">Employer Contribution</th>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="x in subDataResult">
+                                            <td class="text-nowrap text-right"> {{x.RangeFrom | number : 2}} </td>
+                                            <td class="text-nowrap text-right"> {{x.RangeTo | number : 2}} </td>
+                                            <td class="text-nowrap text-right"> {{x.EmployerContribution | number : 2}} </td>
+                                            <td class="text-nowrap text-right"> {{x.EmployeeContribution | number : 2}} </td>
+                                            <td class="text-nowrap text-right"> {{x.TotalContribution | number : 2}} </td>
+                                            <td class="text-nowrap text-right"> {{x.EmployerContribution1 | number : 2}} </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <button type="button" class="btn btn-gradient-primary m-1" ng-click="onClick_SubmitExcelProcess()">Submit</button>
+                        <button type="button" class="btn btn-inverse-dark m-1" ng-click="onClick_CancelExcelProcess('')">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @* Socso List *@
+
+    <div class="modal fade bd-example-modal-lg" id="SocsoList" tabindex="-1" role="dialog" aria-labelledby="excelUploadModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="card">
+                    <div class="card-header">
+                        Upload SOCSO Data
+                    </div>
+                    <div class="card-body">
+                        <div class="col-md-12">
+                            <div style="overflow:auto; height: 70vh;">
+                                <table class="table table-hover">
+                                    <thead>
+                                    <th class="widthRight">RangeFrom</th>
+                                    <th class="widthRight">RangeTo</th>
+                                    <th class="widthRight">Employer Contribution</th>
+                                    <th class="widthRight">Employee Contribution</th>
+                                    <th class="widthRight">Total Contribution</th>
+                                    <th class="widthRight">Employer Contribution</th>
+                                    <th class="widthCenter">Action</th>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="x in tableParamsList">
+                                            <td class="text-nowrap text-right">
+                                                <input type="text" ng-model="x.mastersocsolistFrom">
+                                            </td>
+                                            <td class="text-nowrap text-right">
+                                                <input type="text" ng-model="x.mastersocsolistTo">
+                                            </td>
+                                            <td class="text-nowrap text-right">
+                                                <input type="text" ng-model="x.mastersocsolistEmployerContribution">
+                                            </td>
+                                            <td class="text-nowrap text-right">
+                                                <input type="text" ng-model="x.mastersocsolistEmployeeContribution">
+                                            </td>
+                                            <td class="text-nowrap text-right">
+                                                <input type="text" ng-model="x.mastersocsolistTotalContribution">
+                                            </td>
+                                            <td class="text-nowrap text-right">
+                                                <input type="text" ng-model="x.mastersocsolistEmployerContribution1">
+                                            </td>
+                                            <td class="text-nowrap">
+                                                <button class="badge badge-dark"
+                                                        style="width:80px;"
+                                                        ng-show="x.mastersocsolistId == 0"
+                                                        ng-click="onClick_InsertUpdateListRecord(x)">
+                                                    Add
+                                                </button>
+                                                <button class="badge badge-danger"
+                                                        style="width:80px;"
+                                                        ng-hide="x.mastersocsolistId == 0"
+                                                        ng-click="onClick_InsertUpdateListRecord(x)">
+                                                    Update
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <button type="button" class="btn btn-inverse-dark m-1" ng-click="onClick_CancelSocsoList()">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@section scripts{
+    <script src="~/Areas/Backoffice/_Backoffice/Code/Master/master-socso-controller.js"></script>
+}

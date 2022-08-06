@@ -1,0 +1,276 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Member/Views/Shared/_Layout.cshtml";
+}
+
+<div ng-controller="member-dashboard-controller">
+
+    <div class="row">
+        <div class="col-12">
+            <span class="d-flex align-items-center purchase-popup">
+                <p>Welcome <b>{{loginName}}</b></p>
+            </span>
+        </div>
+    </div>
+
+    <div class="row">
+        <style>
+            .column {
+                float: left;
+                width: 50%;
+                padding: 10px;
+            }
+
+            .row:after {
+                content: "";
+                display: table;
+                clear: both;
+            }
+        </style>
+        <div class="col-md-2 mb-2" ng-show="employeeIsManualAttendance == 1">
+            <div class="card mb-2">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="column">
+                            <a href="#" style="color: black;" ng-click="onClick_ManualPunch()">
+                                <img src="~/Image/icon/software button icon DM-02-01.jpg" style="border: 1px solid; width: 100%" />
+                            </a>
+                        </div>
+                        <div class="column">
+                            <a href="#" style="color: black;" ng-click="onClick_ManualPunch()">
+                                <img src="~/Image/icon/software button icon DM-02-02.jpg" style="border: 1px solid; width: 100%" />
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card mb-2">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="column">
+                            <a href="#" style="color: black;" ng-click="onClick_ManualPunch()">
+                                <img src="~/Image/icon/software button icon DM-02-03.jpg" style="border: 1px solid; width: 100%" />
+                            </a>
+                        </div>
+                        <div class="column">
+                            <a href="#" style="color: black;" ng-click="onClick_ManualPunch()">
+                                <img src="~/Image/icon/software button icon DM-02-04.jpg" style="border: 1px solid; width: 100%" />
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card mb-2">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="column">
+                            <a href="#" style="color: black;" ng-click="onClick_ManualPunch()">
+                                <img src="~/Image/icon/software button icon DM-02-05.jpg" style="border: 1px solid; width: 100%" />
+                            </a>
+                        </div>
+                        <div class="column">
+                            <a href="#" style="color: black;" ng-click="onClick_ManualPunch()">
+                                <img src="~/Image/icon/software button icon DM-02-06.jpg" style="border: 1px solid; width: 100%" />
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-5 mb-2">
+            <div class="card card-primary1">
+                <div class="card-body">
+                    <h4 class="mt-3 b-b1 pb-2 mb-4 fw-bold">Leave Pending Approval</h4>
+                    <h1 class="mb-4 fw-bold">{{pending}}</h1>
+                    <h4 class="mt-5 pb-3 mb-0 fw-bold">Leave summary</h4>
+                    <hr style="margin-top: 5px; margin-bottom:5px;" />
+                    <ul class="list-unstyled">
+                        <li class="d-flex justify-content-between align-items-center">
+                            <span>Approved</span>
+                            <span class="badge badge-pill">{{approved}}</span>
+                        </li>
+                        <li class="d-flex justify-content-between align-items-center">
+                            Rejected
+                            <span class="badge badge-pill">{{rejected}}</span>
+                        </li>
+                    </ul>
+                    <hr style="margin-top: 5px; margin-bottom:5px;" />
+                    <h4 class="fw-bold">
+                        <a href="/member/leavesetting/manage-your-leaveapplication" style="color:white;">
+                            Manage Leave
+                        </a>
+                    </h4>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-5 mb-2">
+            <div class="card">
+                <div class="card-header">
+                    Payroll Report
+                </div>
+                <div class="card-body">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Period From</label>
+                            <input type="month" class="form-control"
+                                   ng-model="periodFrom">
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <label for="chkpayrollList_Payslip">
+                            <input type="checkbox"
+                                   id="chkpayrollList_Payslip"
+                                   ng-model="Payslip"
+                                   ng-change="onCheck_Payslip()" />
+                            Payslip
+                        </label>
+                    </div>
+                    <div class="col-md-12">
+                        <label for="chkpayrollList_IncomeTax_EAForm">
+                            <input type="checkbox"
+                                   disabled
+                                   id="chkpayrollList_IncomeTax_EAForm" />
+                            Income Tax - EA Form
+                        </label>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <button type="button" class="btn btn-block btn-primary m-1" ng-click="onClick_GenerateReport()">Generate Report</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel"
+         aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog" style="max-width:600px !important;" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="searchModalLabel">Employee Detail</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-12">
+                                Joining Date :
+                                <span>{{_employeeJoiningDDMMYYYY}}</span>
+                            </div>
+                            <div class="col-md-12">
+                                Total Year :
+                                <span>{{_totalYear}}</span>
+                            </div>
+
+                            <div class="col-md-12">
+                                Mobile:
+                                <span>{{_memberMobile}}</span>
+                            </div>
+                            <div class="col-md-12">
+                                Member Name:
+                                <span>{{_memberName}}</span>
+                            </div>
+                            <div class="col-md-12">
+                                Member Nric:
+                                <span>{{_memberNric}}</span>
+                            </div>
+                            <div class="col-md-12">
+                                member Passport:
+                                <span>{{_memberPassport}}</span>
+                            </div>
+                            <div class="col-md-12">
+                                member Enrollno:
+                                <span>{{_employeeEnroll}}</span>
+                            </div>
+                            <div class="col-md-12">
+                                Birth of date:
+                                <span>{{_memberDobDDMMYYYY}}</span>
+                            </div>
+                            <div class="col-md-12">
+                                Member Email:
+                                <span>{{_memberEmail}}</span>
+                            </div>
+                            <div class="col-md-12">
+                                Gender:
+                                <span>{{_memberGender}}</span>
+                            </div>
+                            <div class="col-md-12">
+                                Marital Status:
+                                <span>{{_memberMaritalStatus}}</span>
+                            </div>
+                            <div class="col-md-12">
+                                Postcode:
+                                <span>{{_memberPostcode}}</span>
+                            </div>
+
+                            <div class="col-md-12">
+                                CurrentBasic:
+                                <span>{{_employeesalarysetupCurrentBasicRound2}}</span>
+                            </div>
+                            <div class="col-md-12">
+                                PaymentRate:
+                                <span>{{_employeesalarysetupPaymentRate}}</span>
+                            </div>
+                            <div class="col-md-12">
+                                PaymentType:
+                                <span>{{_employeesalarysetupPaymentType}}</span>
+                            </div>
+
+                            <div class="col-md-12">
+                                Designation:
+                                <span>{{_employeeDesignation}}</span>
+                            </div>
+                            <div class="col-md-12">
+                                Branch Name:
+                                <span>{{_employerbranchName}}</span>
+                            </div>
+                            <div class="col-md-12">
+                                Department Name:
+                                <span>{{_employerdepartmentTitle}}</span>
+                            </div>
+                            <div class="col-md-12">
+                                Citizenship:
+                                <span>{{_mastercitizenship}}</span>
+                            </div>
+                            <div class="col-md-12">
+                                Race:
+                                <span>{{_masterrace}}</span>
+                            </div>
+
+                            <div class="col-md-12">
+                                EIS:
+                                <span>{{_memberEIS}}</span>
+                            </div>
+                            <div class="col-md-12">
+                                EPF:
+                                <span>{{_memberEPF}}</span>
+                            </div>
+                            <div class="col-md-12">
+                                Socso:
+                                <span>{{_memberSocso}}</span>
+                            </div>
+                            <div class="col-md-12">
+                                IncomeTax:
+                                <span>{{_memberIncomeTax}}</span>
+                            </div>
+                            <div class="col-md-12">
+                                PTPTN:
+                                <span>{{_memberPTPTN}}</span>
+                            </div>
+                            <div class="col-md-12">
+                                Other:
+                                <span>{{_memberOther}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" ng-click="onClick_CloseSearch()">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/Areas/Member/_Member/Code/Home/member-dashboard-controller.js"></script>
+}

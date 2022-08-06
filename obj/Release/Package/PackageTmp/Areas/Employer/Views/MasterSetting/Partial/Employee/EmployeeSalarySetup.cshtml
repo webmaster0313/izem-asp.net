@@ -1,0 +1,298 @@
+﻿
+<div ng-controller="employee-salarysetup-controller">
+    <div class="row">
+        <div class="col-md-12 m-1">
+            <form name="employeesalaryform">
+                <div class="card">
+                    <div class="card-header">
+                        Update Employee-Salary
+                    </div>
+                    <div class="card-body">
+                        <div class="d-none">
+                            <input type="text" ng-model="employeesalarysetupId">
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Current Basic</label>
+                                    <input type="text" class="form-control form-control-lg decimalInputValidation"
+                                           ng-model="employeesalarysetupCurrentBasic">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Old Basic</label>
+                                    <input type="text" class="form-control form-control-lg decimalInputValidation"
+                                           ng-model="employeesalarysetupOldBasic">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Confirmation Date</label>
+                                    <input type="date" class="form-control form-control-lg" max="2999-12-31"
+                                           ng-model="employeesalarysetupConfirmationDate">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Increment Date</label>
+                                    <input type="date" class="form-control form-control-lg" max="2999-12-31"
+                                           ng-model="employeesalarysetupIncrementDate">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Payment Rate</label>
+                                    <select ng-model="employeesalarysetupPaymentRate" class="form-control" chosen>
+                                        <option value="">-- Select --</option>
+                                        <option value="Monthly">Monthly</option>
+                                        <option value="Daily">Daily</option>
+                                        <option value="Hour">Hour</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Payment Type</label>
+                                    <select ng-model="employeesalarysetupPaymentType" class="form-control" chosen>
+                                        <option value="">-- Select --</option>
+                                        <option value="Bank">Bank</option>
+                                        <option value="Cheque">Cheque</option>
+                                        <option value="Cash">Cash</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>
+                                        EPF Group
+                                        <a class="cursor text-danger" data-toggle="tooltip"
+                                           title="Records updated by super-admin only!">
+                                            <i class="mdi mdi-message-alert"></i>
+                                        </a>
+                                    </label>
+                                    <select ng-model="employeesalarysetupEPFGroup" class="form-control" chosen>
+                                        <option value="">-- Select --</option>
+                                        <option ng-selected="x.masterepfId == employeesalarysetupEPFGroup" ng-repeat="x in fill_employeesalarysetupEPFGroup" ng-value="x.masterepfId">
+                                            {{x.masterepfTitle}}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>
+                                        HRDF Group
+                                        <a class="cursor text-danger" data-toggle="tooltip"
+                                           title="Records updated by super-admin only!">
+                                            <i class="mdi mdi-message-alert"></i>
+                                        </a>
+                                    </label>
+                                    <select ng-model="employeesalarysetupHRDFGroup" class="form-control" chosen>
+                                        <option value="">-- Select --</option>
+                                        <option ng-selected="x.masterhrdfId == employeesalarysetupHRDFGroup" ng-repeat="x in fill_employeesalarysetupHRDFGroup" ng-value="x.masterhrdfId">
+                                            {{x.masterhrdfTitle}}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>
+                                        Socso Group
+
+                                        <a class="cursor text-danger" data-toggle="tooltip"
+                                           title="Records updated by super-admin only!">
+                                            <i class="mdi mdi-message-alert"></i>
+                                        </a>
+                                    </label>
+                                    <select ng-model="employeesalarysetupSocsoGroup" class="form-control" chosen>
+                                        <option value="">-- Select --</option>
+                                        <option ng-selected="x.mastersocsoId == employeesalarysetupSocsoGroup" ng-repeat="x in fill_employeesalarysetupSocsoGroup" ng-value="x.mastersocsoId">
+                                            {{x.mastersocsoTitle}}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Socso Category</label>
+                                    <select ng-model="employeesalarysetupSocsoCategory" class="form-control" chosen>
+                                        <option value="">-- Select --</option>
+                                        <option value="1">Socso Category-1</option>
+                                        <option value="2">Socso Category-2</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>
+                                        ESI Group
+
+                                        <a class="cursor text-danger" data-toggle="tooltip"
+                                           title="Records updated by super-admin only!">
+                                            <i class="mdi mdi-message-alert"></i>
+                                        </a>
+                                    </label>
+                                    <select ng-model="employeesalarysetupEISGroup" class="form-control" chosen>
+                                        <option value="">-- Select --</option>
+                                        <option ng-selected="x.masteresiId == employeesalarysetupEISGroup" ng-repeat="x in fill_employeesalarysetupEISGroup" ng-value="x.masteresiId">
+                                            {{x.masteresiTitle}}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>
+                                        ESI Category
+
+                                    </label>
+                                    <select ng-model="employeesalarysetupEISCategory" class="form-control" chosen>
+                                        <option value="">-- Select --</option>
+                                        <option value="1">EIS Category-1</option>
+                                        <option value="2">EIS Category-2</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>PCB Group</label>
+                                    <select ng-model="employeesalarysetupPCBGroup" class="form-control" chosen>
+                                        <option value="">-- Select --</option>
+                                        <option value="0">No</option>
+                                        <option value="1">Yes</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Remarks</label>
+                                    <input type="text" class="form-control form-control-lg"
+                                           ng-model="employeesalarysetupRemarks">
+                                </div>
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Residential Status</label>
+                                    <select ng-model="employeesalarysetupResidentialStatus" class="form-control" chosen>
+                                        <option value="false">No</option>
+                                        <option value="true">Yes</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Category</label>
+                                    <select ng-model="employeesalarysetupCategory" class="form-control" chosen>
+                                        <option value="">-- Select --</option>
+                                        <option value="1">Single</option>
+                                        <option value="2">Married - spouse working</option>
+                                        <option value="3">Married - spouse not working/Divorce/Widow</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>No. Of Children</label>
+                                    <input type="text" class="form-control form-control-lg"
+                                           ng-model="employeesalarysetupChildren">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Remuneration Type</label>
+                                    <select ng-model="employeesalarysetupRemunerationType" class="form-control" chosen>
+                                        <option value="">-- Select --</option>
+                                        <option value="Normal Remuneration">Normal Remuneration</option>
+                                        <option value="Additional Remuneration">Additional Remuneration</option>
+                                        <option value="Returning Expert Program">Returning Expert Program</option>
+                                        <option value="Knowledge worker">Knowledge worker</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Tax Borne by Employer</label>
+                                    <select ng-model="employeesalarysetupTaxBorneEmployer" class="form-control" chosen>
+                                        <option value="false">No</option>
+                                        <option value="true">Yes</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Calculate MTD for AR</label>
+                                    <select ng-model="employeesalarysetupCalculateMTDAR" class="form-control" chosen>
+                                        <option value="false">No</option>
+                                        <option value="true">Yes</option>
+                                    </select>
+                                </div>
+                            </div>
+                            @*..*@
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Accumulated earning (PTAE)</label>
+                                    <input type="text" class="form-control form-control-lg"
+                                           ng-model="employeesalarysetupAccumulatedPTAE">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Accumulated benefit in kind (PTABIK)</label>
+                                    <input type="text" class="form-control form-control-lg"
+                                           ng-model="employeesalarysetupAccumulatedPTABIK">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Accumulated EPF</label>
+                                    <input type="text" class="form-control form-control-lg"
+                                           ng-model="employeesalarysetupAccumulatedEPF">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Accumulated Socso</label>
+                                    <input type="text" class="form-control form-control-lg"
+                                           ng-model="employeesalarysetupAccumulatedSocso">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Accumulated MTD</label>
+                                    <input type="text" class="form-control form-control-lg"
+                                           ng-model="employeesalarysetupAccumulatedMTD">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Accumulated Zakat</label>
+                                    <input type="text" class="form-control form-control-lg"
+                                           ng-model="employeesalarysetupAccumulatedZakat">
+                                </div>
+                            </div>
+
+
+
+
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <input type="submit" class="btn btn-gradient-primary"
+                               ng-click="employeesalaryform.$valid && onClick_SubmitEmployeeSalarySetup()"
+                               value="Update Salary Setup" />
+                        <button type="button" class="btn btn-inverse-dark" value="Cancel"
+                                ng-click="onClick_CloseEmployeeSalarySetup()">
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

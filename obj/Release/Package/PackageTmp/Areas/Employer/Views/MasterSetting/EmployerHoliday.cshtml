@@ -1,0 +1,307 @@
+﻿
+@{
+    ViewBag.Title = "Employer-Holiday";
+    Layout = "~/Areas/Employer/Views/Shared/_Layout.cshtml";
+}
+
+<div ng-controller="employer-holiday-controller">
+
+    @*Entry List*@
+
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Master entries</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Holiday</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <div class="col-md-12" ng-show="hideEntry">
+            <div class="card">
+                <div class="card-header">
+                    <div class="float-right">
+                        <a class="listMenu" data-toggle="tooltip" data-placement="top"
+                           title="Open search" ng-click="onClick_OpenSearch()">
+                            <i class="mdi mdi-filter icon-font-size filterMenu"></i>
+                        </a>
+                        <a class="listMenu" data-toggle="tooltip" data-placement="top"
+                           title="Reset result" ng-click="onClick_ResetSearch()">
+                            <i class="mdi mdi-view-list icon-font-size viewMenu"></i>
+                        </a>
+                        <a class="listMenu" data-toggle="tooltip" data-placement="top"
+                           ng-if="isReportPermit"
+                           ng-click="onClick_Download()"
+                           title="Export excel">
+                            <i class="mdi mdi-download icon-font-size exportMenu"></i>
+                        </a>
+                        <a class="listMenu" data-toggle="tooltip" data-placement="top"
+                           title="New entry"
+                           ng-show="isAddPermit"
+                           ng-click="onClick_OpenInsertRecord()">
+                            <i class="mdi mdi-plus-circle-multiple-outline icon-font-size addMenu"></i>
+                        </a>
+                        <a class="listMenu" data-toggle="tooltip" data-placement="top"
+                           title="New entry"
+                           ng-show="isAddPermit"
+                           ng-click="onClick_AddRecord()">
+                            <i class="mdi mdi-plus-box icon-font-size addMenu"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <table class="table table-hover table-responsive-xl">
+                        <thead>
+                            <tr>
+                                <th class="widthLeft">Date</th>
+                                <th class="widthLeft">Title</th>
+                                <th>Description</th>
+                                <th class="widthCenter">Ot-Tag</th>
+                                <th class="widthCenter">Add-Tag</th>
+                                <th class="widthCenter">Shift-Tag</th>
+                                <th class="widthCenter"
+                                    ng-if="isEditPermit || isDeletePermit">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-if="!loaded">
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"
+                                    ng-if="isEditPermit || isDeletePermit">
+                                    <div class="bar"></div>
+                                </td>
+                            </tr>
+                            <tr ng-if="loaded" ng-repeat="x in tableParams">
+                                <td>{{x.holidayDateDDMMYYYY}}</td>
+                                <td>{{x.holidayTitle}}</td>
+                                <td>{{x.holidayDescription}}</td>
+                                <td>{{x.employerotsetupOTCode}}</td>
+                                <td>{{x.employeradditionalpaysetupCode}}</td>
+                                <td>{{x.employershiftsetupCode}}</td>
+                                <td class="text-nowrap"
+                                    ng-if="isEditPermit || isDeletePermit">
+                                    <a class="cursor"
+                                       ng-show="isEditPermit"
+                                       ng-click="onClick_EditRecord(x.employerHolidayId)">
+                                        <i class="mdi mdi-pencil-box icon-font-size editMenu"></i>
+                                    </a>
+                                    <a class="cursor"
+                                       ng-show="isDeletePermit"
+                                       ng-click="onClick_DeleteRecord(x.employerHolidayId)">
+                                        <i class="mdi mdi-delete-forever icon-font-size deleteMenu"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="float-left">
+                                <select ng-model="pageSizeSelected" ng-change="changePageSize()" class="badge">
+                                    <option value="15">15</option>
+                                    <option value="30">30</option>
+                                    <option value="50">50</option>
+                                </select>
+                            </div>
+                            <div class="float-right">
+                                <pagination total-items="totalCount" ng-change="pageChanged()"
+                                            items-per-page="pageSizeSelected" direction-links="true" ng-model="pageIndex"
+                                            next-text=">" previous-text="<"
+                                            max-size="maxSize" class="pagination" first-text="First" last-text="Last"
+                                            boundary-links="true" rotate="false"
+                                            num-pages="numPages">
+                                </pagination>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @* Entry Form *@
+
+    <div class="row">
+        <div class="col-md-12" ng-show="!hideEntry">
+            <div class="card">
+                <form name="dataForm" autocomplete="off">
+                    <div class="card-header">
+                        Manage Holiday
+                    </div>
+                    <div class="card-body">
+                        <div style="display:none;">
+                            <input type="text" ng-model="employerHolidayId" />
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Title<span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control form-control-lg"
+                                           ng-model="holidayTitle"
+                                           required>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Date<span class="text-danger">*</span></label>
+                                    <input type="date" class="form-control form-control-lg"
+                                           ng-model="holidayDate"
+                                           required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Description<span class="text-danger">*</span></label>
+                                    <textarea type="text" class="form-control form-control-lg"
+                                              ng-model="holidayDescription"
+                                              rows="3"
+                                              required></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>OverTime Tag</label>
+                                    <select ng-model="holidayOTTag" class="form-control">
+                                        <option value="">-- Select --</option>
+                                        <option ng-selected="x == holidayOTTag" ng-repeat="x in fill_OvertimeSetting" ng-value="x.employerotsetupId">
+                                            {{x.employerotsetupOTCode}}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Add-Pay Tag</label>
+                                    <select ng-model="holidayAddPayTag" class="form-control">
+                                        <option value="">-- Select --</option>
+                                        <option ng-selected="x == holidayAddPayTag" ng-repeat="x in fill_AdditionalPayset" ng-value="x.employeradditionalpaysetupId">
+                                            {{x.employeradditionalpaysetupCode}}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Shift Tag</label>
+                                    <select ng-model="holidayShiftTag" class="form-control">
+                                        <option value="">-- Select --</option>
+                                        <option ng-selected="x == holidayShiftTag" ng-repeat="x in fill_ShiftSetting" ng-value="x.employershiftsetupId">
+                                            {{x.employershiftsetupCode}}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <input type="submit" class="btn btn-gradient-primary m-1" ng-click="dataForm.$valid && onClick_Submit()" />
+                        <button type="button" class="btn btn-inverse-dark m-1" ng-click="onClick_Cancel()">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    @*Search Modal*@
+
+    <div class="modal fade" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel"
+         aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog" style="max-width:600px !important;" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="searchModalLabel">Search Result</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Holiday Year</label>
+                                <input type="text" class="form-control"
+                                       maxlength="4"
+                                       ng-model="SearchHolidayDate" />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Holiday Title</label>
+                                <input type="text" class="form-control"
+                                       ng-model="SearchHolidayTitle">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" ng-click="onClick_CloseSearch()">Close</button>
+                    <button type="button" class="btn btn-primary" ng-click="onClick_SearchResult()">Search</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @* Multi Insert Holiday *@
+
+    <div class="modal fade" id="multiInsertModal" tabindex="-1" role="dialog" aria-labelledby="multiInsertModalLabel"
+         aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog  modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="multiInsertModalLabel">Insert Next Year Records</h5>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-hover table-responsive-xl">
+                        <thead>
+                            <tr>
+                                <th class="widthLeft">Date</th>
+                                <th class="widthLeft">Title</th>
+                                <th>Description</th>
+                                <th class="widthCenter">Ot-Tag</th>
+                                <th class="widthCenter">Add-Tag</th>
+                                <th class="widthCenter">Shift-Tag</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="x in tableParamsList">
+                                <td>
+                                    <input type="date" ng-model="x.holidayDate">
+                                </td>
+                                <td>
+                                    <input type="text" ng-model="x.holidayTitle">
+                                </td>
+                                <td>
+                                    <input type="text" ng-model="x.holidayDescription">
+                                </td>
+                                <td>{{x.employerotsetupOTCode}}</td>
+                                <td>{{x.employeradditionalpaysetupCode}}</td>
+                                <td>{{x.employershiftsetupCode}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" ng-click="onClick_CloseInsertMulti()">Close</button>
+                    <button type="button" class="btn btn-primary" ng-click="onClick_InsertMultiHoliday()">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @*Excel Download*@
+    <div style="display:none">
+        <table id="tabledata"></table>
+    </div>
+
+</div>
+
+@section scripts{
+    <script src="~/Areas/Employer/_Employer/Code/MasterSetting/employer-holiday-controller.js?version=@(System.Configuration.ConfigurationManager.AppSettings["version"].ToString())"></script>
+}

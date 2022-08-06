@@ -1,0 +1,938 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{224E9BB9-34DB-4DE0-A81D-207F20F18751}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>iZem.my</RootNamespace>
+    <AssemblyName>iZem.my</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <UseIISExpress>true</UseIISExpress>
+    <Use64BitIISExpress />
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="CrystalDecisions.CrystalReports.Engine, Version=13.0.4000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="CrystalDecisions.ReportSource, Version=13.0.4000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="CrystalDecisions.Shared, Version=13.0.4000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http">
+    </Reference>
+    <Reference Include="System.Net.Http.WebRequest">
+    </Reference>
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.4\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.2.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.4\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Optimization">
+      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.4\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.4\lib\net45\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.4\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.4\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.11.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="WebGrease">
+      <Private>True</Private>
+      <HintPath>..\packages\WebGrease.1.6.0\lib\WebGrease.dll</HintPath>
+    </Reference>
+    <Reference Include="Antlr3.Runtime">
+      <Private>True</Private>
+      <HintPath>..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform">
+      <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Areas\Backoffice\BackofficeAreaRegistration.cs" />
+    <Compile Include="Areas\Backoffice\Controllers\DashboardController.cs" />
+    <Compile Include="Areas\Backoffice\Controllers\HomeController.cs" />
+    <Compile Include="Areas\Backoffice\Controllers\MasterController.cs" />
+    <Compile Include="Areas\Backoffice\Controllers\UserController.cs" />
+    <Compile Include="Areas\Employer\Controllers\AttendanceSettingController.cs" />
+    <Compile Include="Areas\Employer\Controllers\HomeController.cs" />
+    <Compile Include="Areas\Employer\Controllers\LeaveSettingController.cs" />
+    <Compile Include="Areas\Employer\Controllers\MasterSettingController.cs" />
+    <Compile Include="Areas\Employer\Controllers\PayrollSettingController.cs" />
+    <Compile Include="Areas\Employer\Controllers\UtilityController.cs" />
+    <Compile Include="Areas\Employer\EmployerAreaRegistration.cs" />
+    <Compile Include="Areas\Member\Controllers\AttendanceSettingController.cs" />
+    <Compile Include="Areas\Member\Controllers\HomeController.cs" />
+    <Compile Include="Areas\Member\Controllers\LeaveSettingController.cs" />
+    <Compile Include="Areas\Member\MemberAreaRegistration.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="iZemReports.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>iZemReports.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Models\commonClass.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Reports\Employer\AttendanceReport\AttendanceShiftReport.cs">
+      <DependentUpon>AttendanceShiftReport.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Reports\Employer\AttendanceReport\AttendanceAddPayReport.cs">
+      <DependentUpon>AttendanceAddPayReport.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Reports\Employer\AttendanceReport\AttendanceStartEnd1Report.cs">
+      <DependentUpon>AttendanceStartEnd1Report.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Reports\Employer\AttendanceReport\AttendanceReport1.cs">
+      <DependentUpon>AttendanceReport.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Reports\Employer\AttendanceReport\AttendanceStartEnd2Report.cs">
+      <DependentUpon>AttendanceStartEnd2Report.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Reports\Employer\AttendanceReport\AttendanceStartEnd3Report.cs">
+      <DependentUpon>AttendanceStartEnd3Report.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Reports\Employer\AttendanceReport\AttendanceOvertimeReport.cs">
+      <DependentUpon>AttendanceOvertimeReport.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Reports\Employer\commonReport.cs">
+      <DependentUpon>commonReport.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Reports\Employer\commonReportHorizontal.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>commonReportHorizontal.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\Employer\LeaveReport\LeaveDetailReport.cs">
+      <DependentUpon>LeaveDetailReport.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Reports\Employer\LeaveReport\LeaveCurrentLeaveSummaryReport.cs">
+      <DependentUpon>LeaveCurrentLeaveSummaryReport.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Reports\Employer\LeaveReport\LeaveApplicationReport.cs">
+      <DependentUpon>LeaveApplicationReport.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Reports\Employer\MasterReport\EmployeeReport.cs">
+      <DependentUpon>EmployeeReport.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Reports\Employer\PayrollReport\PayrollCP22AReport.cs">
+      <DependentUpon>PayrollCP22AReport.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Reports\Employer\PayrollReport\PayrollEFormForEmployer.cs">
+      <DependentUpon>PayrollEFormForEmployer.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Reports\Employer\PayrollReport\PayrollPCB38Report.cs">
+      <DependentUpon>PayrollPCB38Report.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Reports\Employer\PayrollReport\PayrollEAForm.cs">
+      <DependentUpon>PayrollEAForm.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Reports\Employer\PayrollReport\IncomeTaxFormPCB39.cs">
+      <DependentUpon>IncomeTaxFormPCB39.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Reports\Employer\PayrollReport\PayrollHRDFForm.cs">
+      <DependentUpon>PayrollHRDFForm.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Reports\Employer\PayrollReport\PayrollPayslipDefaultReport.cs">
+      <DependentUpon>PayrollPayslipDefaultReport.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Reports\Employer\PayrollReport\PayrollPerkesoEisFormA.cs">
+      <DependentUpon>PayrollPerkesoEisFormA.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Reports\Employer\PayrollReport\PayrollPerkesoSocsoFormA.cs">
+      <DependentUpon>PayrollPerkesoSocsoFormA.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Reports\Employer\PayrollReport\PayrollKwspEpfFormA1.cs">
+      <DependentUpon>PayrollKwspEpfFormA.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Reports\Employer\PayrollReport\PayrollPaymentMethodReport.cs">
+      <DependentUpon>PayrollPaymentMethodReport.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Reports\Employer\PayrollReport\PayrollAdditionalPayReport.cs">
+      <DependentUpon>PayrollAdditionalPayReport.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Reports\Employer\PayrollReport\PayrollOvertimeReport.cs">
+      <DependentUpon>PayrollOvertimeReport.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Reports\Employer\PayrollReport\PayrollDetail_Department_Report.cs">
+      <DependentUpon>PayrollDetail_Department_Report.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Reports\Employer\PayrollReport\PayrollDetail_Branch_Report.cs">
+      <DependentUpon>PayrollDetail_Branch_Report.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Reports\Employer\PayrollReport\PayrollDetailReport.cs">
+      <DependentUpon>PayrollDetailReport.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Reports\Employer\PayrollReport\PayrollPayslipReport.cs">
+      <DependentUpon>PayrollPayslipReport.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Reports\Employer\PayrollReport\HourlyPaymentMethod.cs">
+      <DependentUpon>HourlyPaymentMethod.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Reports\Employer\PayrollReport\HourlyPayVoucherReport.cs">
+      <DependentUpon>HourlyPayVoucherReport.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Reports\Employer\PayrollReport\PayrollShiftReport.cs">
+      <DependentUpon>PayrollShiftReport.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Reports\Employer\PayrollReport\SubReport\PayrollDetailDeductionArray.cs">
+      <DependentUpon>PayrollDetailDeductionArray.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Reports\Employer\PayrollReport\SubReport\PayrollDetailEarningArray.cs">
+      <DependentUpon>PayrollDetailEarningArray.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Reports\Employer\PayrollReport\SubReport\PayslipLeaveSummary.cs">
+      <DependentUpon>PayslipLeaveSummary.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Reports\Employer\PayrollReport\SubReport\PayslipDeduction.cs">
+      <DependentUpon>PayslipDeduction.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Reports\Employer\PayrollReport\SubReport\PayslipEarning.cs">
+      <DependentUpon>PayslipEarning.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Backoffice\_Backoffice\Code\Authentication\backoffice-authentication-app.js" />
+    <Content Include="Areas\Backoffice\_Backoffice\Code\Authentication\backoffice-authentication-controller.js" />
+    <Content Include="Areas\Backoffice\_Backoffice\Code\backoffice-app.js" />
+    <Content Include="Areas\Backoffice\_Backoffice\Code\backoffice-controller.js" />
+    <Content Include="Areas\Backoffice\_Backoffice\Code\backoffice-header-controller.js" />
+    <Content Include="Areas\Backoffice\_Backoffice\Code\backoffice-sidemenu-controller.js" />
+    <Content Include="Areas\Backoffice\_Backoffice\Code\Home\home-exesetup-controller.js" />
+    <Content Include="Areas\Backoffice\_Backoffice\Code\Master\master-employee-bank-controller.js" />
+    <Content Include="Areas\Backoffice\_Backoffice\Code\Master\master-employer-bank-controller.js" />
+    <Content Include="Areas\Backoffice\_Backoffice\Code\Master\master-hrdf-controller.js" />
+    <Content Include="Areas\Backoffice\_Backoffice\Code\Master\master-subscription-controller.js" />
+    <Content Include="Areas\Backoffice\_Backoffice\Code\Master\master-citizenship-controller.js" />
+    <Content Include="Areas\Backoffice\_Backoffice\Code\Master\master-country-controller.js" />
+    <Content Include="Areas\Backoffice\_Backoffice\Code\Master\master-eis-controller.js" />
+    <Content Include="Areas\Backoffice\_Backoffice\Code\Master\master-epf-controller.js" />
+    <Content Include="Areas\Backoffice\_Backoffice\Code\Master\master-facility-controller.js" />
+    <Content Include="Areas\Backoffice\_Backoffice\Code\Master\master-race-controller.js" />
+    <Content Include="Areas\Backoffice\_Backoffice\Code\Master\master-relationship-controller.js" />
+    <Content Include="Areas\Backoffice\_Backoffice\Code\Master\master-socso-controller.js" />
+    <Content Include="Areas\Backoffice\_Backoffice\Code\Master\master-state-controller.js" />
+    <Content Include="Areas\Backoffice\_Backoffice\Code\Master\master-term-controller.js" />
+    <Content Include="Areas\Backoffice\_Backoffice\Code\User\user-employer-controller.js" />
+    <Content Include="Areas\Backoffice\_Backoffice\Code\User\user-member-controller.js" />
+    <Content Include="Areas\Backoffice\_Backoffice\Code\User\user-signin-controller.js" />
+    <Content Include="Areas\Employer\_Employer\Code\AttendanceSetting\employer-attendancelist-controller.js" />
+    <Content Include="Areas\Employer\_Employer\Code\AttendanceSetting\employer-attendancereport-controller.js" />
+    <Content Include="Areas\Employer\_Employer\Code\AttendanceSetting\employer-datatransfer-controller.js" />
+    <Content Include="Areas\Employer\_Employer\Code\AttendanceSetting\employer-device-controller.js" />
+    <Content Include="Areas\Employer\_Employer\Code\AttendanceSetting\employer-shift-controller.js" />
+    <Content Include="Areas\Employer\_Employer\Code\Home\client-dashboard-controller.js" />
+    <Content Include="Areas\Employer\_Employer\Code\Home\client-profile-controller.js" />
+    <Content Include="Areas\Employer\_Employer\Code\Home\client-changepassword-controller.js" />
+    <Content Include="Areas\Employer\_Employer\Code\LeaveSetting\employer-leaveapplication-controller.js" />
+    <Content Include="Areas\Employer\_Employer\Code\LeaveSetting\employer-leavesummary-controller.js" />
+    <Content Include="Areas\Employer\_Employer\Code\LeaveSetting\employer-leavetype-controller.js" />
+    <Content Include="Areas\Employer\_Employer\Code\MasterSetting\employer-branch-controller.js" />
+    <Content Include="Areas\Employer\_Employer\Code\MasterSetting\employer-companysetting-controller.js" />
+    <Content Include="Areas\Employer\_Employer\Code\MasterSetting\employer-department-controller.js" />
+    <Content Include="Areas\Employer\_Employer\Code\MasterSetting\employer-employee-controller.js" />
+    <Content Include="Areas\Employer\_Employer\Code\MasterSetting\employer-entitlement-controller.js" />
+    <Content Include="Areas\Employer\_Employer\Code\MasterSetting\employer-facility-controller.js" />
+    <Content Include="Areas\Employer\_Employer\Code\MasterSetting\employer-holiday-controller.js" />
+    <Content Include="Areas\Employer\_Employer\Code\MasterSetting\employer-setting-controller.js" />
+    <Content Include="Areas\Employer\_Employer\Code\MasterSetting\employer-subscription-controller.js" />
+    <Content Include="Areas\Employer\_Employer\Code\MasterSetting\Partial\Employee\employee-allowancedeductionsetup-controller.js" />
+    <Content Include="Areas\Employer\_Employer\Code\MasterSetting\Partial\Employee\employee-customratesetup-controller.js" />
+    <Content Include="Areas\Employer\_Employer\Code\MasterSetting\Partial\Employee\employee-dependentsetup-controller.js" />
+    <Content Include="Areas\Employer\_Employer\Code\MasterSetting\Partial\Employee\employee-entitlementsetup-controller.js" />
+    <Content Include="Areas\Employer\_Employer\Code\MasterSetting\Partial\Employee\employee-leaveentitlementsetup-controller.js" />
+    <Content Include="Areas\Employer\_Employer\Code\MasterSetting\Partial\Employee\employee-loansetup-controller.js" />
+    <Content Include="Areas\Employer\_Employer\Code\MasterSetting\Partial\Employee\employee-member-controller.js" />
+    <Content Include="Areas\Employer\_Employer\Code\MasterSetting\Partial\Employee\employee-salarysetup-controller.js" />
+    <Content Include="Areas\Employer\_Employer\Code\MasterSetting\Partial\Employee\employee-shiftsetup-controller.js" />
+    <Content Include="Areas\Employer\_Employer\Code\PayrollSetting\employer-additionalpay-controller.js" />
+    <Content Include="Areas\Employer\_Employer\Code\PayrollSetting\employer-allowancededuction-controller.js" />
+    <Content Include="Areas\Employer\_Employer\Code\PayrollSetting\employer-globalsetting-controller.js" />
+    <Content Include="Areas\Employer\_Employer\Code\PayrollSetting\employer-hourlysalaryprocess-controller.js" />
+    <Content Include="Areas\Employer\_Employer\Code\PayrollSetting\employer-overtime-controller.js" />
+    <Content Include="Areas\Employer\_Employer\Code\PayrollSetting\employer-payrollprocess-controller.js" />
+    <Content Include="Areas\Employer\_Employer\Code\PayrollSetting\employer-payrollreport-controller.js" />
+    <Content Include="Areas\Employer\_Employer\Code\PayrollSetting\employer-shift-controller.js" />
+    <Content Include="Areas\Employer\_Employer\Code\UtilitySetting\employer-permissionsetting-controller.js" />
+    <Content Include="Areas\Employer\_Employer\Code\UtilitySetting\employer-template-controller.js" />
+    <Content Include="Areas\Employer\_Employer\Code\UtilitySetting\employer-templatepermission-controller.js" />
+    <Content Include="Areas\Employer\_Employer\Code\UtilitySetting\employer-userright-controller.js" />
+    <Content Include="Areas\Employer\_Employer\employer-app.js" />
+    <Content Include="Areas\Employer\_Employer\employer-controller.js" />
+    <Content Include="Areas\Employer\_Employer\employer-header-controller.js" />
+    <Content Include="Areas\Employer\_Employer\employer-sidemenu-controller.js" />
+    <Content Include="Areas\Member\_Member\Code\AttendanceSetting\member-attendancelist-controller.js" />
+    <Content Include="Areas\Member\_Member\Code\AttendanceSetting\member-attendancereport-controller.js" />
+    <Content Include="Areas\Member\_Member\Code\Home\member-dashboard-controller.js" />
+    <Content Include="Areas\Member\_Member\Code\Home\member-employeedetail-controller.js" />
+    <Content Include="Areas\Member\_Member\Code\LeaveSetting\member-leaveapplication-controller.js" />
+    <Content Include="Areas\Member\_Member\Code\LeaveSetting\member-leavesummary-controller.js" />
+    <Content Include="Areas\Member\_Member\member-app.js" />
+    <Content Include="Areas\Member\_Member\member-controller.js" />
+    <Content Include="Areas\Member\_Member\member-header-controller.js" />
+    <Content Include="Areas\Member\_Member\member-sidemenu-controller.js" />
+    <Content Include="Areas\_loginAuthentication\client-authentication-app.js" />
+    <Content Include="Areas\_loginAuthentication\client-authentication-controller.js" />
+    <Content Include="Areas\_loginAuthentication\Code\client-forgotpassword-controller.js" />
+    <Content Include="Areas\_loginAuthentication\Code\client-registration-controller.js" />
+    <Content Include="Areas\_loginAuthentication\Code\client-signin-controller.js" />
+    <Content Include="Areas\_loginAuthentication\Code\client-verification-controller.js" />
+    <Content Include="Areas\_Service\common-dropdown-service.js" />
+    <Content Include="Areas\_Service\common-operation-service.js" />
+    <Content Include="Content\assets\choosen\ng-file-upload.min.js" />
+    <Content Include="Content\assets\css\manual.css" />
+    <Content Include="Content\assets\css\style.css" />
+    <Content Include="Content\assets\css\style.min.css" />
+    <Content Include="Content\assets\images\faces-clipart\pic-1.png" />
+    <Content Include="Content\assets\images\faces-clipart\pic-2.png" />
+    <Content Include="Content\assets\images\faces-clipart\pic-3.png" />
+    <Content Include="Content\assets\images\faces-clipart\pic-4.png" />
+    <Content Include="Content\assets\images\favicon.png" />
+    <Content Include="Content\assets\images\logo-mini.svg" />
+    <Content Include="Content\assets\images\logo.svg" />
+    <Content Include="Content\assets\images\sprites\blue.png" />
+    <Content Include="Content\assets\images\sprites\dark.png" />
+    <Content Include="Content\assets\images\sprites\flag.png" />
+    <Content Include="Content\assets\images\sprites\green.png" />
+    <Content Include="Content\assets\images\sprites\jsgrid-icons.png" />
+    <Content Include="Content\assets\images\sprites\red.png" />
+    <Content Include="Content\assets\images\sprites\yellow.png" />
+    <Content Include="Content\assets\js\FileSaver.js" />
+    <Content Include="Content\assets\js\hoverable-collapse.js" />
+    <Content Include="Content\assets\js\jhxlsx.js" />
+    <Content Include="Content\assets\js\misc.js" />
+    <Content Include="Content\assets\js\multipleexce.css" />
+    <Content Include="Content\assets\js\off-canvas.js" />
+    <Content Include="Content\assets\js\xlsx.core.min.js" />
+    <Content Include="Content\assets\vendors\css\vendor.bundle.base.css" />
+    <Content Include="Content\assets\vendors\js\vendor.bundle.base.js" />
+    <Content Include="Content\assets\vendors\mdi\css\materialdesignicons.min.css" />
+    <Content Include="Content\bootstrap-datepicker.css" />
+    <Content Include="Content\chosen.css" />
+    <Content Include="Content\common\table2excel.js" />
+    <Content Include="Content\images\chosen-sprite.png" />
+    <Content Include="Content\images\circle.svg" />
+    <Content Include="Content\images\loader1.svg" />
+    <Content Include="Content\images\loader2.gif" />
+    <Content Include="Content\images\loader3.gif" />
+    <Content Include="Content\images\logo.png" />
+    <Content Include="Content\toastr.css" />
+    <Content Include="Content\toastr.min.css" />
+    <Content Include="Content\common\angularjs-dropdown-multiselect.min.js" />
+    <Content Include="Content\common\common.js" />
+    <Content Include="Content\common\lodash.min.js" />
+    <Content Include="Content\common\mastInput.js" />
+    <Content Include="Content\common\mastInput.min.js" />
+    <Content Include="Content\common\ui-bootstrap-tpls-0.13.4.min.js" />
+    <Content Include="favicon.ico" />
+    <Content Include="fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Global.asax" />
+    <Content Include="Image\icon\software button icon DM-02-01.jpg" />
+    <Content Include="Image\icon\software button icon DM-02-01.png" />
+    <Content Include="Image\icon\software button icon DM-02-02.jpg" />
+    <Content Include="Image\icon\software button icon DM-02-02.png" />
+    <Content Include="Image\icon\software button icon DM-02-03.jpg" />
+    <Content Include="Image\icon\software button icon DM-02-03.png" />
+    <Content Include="Image\icon\software button icon DM-02-04.jpg" />
+    <Content Include="Image\icon\software button icon DM-02-04.png" />
+    <Content Include="Image\icon\software button icon DM-02-05.jpg" />
+    <Content Include="Image\icon\software button icon DM-02-05.png" />
+    <Content Include="Image\icon\software button icon DM-02-06.jpg" />
+    <Content Include="Image\icon\software button icon DM-02-06.png" />
+    <Content Include="Image\NoPhoto.jpg" />
+    <Content Include="Scripts\angular-chosen.min.js" />
+    <Content Include="Scripts\angular-mocks.js" />
+    <Content Include="Scripts\angular.js" />
+    <Content Include="Scripts\angular.min.js" />
+    <Content Include="Scripts\bootstrap-datepicker.js" />
+    <Content Include="Scripts\chosen.jquery.min.js" />
+    <Content Include="Scripts\ImageUpload.js" />
+    <Content Include="Scripts\moment-with-locales.js" />
+    <Content Include="Scripts\moment-with-locales.min.js" />
+    <Content Include="Scripts\moment.js" />
+    <Content Include="Scripts\moment.min.js" />
+    <Content Include="Scripts\toastr.js" />
+    <Content Include="Scripts\toastr.min.js" />
+    <Content Include="Web.config" />
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Views\Web.config" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+    <Folder Include="Areas\Backoffice\Models\" />
+    <Folder Include="Areas\Employer\Models\" />
+    <Folder Include="Areas\Member\Models\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Areas\Backoffice\Views\web.config" />
+    <Content Include="Areas\Employer\Views\web.config" />
+    <Content Include="Areas\Member\Views\web.config" />
+    <Content Include="Content\assets\css\style.css.map" />
+    <Content Include="Content\assets\fonts\Ubuntu\Ubuntu-Bold.eot" />
+    <Content Include="Content\assets\fonts\Ubuntu\Ubuntu-Bold.ttf" />
+    <Content Include="Content\assets\fonts\Ubuntu\Ubuntu-Bold.woff" />
+    <Content Include="Content\assets\fonts\Ubuntu\Ubuntu-Bold.woff2" />
+    <Content Include="Content\assets\fonts\Ubuntu\Ubuntu-Light.eot" />
+    <Content Include="Content\assets\fonts\Ubuntu\Ubuntu-Light.ttf" />
+    <Content Include="Content\assets\fonts\Ubuntu\Ubuntu-Light.woff" />
+    <Content Include="Content\assets\fonts\Ubuntu\Ubuntu-Light.woff2" />
+    <Content Include="Content\assets\fonts\Ubuntu\Ubuntu-Medium.eot" />
+    <Content Include="Content\assets\fonts\Ubuntu\Ubuntu-Medium.ttf" />
+    <Content Include="Content\assets\fonts\Ubuntu\Ubuntu-Medium.woff" />
+    <Content Include="Content\assets\fonts\Ubuntu\Ubuntu-Medium.woff2" />
+    <Content Include="Content\assets\fonts\Ubuntu\Ubuntu-Regular.eot" />
+    <Content Include="Content\assets\fonts\Ubuntu\Ubuntu-Regular.ttf" />
+    <Content Include="Content\assets\fonts\Ubuntu\Ubuntu-Regular.woff" />
+    <Content Include="Content\assets\fonts\Ubuntu\Ubuntu-Regular.woff2" />
+    <Content Include="Content\assets\scss\components\_badges.scss" />
+    <Content Include="Content\assets\scss\components\_bootstrap-progress.scss" />
+    <Content Include="Content\assets\scss\components\_breadcrumbs.scss" />
+    <Content Include="Content\assets\scss\components\_buttons.scss" />
+    <Content Include="Content\assets\scss\components\_cards.scss" />
+    <Content Include="Content\assets\scss\components\_checkbox-radio.scss" />
+    <Content Include="Content\assets\scss\components\_dropdown.scss" />
+    <Content Include="Content\assets\scss\components\_forms.scss" />
+    <Content Include="Content\assets\scss\components\_icons.scss" />
+    <Content Include="Content\assets\scss\components\_lists.scss" />
+    <Content Include="Content\assets\scss\components\_preview.scss" />
+    <Content Include="Content\assets\scss\components\_tables.scss" />
+    <Content Include="Content\assets\scss\components\_todo-list.scss" />
+    <Content Include="Content\assets\scss\landing-screens\_auth.scss" />
+    <Content Include="Content\assets\scss\mixins\_animation.scss" />
+    <Content Include="Content\assets\scss\mixins\_background.scss" />
+    <Content Include="Content\assets\scss\mixins\_badges.scss" />
+    <Content Include="Content\assets\scss\mixins\_blockqoute.scss" />
+    <Content Include="Content\assets\scss\mixins\_breadcrumbs.scss" />
+    <Content Include="Content\assets\scss\mixins\_buttons.scss" />
+    <Content Include="Content\assets\scss\mixins\_cards.scss" />
+    <Content Include="Content\assets\scss\mixins\_misc.scss" />
+    <Content Include="Content\assets\scss\mixins\_pagination.scss" />
+    <Content Include="Content\assets\scss\mixins\_popovers.scss" />
+    <Content Include="Content\assets\scss\mixins\_text.scss" />
+    <Content Include="Content\assets\scss\mixins\_tooltips.scss" />
+    <Content Include="Content\assets\scss\style.scss" />
+    <Content Include="Content\assets\scss\_dashboard.scss" />
+    <Content Include="Content\assets\scss\_demo.scss" />
+    <Content Include="Content\assets\scss\_fonts.scss" />
+    <Content Include="Content\assets\scss\_footer.scss" />
+    <Content Include="Content\assets\scss\_functions.scss" />
+    <Content Include="Content\assets\scss\_layouts.scss" />
+    <Content Include="Content\assets\scss\_misc.scss" />
+    <Content Include="Content\assets\scss\_navbar.scss" />
+    <Content Include="Content\assets\scss\_reset.scss" />
+    <Content Include="Content\assets\scss\_sidebar.scss" />
+    <Content Include="Content\assets\scss\_typography.scss" />
+    <Content Include="Content\assets\scss\_utilities.scss" />
+    <Content Include="Content\assets\scss\_variables.scss" />
+    <Content Include="Content\assets\scss\_vertical-wrapper.scss" />
+    <Content Include="Content\assets\scss\_widget-grid.scss" />
+    <Content Include="Content\assets\vendors\js\bootstrap.min.js.map" />
+    <Content Include="Content\assets\vendors\mdi\css\materialdesignicons.min.css.map" />
+    <Content Include="Content\assets\vendors\mdi\fonts\materialdesignicons-webfont.eot" />
+    <Content Include="Content\assets\vendors\mdi\fonts\materialdesignicons-webfont.ttf" />
+    <Content Include="Content\assets\vendors\mdi\fonts\materialdesignicons-webfont.woff" />
+    <Content Include="Content\assets\vendors\mdi\fonts\materialdesignicons-webfont.woff2" />
+    <Content Include="Content\format\DeviceEntry.xls" />
+    <Content Include="Content\format\efpData.xls" />
+    <Content Include="Content\format\esiData.xls" />
+    <Content Include="Content\format\socsoData.xls" />
+    <Content Include="Content\toastr.less" />
+    <Content Include="Content\toastr.scss" />
+    <Content Include="Areas\Backoffice\Views\Shared\_Layout.cshtml" />
+    <Content Include="Areas\Backoffice\Views\Home\Index.cshtml" />
+    <Content Include="Areas\Backoffice\Views\Dashboard\Index.cshtml" />
+    <Content Include="Areas\Backoffice\Views\Shared\header.cshtml" />
+    <Content Include="Areas\Backoffice\Views\Shared\sidemenu.cshtml" />
+    <Content Include="Areas\Backoffice\Views\Master\MasterCitizenship.cshtml" />
+    <Content Include="Areas\Backoffice\Views\Master\MasterCountry.cshtml" />
+    <Content Include="Areas\Backoffice\Views\Master\MasterState.cshtml" />
+    <Content Include="Areas\Backoffice\Views\Master\MasterFacility.cshtml" />
+    <Content Include="Areas\Backoffice\Views\Master\MasterRace.cshtml" />
+    <Content Include="Areas\Backoffice\Views\Master\MasterRelationship.cshtml" />
+    <Content Include="Areas\Backoffice\Views\Master\MasterSubscription.cshtml" />
+    <Content Include="Areas\Backoffice\Views\Master\MasterTerm.cshtml" />
+    <Content Include="Areas\Backoffice\Views\Master\MasterEpf.cshtml" />
+    <Content Include="Areas\Backoffice\Views\Master\MasterSocso.cshtml" />
+    <Content Include="Areas\Backoffice\Views\Master\MasterEis.cshtml" />
+    <Content Include="Areas\Employer\Views\Shared\_Layout.cshtml" />
+    <Content Include="Areas\Employer\Views\Shared\header.cshtml" />
+    <Content Include="Areas\Employer\Views\Shared\sidemenu.cshtml" />
+    <Content Include="Areas\Employer\Views\Home\Index.cshtml" />
+    <Content Include="Areas\Employer\Views\MasterSetting\EmployerBranch.cshtml" />
+    <Content Include="Areas\Employer\Views\MasterSetting\EmployerDepartment.cshtml" />
+    <Content Include="Areas\Employer\Views\MasterSetting\EmployerSetting.cshtml" />
+    <Content Include="Areas\Employer\Views\MasterSetting\EmployerEntitlement.cshtml" />
+    <Content Include="Areas\Employer\Views\MasterSetting\EmployerFacility.cshtml" />
+    <Content Include="Areas\Employer\Views\MasterSetting\EmployerSubscription.cshtml" />
+    <Content Include="Areas\Employer\Views\MasterSetting\EmployerHoliday.cshtml" />
+    <Content Include="Areas\Employer\Views\PayrollSetting\EmployerGlobalSetting.cshtml" />
+    <Content Include="Areas\Employer\Views\PayrollSetting\EmployerOvertimeSetting.cshtml" />
+    <Content Include="Areas\Employer\Views\PayrollSetting\EmployerShiftSeting.cshtml" />
+    <Content Include="Areas\Employer\Views\PayrollSetting\EmployerAdditionalPaySetting.cshtml" />
+    <Content Include="Areas\Employer\Views\PayrollSetting\EmployerAllowanceDeductionSetting.cshtml" />
+    <Content Include="Areas\Employer\Views\Home\profile.cshtml" />
+    <Content Include="Areas\Employer\Views\MasterSetting\EmployerCompanySetting.cshtml" />
+    <Content Include="Areas\Employer\Views\MasterSetting\Employee.cshtml" />
+    <Content Include="Areas\Employer\Views\MasterSetting\Partial\Employee\MemberForm.cshtml" />
+    <Content Include="Areas\Employer\Views\MasterSetting\Partial\Employee\EmployeeSalarySetup.cshtml" />
+    <Content Include="Areas\Employer\Views\MasterSetting\Partial\Employee\EmployeeAllowanceDeductionSetup.cshtml" />
+    <Content Include="Areas\Employer\Views\MasterSetting\Partial\Employee\EmployeeCustomRateSetup.cshtml" />
+    <Content Include="Areas\Employer\Views\MasterSetting\Partial\Employee\EmployeeLoanSetup.cshtml" />
+    <Content Include="Areas\Employer\Views\MasterSetting\Partial\Employee\EmployeeLeaveEntitlementSetup.cshtml" />
+    <Content Include="Areas\Employer\Views\MasterSetting\Partial\Employee\EmployeeEntitlementSetup.cshtml" />
+    <Content Include="Areas\Employer\Views\MasterSetting\Partial\Employee\EmployeeDependentSetup.cshtml" />
+    <Content Include="Areas\Employer\Views\MasterSetting\Partial\Employee\EmployeeShiftSetup.cshtml" />
+    <Content Include="Areas\Employer\Views\LeaveSetting\EmployerLeaveType.cshtml" />
+    <Content Include="Areas\Employer\Views\AttendanceSetting\EmployerShiftSetting.cshtml" />
+    <Content Include="Areas\Employer\Views\LeaveSetting\EmployerLeaveApplication.cshtml" />
+    <Content Include="Areas\Employer\Views\LeaveSetting\EmployerLeaveSummary.cshtml" />
+    <Content Include="Areas\Employer\Views\AttendanceSetting\EmployerAttendanceList.cshtml" />
+    <Content Include="Areas\Employer\Views\AttendanceSetting\EmployerAttendanceReport.cshtml" />
+    <Content Include="Areas\Employer\Views\PayrollSetting\EmployerPayrollProcess.cshtml" />
+    <Content Include="Areas\Employer\Views\PayrollSetting\EmployerPayrollReport.cshtml" />
+    <Content Include="Areas\Employer\Views\PayrollSetting\EmployerHourlySalaryProcess.cshtml" />
+    <Content Include="Areas\Backoffice\Views\User\SignIn.cshtml" />
+    <Content Include="Areas\Backoffice\Views\User\Member.cshtml" />
+    <Content Include="Areas\Backoffice\Views\User\Employer.cshtml" />
+    <Content Include="Areas\Backoffice\Views\Home\ExeSetup.cshtml" />
+    <Content Include="Areas\Employer\Views\AttendanceSetting\EmployerDevice.cshtml" />
+    <Content Include="Areas\Employer\Views\AttendanceSetting\EmployerDataTransfer.cshtml" />
+    <Content Include="Areas\Employer\Views\Utility\Index.cshtml" />
+    <Content Include="Areas\Employer\Views\Utility\EmployerTemplate.cshtml" />
+    <Content Include="Areas\Employer\Views\Utility\EmployerTemplatePermission.cshtml" />
+    <Content Include="Areas\Employer\Views\Utility\EmployerUserRights.cshtml" />
+    <Content Include="iZemReports.xsc">
+      <DependentUpon>iZemReports.xsd</DependentUpon>
+    </Content>
+    <Content Include="Areas\Member\Views\Shared\_Layout.cshtml" />
+    <Content Include="Areas\Member\Views\Shared\header.cshtml" />
+    <Content Include="Areas\Member\Views\Shared\sidemenu.cshtml" />
+    <Content Include="Areas\Member\Views\Home\Index.cshtml" />
+    <Content Include="Areas\Employer\Views\Home\changePassword.cshtml" />
+    <Content Include="Areas\Member\Views\LeaveSetting\EmployeeLeaveApplication.cshtml" />
+    <Content Include="Areas\Member\Views\LeaveSetting\EmployeeLeaveSummary.cshtml" />
+    <Content Include="Areas\Member\Views\AttendanceSetting\EmployeeAttendanceList.cshtml" />
+    <Content Include="Areas\Member\Views\AttendanceSetting\EmployeeAttendanceReport.cshtml" />
+    <Content Include="Areas\Backoffice\Views\Master\MasterHrdf.cshtml" />
+    <Content Include="Areas\Member\Views\Home\EmployeeDetail.cshtml" />
+    <Content Include="Areas\Backoffice\Views\Master\MasterEmployeeBank.cshtml" />
+    <Content Include="Areas\Backoffice\Views\Master\MasterEmployerBank.cshtml" />
+    <Content Include="Image\banks.json" />
+    <None Include="iZemReports.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>iZemReports.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="iZemReports.xss">
+      <DependentUpon>iZemReports.xsd</DependentUpon>
+    </Content>
+    <None Include="packages.config" />
+    <Content Include="Scripts\angular.min.js.map" />
+    <Content Include="Scripts\moment-with-locales.min.js.map" />
+    <Content Include="Scripts\moment.min.js.map" />
+    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Home\Registration.cshtml" />
+    <Content Include="Views\Home\ForgotPassword.cshtml" />
+    <Content Include="Views\Home\Verification.cshtml" />
+    <Content Include="Views\Home\TermsConditions.cshtml" />
+    <Content Include="Views\Home\PrivacyPolicy.cshtml" />
+    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Reports\Employer\AttendanceReport\AttendanceShiftReport.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>AttendanceShiftReport.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Employer\AttendanceReport\AttendanceAddPayReport.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>AttendanceAddPayReport.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Employer\AttendanceReport\AttendanceStartEnd1Report.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>AttendanceStartEnd1Report.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Employer\AttendanceReport\AttendanceReport.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>AttendanceReport1.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Employer\AttendanceReport\AttendanceStartEnd2Report.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>AttendanceStartEnd2Report.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Employer\AttendanceReport\AttendanceStartEnd3Report.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>AttendanceStartEnd3Report.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Employer\AttendanceReport\AttendanceOvertimeReport.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>AttendanceOvertimeReport.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Employer\commonReport.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>commonReport.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Employer\commonReportHorizontal.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>commonReportHorizontal.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Employer\LeaveReport\LeaveDetailReport.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>LeaveDetailReport.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Employer\LeaveReport\LeaveCurrentLeaveSummaryReport.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>LeaveCurrentLeaveSummaryReport.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Employer\LeaveReport\LeaveApplicationReport.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>LeaveApplicationReport.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Employer\MasterReport\EmployeeReport.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>EmployeeReport.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Employer\PayrollReport\PayrollCP22AReport.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>PayrollCP22AReport.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Employer\PayrollReport\PayrollEFormForEmployer.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>PayrollEFormForEmployer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Employer\PayrollReport\PayrollPCB38Report.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>PayrollPCB38Report.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Employer\PayrollReport\PayrollEAForm.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>PayrollEAForm.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Employer\PayrollReport\IncomeTaxFormPCB39.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>IncomeTaxFormPCB39.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Employer\PayrollReport\PayrollHRDFForm.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>PayrollHRDFForm.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Employer\PayrollReport\PayrollPayslipDefaultReport.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>PayrollPayslipDefaultReport.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Employer\PayrollReport\PayrollPerkesoEisFormA.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>PayrollPerkesoEisFormA.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Employer\PayrollReport\PayrollPerkesoSocsoFormA.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>PayrollPerkesoSocsoFormA.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Employer\PayrollReport\PayrollKwspEpfFormA.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>PayrollKwspEpfFormA1.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Employer\PayrollReport\PayrollPaymentMethodReport.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>PayrollPaymentMethodReport.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Employer\PayrollReport\PayrollAdditionalPayReport.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>PayrollAdditionalPayReport.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Employer\PayrollReport\PayrollOvertimeReport.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>PayrollOvertimeReport.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Employer\PayrollReport\PayrollDetail_Department_Report.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>PayrollDetail_Department_Report.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Employer\PayrollReport\PayrollDetail_Branch_Report.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>PayrollDetail_Branch_Report.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Employer\PayrollReport\PayrollDetailReport.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>PayrollDetailReport.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Employer\PayrollReport\PayrollPayslipReport.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>PayrollPayslipReport.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Employer\PayrollReport\HourlyPaymentMethod.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>HourlyPaymentMethod.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Employer\PayrollReport\HourlyPayVoucherReport.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>HourlyPayVoucherReport.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Employer\PayrollReport\PayrollShiftReport.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>PayrollShiftReport.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Employer\PayrollReport\SubReport\PayrollDetailDeductionArray.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>PayrollDetailDeductionArray.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Employer\PayrollReport\SubReport\PayrollDetailEarningArray.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>PayrollDetailEarningArray.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Employer\PayrollReport\SubReport\PayslipLeaveSummary.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>PayslipLeaveSummary.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Employer\PayrollReport\SubReport\PayslipDeduction.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>PayslipDeduction.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Employer\PayrollReport\SubReport\PayslipEarning.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>PayslipEarning.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{C0C07587-41A7-46C8-8FBD-3F9C8EBE2DDC}" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>31657</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:31657/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target> -->
+</Project>

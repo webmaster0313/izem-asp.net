@@ -1,0 +1,355 @@
+﻿
+@{
+    ViewBag.Title = "Employer Payroll-Report";
+    Layout = "~/Areas/Employer/Views/Shared/_Layout.cshtml";
+}
+
+<div ng-controller="employer-payrollreport-controller">
+
+    @*Entry List*@
+
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Payroll Process</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Payroll Report</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Employee</label>
+                                <select ng-model="employeeId" class="form-control" chosen multiple>
+                                    <option ng-selected="x == employeeId" ng-repeat="x in fill_SearchEmployeeId" ng-value="x.employeeId">
+                                        {{x.memberName}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Department</label>
+                                <select ng-model="employerdepartmentId" class="form-control" chosen multiple>
+                                    <option ng-selected="x == employerdepartmentId" ng-repeat="x in fill_SearchEmployerdepartmentId" ng-value="x.employerdepartmentId">
+                                        {{x.employerdepartmentTitle}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Branch</label>
+                                <select ng-model="employerbranchId" class="form-control" chosen multiple>
+                                    <option ng-selected="x == employerbranchId" ng-repeat="x in fill_SearchEmployerbranchId" ng-value="x.employerbranchId">
+                                        {{x.employerbranchName}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Period From</label>
+                                <input type="month" class="form-control"
+                                       ng-model="periodFrom">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Period To</label>
+                                <input type="month" class="form-control"
+                                       ng-disabled="isPeriodTo"
+                                       ng-model="periodTo">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Sort By</label>
+                                <select ng-model="sortBy" class="form-control">
+                                    <option value="memberName">Employee</option>
+                                    <option value="employeeAlternativeEnroll">Employee Number</option>
+                                    <option value="employeeJoiningDDMMYYYY">Employee Joining Date</option>
+                                    <option value="employerDepartmentTitle">Department - Employee</option>
+                                    <option value="employerBranchName">Branch - Employee</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Employee Status</label>
+                                <select ng-model="activeBy" class="form-control">
+                                    <option value="">All Employee</option>
+                                    <option value="true">Active Employee</option>
+                                    <option value="false">In-Active Employee</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div>
+                                <label for="chkpayrollList_Payslip">
+                                    <input type="checkbox"
+                                           id="chkpayrollList_Payslip"
+                                           ng-model="Payslip"
+                                           ng-change="onCheck_Payslip()" />
+                                    Payslip
+                                </label>
+                            </div>
+                            <hr />
+                            <div>
+                                <label for="chkpayrollList_PayslipDetails">
+                                    <input type="checkbox"
+                                           id="chkpayrollList_PayslipDetails"
+                                           ng-model="PayslipDetails"
+                                           ng-change="onCheck_PayslipDetails()" />
+                                    Payroll Details
+                                </label>
+                            </div>
+                            <div>
+                                <label for="chkpayrollList_PayslipDetailsDepartmentWise">
+                                    <input type="checkbox"
+                                           id="chkpayrollList_PayslipDetailsDepartmentWise"
+                                           ng-model="PayslipDetailsDepartmentWise"
+                                           ng-change="onCheck_PayslipDetailsDepartmentWise()" />
+                                    Payroll Details - Department Wise
+                                </label>
+                            </div>
+                            <div>
+                                <label for="chkpayrollList_PayslipDetailsBranchWise">
+                                    <input type="checkbox"
+                                           id="chkpayrollList_PayslipDetailsBranchWise"
+                                           ng-model="PayslipDetailsBranchWise"
+                                           ng-change="onCheck_PayslipDetailsBranchWise()" />
+                                    Payroll Details - Branch Wise
+                                </label>
+                            </div>
+                            <hr />
+                            <div>
+                                <label for="chkpayrollList_OvertimeDetails">
+                                    <input type="checkbox"
+                                           id="chkpayrollList_OvertimeDetails"
+                                           ng-model="OvertimeDetails"
+                                           ng-change="onCheck_OvertimeDetails()" />
+                                    Overtime Details
+                                </label>
+                            </div>
+                            <div>
+                                <label for="chkpayrollList_AdditionalPayDetails">
+                                    <input type="checkbox"
+                                           id="chkpayrollList_AdditionalPayDetails"
+                                           ng-model="AdditionalPayDetails"
+                                           ng-change="onCheck_AdditionalPayDetails()" />
+                                    Additional Pay Details
+                                </label>
+                            </div>
+                            <div>
+                                <label for="chkpayrollList_ShiftDetails">
+                                    <input type="checkbox"
+                                           id="chkpayrollList_ShiftDetails"
+                                           ng-model="ShiftDetails"
+                                           ng-change="onCheck_ShiftDetails()" />
+                                    Shift Details
+                                </label>
+                            </div>
+                            <hr />
+                            <div>
+                                <label for="chkpayrollList_PaymentMethodReport">
+                                    <input type="checkbox"
+                                           id="chkpayrollList_PaymentMethodReport"
+                                           ng-model="PaymentMethodReport"
+                                           ng-change="onCheck_PaymentMethodReport()" />
+                                    Payment Method Report
+                                </label>
+                            </div>
+                            <div>
+                                <label for="chkpayrollList_BankReport">
+                                    <input type="checkbox"
+                                           id="chkpayrollList_BankReport"
+                                           ng-model="BankReport"
+                                           ng-change="onCheck_BankReport()" />
+                                    Bank Report
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div>
+                                <label for="chkpayrollList_KWSP_EPF_Form_A">
+                                    <input type="checkbox"
+                                           id="chkpayrollList_KWSP_EPF_Form_A"
+                                           ng-model="KWSP_EPF_Form_A"
+                                           ng-change="onCheck_KWSP_EPF_Form_A()" />
+                                    KWSP (EPF) Form A
+                                </label>
+                            </div>
+                            <div>
+                                <label for="chkpayrollList_KWSP_EPF_CSV_File">
+                                    <input type="checkbox"
+                                           id="chkpayrollList_KWSP_EPF_CSV_File"
+                                           ng-model="KWSP_EPF_CSV_File"
+                                           ng-change="onCheck_KWSP_EPF_CSV_File()" />
+                                    KWSP (EPF) – CSV File
+                                </label>
+                            </div>
+                            <hr />
+                            <div>
+                                <label for="chkpayrollList_Perkeso_Socso_Form_A">
+                                    <input type="checkbox"
+                                           id="chkpayrollList_Perkeso_Socso_Form_A"
+                                           ng-model="Perkeso_Socso_Form_A"
+                                           ng-change="onCheck_Perkeso_Socso_Form_A()" />
+                                    Perkeso (Socso) - Form A
+                                </label>
+                            </div>
+                            <div>
+                                <label for="chkpayrollList_Perkeso_Socso_Text_File">
+                                    <input type="checkbox"
+                                           id="chkpayrollList_Perkeso_Socso_Text_File"
+                                           ng-model="Perkeso_Socso_Text_File"
+                                           ng-change="onCheck_Perkeso_Socso_Text_File()" />
+                                    Perkeso (Socso) – Text File
+                                </label>
+                            </div>
+                            <div>
+                                <label for="chkpayrollList_Perkeso_EIS_Form_A">
+                                    <input type="checkbox"
+                                           id="chkpayrollList_Perkeso_EIS_Form_A"
+                                           ng-model="Perkeso_EIS_Form_A"
+                                           ng-change="onCheck_Perkeso_EIS_Form_A()" />
+                                    Perkeso (EIS) - Form A
+                                </label>
+                            </div>
+                            <div>
+                                <label for="chkpayrollList_Perkeso_EIS_Text_File">
+                                    <input type="checkbox"
+                                           id="chkpayrollList_Perkeso_EIS_Text_File"
+                                           ng-model="Perkeso_EIS_Text_File"
+                                           ng-change="onCheck_Perkeso_EIS_Text_File()" />
+                                    Perkeso (EIS) – Text File
+                                </label>
+                            </div>
+                            <hr />
+                            @*.HRDF.*@
+                            <div>
+                                <label for="chkpayrollList_HRDFForm">
+                                    <input type="checkbox"
+                                           id="chkpayrollList_HRDFForm"
+                                           ng-model="HRDF_Form"
+                                           ng-change="onCheck_HRDF_Form()" />
+                                    HRDF Form
+                                </label>
+                            </div>
+                            <div>
+                                <label for="chkpayrollList_HRDFCSV">
+                                    <input type="checkbox"
+                                           id="chkpayrollList_HRDFCSV"
+                                           ng-model="HRDF_CSV"
+                                           ng-change="onCheck_HRDF_CSV()" />
+                                    HRDF CSV
+                                </label>
+                            </div>
+                        </div>
+                        @*.PCB Section.*@
+                        <div class="col-md-4">
+                            <div>
+                                <label for="chkpayrollList_Income_Tax_Form_PCB39">
+                                    <input type="checkbox"
+                                           id="chkpayrollList_Income_Tax_Form_PCB39"
+                                           ng-model="Income_Tax_Form_PCB39"
+                                           ng-change="onCheck_Income_Tax_Form_PCB39()" />
+                                    Income Tax – Form PCB39
+                                </label>
+                            </div>
+                            <div>
+                                <label for="chkpayrollList_IncomeTax_TextFilefor_PCB39">
+                                    <input type="checkbox"
+                                           id="chkpayrollList_IncomeTax_TextFilefor_PCB39"
+                                           ng-model="Income_Tax_Text_File_for_PCB39"
+                                           ng-change="onCheck_Income_Tax_Text_File_for_PCB39()" />
+                                    Income Tax - Text File for PCB39
+                                </label>
+                            </div>
+                            <hr />
+                            <div>
+                                <label for="chkpayrollList_IncomeTax_Form_CP22A">
+                                    <input type="checkbox"
+                                           id="chkpayrollList_IncomeTax_Form_CP22A"
+                                           ng-model="IncomeTax_Form_CP22A"
+                                           ng-change="onCheck_IncomeTax_Form_CP22A()"
+                                           />
+                                    Income Tax - Form CP22A
+                                </label>
+                            </div>
+                            <div>
+                                <label for="chkpayrollList_IncomeTax_EAForm">
+                                    <input type="checkbox"
+                                           id="chkpayrollList_IncomeTax_EAForm"
+                                           ng-model="IncomeTax_EAForm"
+                                           ng-change="onCheck_IncomeTax_EAForm()" />
+                                    Income Tax - EA Form
+                                </label>
+                            </div>
+                            <div>
+                                <label for="chkpayrollList_IncomeTax_EFormfor_Employer">
+                                    <input type="checkbox"
+                                           disabled
+                                           id="chkpayrollList_IncomeTax_EFormfor_Employer"
+                                           ng-model="IncomeTax_EFormfor_Employer"
+                                           ng-change="onCheck_IncomeTax_EFormfor_Employer()" />
+                                    Income Tax - E Form for Employer
+                                </label>
+                            </div>
+                            <div>
+                                <label for="chkpayrollList_IncomeTax_EFormfor_Employer_TEXTFile">
+                                    <input type="checkbox"
+                                           id="chkpayrollList_IncomeTax_EFormfor_Employer_TEXTFile"
+                                           ng-model="IncomeTax_EFormfor_Employer_TEXTFile"
+                                           ng-change="onCheck_IncomeTax_EFormfor_Employer_TEXTFile()" />
+                                    Income Tax - E Form for Employer Text File
+                                </label>
+                            </div>
+                            <div>
+                                <label for="chkpayrollList_IncomeTax_EFormfor_Employer_CSVFile">
+                                    <input type="checkbox"
+                                           id="chkpayrollList_IncomeTax_EFormfor_Employer_CSVFile"
+                                           ng-model="IncomeTax_EFormfor_Employer_CSVFile"
+                                           ng-change="onCheck_IncomeTax_EFormfor_Employer_CSVFile()" />
+                                    Income Tax - E Form for Employer CSV File
+                                </label>
+                            </div>
+                            <hr />
+                            <div>
+                                <label for="chkpayrollList_PCB_2">
+                                    <input type="checkbox"
+                                           id="chkpayrollList_PCB_2"
+                                           ng-model="PCB_2"
+                                           ng-change="onCheck_PCB_2()" />
+                                    PCB 2(II)
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <button type="button" class="btn btn-primary m-1" ng-click="onClick_GenerateReport()">Generate Report</button>
+                    <button type="button" class="btn btn-inverse-dark m-1" ng-show="Payslip" ng-click="onClick_SendEmail()">Send Email</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div style="display:none">
+        <table id="tabledata"></table>
+    </div>
+
+</div>
+
+@section scripts{
+    <script src="~/Areas/Employer/_Employer/Code/PayrollSetting/employer-payrollreport-controller.js?version=@(System.Configuration.ConfigurationManager.AppSettings["version"].ToString())"></script>
+}

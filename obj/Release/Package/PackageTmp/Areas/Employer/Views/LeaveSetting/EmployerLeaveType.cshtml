@@ -1,0 +1,333 @@
+﻿
+@{
+    ViewBag.Title = "Employer-Leave-Type";
+    Layout = "~/Areas/Employer/Views/Shared/_Layout.cshtml";
+}
+
+<div ng-controller="employer-leavetype-controller">
+
+    @*Entry List*@
+
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Leave entries</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Leave Type</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <div class="col-md-12" ng-show="hideEntry">
+            <div class="card">
+                <div class="card-header">
+                    <div class="float-right">
+                        <a class="listMenu" data-toggle="tooltip" data-placement="top"
+                           title="Open search" ng-click="onClick_OpenSearch()">
+                            <i class="mdi mdi-filter icon-font-size filterMenu"></i>
+                        </a>
+                        <a class="listMenu" data-toggle="tooltip" data-placement="top"
+                           title="Reset result" ng-click="onClick_ResetSearch()">
+                            <i class="mdi mdi-view-list icon-font-size viewMenu"></i>
+                        </a>
+                        <a class="listMenu" data-toggle="tooltip" data-placement="top"
+                           title="New entry" 
+                           ng-show="isAddPermit"
+                           ng-click="onClick_AddRecord()">
+                            <i class="mdi mdi-plus-box icon-font-size addMenu"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <table class="table table-hover table-responsive-xl">
+                        <thead>
+                            <tr>
+                                <th class="widthCenter">Leave Code</th>
+                                <th>Leave Earned Type</th>
+                                <th>Prorate Allowed</th>
+                                <th>Leave Confirm After (In Days)</th>
+                                <th>Leave Category</th>
+                                <th class="widthCenter"
+                                    ng-show="isAddPermit">Entitled</th>
+                                <th class="widthCenter"
+                                    ng-if="isEditPermit || isDeletePermit">ACtion</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-if="!loaded">
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"><div class="bar"></div></td>
+                                <td class="loading"
+                                    ng-show="isAddPermit"><div class="bar"></div></td>
+                                <td class="loading"
+                                    ng-if="isEditPermit || isDeletePermit"><div class="bar"></div></td>
+                            </tr>
+                            <tr ng-if="loaded" ng-repeat="x in tableParams">
+                                <td class="widthCenter">{{x.employerleavetypeLeaveCode}}</td>
+                                <td>{{x.employerleavetypeLeaveType}}</td>
+                                <td>
+                                    <span ng-if="x.employerleavetypeOnProrateBasis== 0">No</span>
+                                    <span ng-if="x.employerleavetypeOnProrateBasis == 1">Yes</span>
+                                </td>
+                                <td>
+                                    <span ng-if="x.employerleavetypeLeaveConfirmationDay== 0">Immediately</span>
+                                    <span ng-if="x.employerleavetypeLeaveConfirmationDay == 1">After confirmation</span>
+                                    <span ng-if="x.employerleavetypeLeaveConfirmationDay== 30">After 1 month of service</span>
+                                    <span ng-if="x.employerleavetypeLeaveConfirmationDay == 90">After 3 months of service</span>
+                                    <span ng-if="x.employerleavetypeLeaveConfirmationDay== 180">After 6 months of service</span>
+                                    <span ng-if="x.employerleavetypeLeaveConfirmationDay == 270">After 9 months of service</span>
+                                    <span ng-if="x.employerleavetypeLeaveConfirmationDay== 365">After 12 months of service</span>
+                                </td>
+                                <td>
+                                    <span ng-if="x.employerleavetypeIsAnnual.data[0] == 1">Annual Leave</span>
+                                    <span ng-if="x.employerleavetypeIsHospitalization.data[0] == 1">Hospitalization Leave</span>
+                                    <span ng-if="x.employerleavetypeIsOther.data[0] == 1">Other Leave</span>
+                                    <span ng-if="x.employerleavetypeIsMedical.data[0] == 1">Medical Leave</span>
+                                    <span ng-if="x.employerleavetypeIsUnpaid.data[0] == 1">UnPaid Leave</span>
+                                </td>
+                                <td class="text-nowrap">
+                                    <a class="cursor"
+                                       ng-show="isAddPermit"
+                                       ng-click="onClick_Load_MasterService_list(x.employerleavetypeId)">
+                                        <span class="badge badge-success"> Year</span>
+                                    </a>
+                                </td>
+                                <td class="text-nowrap"
+                                    ng-if="isEditPermit || isDeletePermit">
+                                    <a class="cursor"
+                                       ng-show="isEditPermit"
+                                       ng-click="onClick_EditRecord(x.employerleavetypeId)">
+                                        <i class="mdi mdi-pencil-box icon-font-size editMenu"></i>
+                                    </a>
+                                    <a class="cursor"
+                                       ng-show="isDeletePermit"
+                                       ng-click="onClick_DeleteRecord(x.employerleavetypeId)">
+                                        <i class="mdi mdi-delete-forever icon-font-size deleteMenu"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="float-left">
+                                <select ng-model="pageSizeSelected" ng-change="changePageSize()" class="badge">
+                                    <option value="15">15</option>
+                                    <option value="30">30</option>
+                                    <option value="50">50</option>
+                                </select>
+                            </div>
+                            <div class="float-right">
+                                <pagination total-items="totalCount" ng-change="pageChanged()"
+                                            items-per-page="pageSizeSelected" direction-links="true" ng-model="pageIndex"
+                                            next-text=">" previous-text="<"
+                                            max-size="maxSize" class="pagination" first-text="First" last-text="Last"
+                                            boundary-links="true" rotate="false"
+                                            num-pages="numPages">
+                                </pagination>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @* Entry Form *@
+
+    <div class="row">
+        <div class="col-md-12" ng-show="!hideEntry">
+            <div class="card">
+                <form name="dataForm" autocomplete="off">
+                    <div class="card-header">
+                        Manage Leave Type
+                    </div>
+                    <div class="card-body">
+                        <div style="display:none;">
+                            <input type="text" ng-model="employerleavetypeId" />
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group ">
+                                    <label>Leave Earned Type Code<span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control form-control-lg"
+                                           ng-model="employerleavetypeLeaveCode"
+                                           required>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group ">
+                                    <label>Leave Earned Type Name<span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control form-control-lg"
+                                           ng-model="employerleavetypeLeaveType"
+                                           required>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group ">
+                                    <label>Leave Type</label>
+                                    <select class="form-control" ng-model="employerleavetypeOnProrateBasis" chosen>
+                                        <option value="0">Earned Leave Full 12 Month</option>
+                                        <option value="1">Earned Leave till Current Month</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group ">
+                                    <label>Entitlement Rounding</label>
+                                    <select class="form-control" ng-model="employerleavetypeEntitlementRounding" chosen>
+                                        <option value="1">Near Up</option>
+                                        <option value="2">Near Down</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group ">
+                                    <label>Allow To Take Leave</label>
+                                    <select class="form-control" ng-model="employerleavetypeLeaveConfirmationDay" chosen>
+                                        <option value="0">Immediately</option>
+                                        @*<option value="1">After confirmation</option>*@
+                                        <option value="30">After 1 month of service</option>
+                                        <option value="90">After 3 months of service</option>
+                                        <option value="180">After 6 months of service</option>
+                                        <option value="270">After 9 months of service</option>
+                                        <option value="365">After 12 months of service</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group ">
+                                    <label>Color Code<span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control form-control-lg" required
+                                           ng-model="employerleavetypeLeaveTypeColor">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group ">
+                                    <label>Color Selection<span class="text-danger">*</span></label>
+                                    <input type="color" class="form-control form-control-lg" ng-change="UpdateColor()"
+                                           ng-model="employerleavetypeLeaveTypeColorCode">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group ">
+                                    <label>Leave Type Category<span class="text-danger">*</span></label>
+                                    <select class="form-control" ng-model="elt_Leaveselection" required chosen>
+                                        <option value="">--Select--</option>
+                                        <option value="UL">Unpaid Leave</option>
+                                        <option value="AL">Annual Leave</option>
+                                        <option value="MC">Medical Leave</option>
+                                        <option value="HL">Hospitalization Leave</option>
+                                        <option value="OL">Other Leave</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <input type="submit" class="btn btn-gradient-primary m-1" ng-click="dataForm.$valid && onClick_Submit()" />
+                        <button type="button" class="btn btn-inverse-dark m-1" ng-click="onClick_Cancel()">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    @*Year Modal*@
+    <div class="modal fade" id="entitledModal" tabindex="-1" role="dialog" aria-labelledby="entitledModalLabel"
+         aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog" style="max-width:600px !important;" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="entitledModalLabel">Leave Entitled-Day</h5>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-hover table-responsive-xl">
+                        <thead>
+                            <tr>
+                                <th class="widthCenter">Start</th>
+                                <th class="widthCenter">End</th>
+                                <th class="widthCenter">Entitled</th>
+                                <th class="widthCenter">Max/BNF</th>
+                                <th class="widthCenter">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="x in tableParams1">
+                                <td class="widthCenter">
+                                    <input type="text" style="width:50px;"
+                                           ng-disabled="$index > 1"
+                                           ng-model="x.employerleavetypeentitlementStart" />
+                                </td>
+                                <td class="widthCenter">
+                                    <input type="text" style="width:50px;"
+                                           ng-disabled="$index > 1"
+                                           ng-model="x.employerleavetypeentitlementEnd" />
+                                </td>
+                                <td class="widthCenter">
+                                    <input type="text" style="width:50px;"
+                                           ng-disabled="$index > 1"
+                                           ng-model="x.employerleavetypeentitlementEntitleDay" />
+                                </td>
+                                <td class="widthCenter">
+                                    <input type="text" style="width:50px;"
+                                           ng-disabled="$index > 1"
+                                           ng-model="x.employerleavetypeentitlementMaxBnf" />
+                                </td>
+                                <td class="text-nowrap widthCenter">
+                                    <a class="cursor" ng-show="$index == 0 || $index == 1" ng-click="onClick_EditRecordEntitlement(x)">
+                                        <i class="mdi mdi-content-save icon-font-size text-info"></i>
+                                    </a>
+                                    <a class="cursor" ng-show="$index == 1"
+                                       ng-click="onClick_DeleteRecordEntitlement(x)">
+                                        <i class="mdi mdi-delete-forever icon-font-size text-danger"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" ng-click="onClick_CloseList()">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @*Search Modal*@
+
+    <div class="modal fade" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel"
+         aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="searchModalLabel">Search Result</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Leave Code</label>
+                                <input type="text" class="form-control"
+                                       ng-model="SearchemployerleavetypeLeaveCode">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" ng-click="onClick_CloseSearch()">Close</button>
+                    <button type="button" class="btn btn-primary" ng-click="onClick_SearchResult()">Search</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@section scripts{
+    <script src="~/Areas/Employer/_Employer/Code/LeaveSetting/employer-leavetype-controller.js?version=@(System.Configuration.ConfigurationManager.AppSettings["version"].ToString())"></script>
+}
+

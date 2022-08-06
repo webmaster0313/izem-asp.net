@@ -1,20 +1,5 @@
 /* Sidebar */
 
-.sidebar-wrapper {
-  display: block;
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  width: 100%;
-  max-width: 15.625rem!important;
-  overflow: hidden;
-  overflow-anchor: none;
-  touch-action: auto;
-  padding: 0;
-  box-shadow: 0 0 2rem 0 rgb(136 152 170 / 15%);
-  z-index: 9999;
-}
-
 .sidebar {
   min-height: calc(100vh - #{$navbar-height});
   background: $sidebar-light-bg;

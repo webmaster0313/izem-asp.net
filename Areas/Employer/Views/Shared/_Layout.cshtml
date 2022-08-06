@@ -31,10 +31,10 @@
     <div ng-app="employer-app" ng-cloak>
         <div ng-controller="employer-controller">
             <div class="container-scroller">
-                <aside>
+                <aside class="sidebar-wrapper border-radius mt-3 mb-3 ml-4">
                     @Html.Partial("sidemenu")
                 </aside>
-                <main>
+                <main class="main border-radius">
                     @Html.Partial("header")
                     <div class="content-wrapper">
                         @RenderBody()

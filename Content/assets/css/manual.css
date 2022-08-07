@@ -436,6 +436,8 @@ select.form-control {
     -webkit-box-shadow: 0 0 0 3px #f26726;
     box-shadow: 0 0 0 3px #f26726;
 }*/
+
+/* ------------------------------------------------------------ */
 .main {
     position: relative;
 }
@@ -463,4 +465,20 @@ select.form-control {
 
 .border-radius {
     border-radius: 1rem;
+}
+
+.content-wrapper {
+    background: transparent;
+}
+
+.top-bg {
+    min-height: 300px;
+}
+
+.bg-primary {
+    background-color: #5e72e4 !important;
+}
+
+.navbar {
+    background: transparent;
 }

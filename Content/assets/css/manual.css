@@ -509,8 +509,10 @@ body {
         .sidebar-wrapper {
             width: $sidebar-width-icon;
         }
+    }
+    @media (min-width: 1200px) {
         .main {
-            margin-left: 5rem;
+            margin-left: 5.125rem;
         }
     }
 }

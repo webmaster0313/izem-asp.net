@@ -16,15 +16,15 @@
         </div>
     </div>
 
-    <div class="row" ng-if="verification">
+    <div class="row gut-md" ng-if="verification">
         <div class="col-md-4">
-            <div class="card card-primary">
+            <div class="card card-white border-radius">
                 <div class="card-body">
-                    <h4 class="mt-3 b-b1 pb-2 mb-4 fw-bold">Active Employee</h4>
-                    <h1 class="mb-4 fw-bold">{{active}}</h1>
-                    <h4 class="mt-5 pb-3 mb-0 fw-bold">User summary</h4>
+                    <h4 class="mt-1 mb-2">Active Employee</h4>
+                    <h1 class="mb-2 fw-bold">{{active}}</h1>
+                    <h4 class="pb-2 mb-0 fw-bold">User summary</h4>
                     <hr style="margin-top: 5px; margin-bottom:5px;" />
-                    <ul class="list-unstyled">
+                    <ul class="list-unstyled mb-2">
                         <li class="d-flex justify-content-between align-items-center">
                             <span>Total Employee</span>
                             <span class="badge badge-pill">{{total}}</span>
@@ -35,23 +35,21 @@
                         </li>
                     </ul>
                     <hr style="margin-top: 5px; margin-bottom:5px;" />
-                    <h4 class="fw-bold">
-                        <a href="/employer/mastersetting/manage-your-employee-list" style="color:white;">
-                            Manage Employee
-                        </a>
-                    </h4>
+                    <a href="/employer/mastersetting/manage-your-employee-list" style="font-size: .8rem">
+                        Manage Employee
+                    </a>
                 </div>
             </div>
         </div>
 
         <div class="col-md-4">
-            <div class="card card-primary1">
+            <div class="card card-white border-radius">
                 <div class="card-body">
-                    <h4 class="mt-3 b-b1 pb-2 mb-4 fw-bold">Pending Leave to Process</h4>
-                    <h1 class="mb-4 fw-bold">{{pending}}</h1>
-                    <h4 class="mt-5 pb-3 mb-0 fw-bold">Leave summary</h4>
+                    <h4 class="mt-1 mb-2">Pending Leave to Process</h4>
+                    <h1 class="mb-2 fw-bold">{{pending}}</h1>
+                    <h4 class="pb-2 mb-0 fw-bold">Leave summary</h4>
                     <hr style="margin-top: 5px; margin-bottom:5px;" />
-                    <ul class="list-unstyled">
+                    <ul class="list-unstyled mb-2">
                         <li class="d-flex justify-content-between align-items-center">
                             <span>Approved</span>
                             <span class="badge badge-pill">{{approved}}</span>
@@ -62,16 +60,14 @@
                         </li>
                     </ul>
                     <hr style="margin-top: 5px; margin-bottom:5px;" />
-                    <h4 class="fw-bold">
-                        <a href="/employer/leavesetting/manage-your-leaveapplication" style="color:white;">
-                            Manage Leave
-                        </a>
-                    </h4>
+                    <a href="/employer/leavesetting/manage-your-leaveapplication" style="font-size: .8rem;">
+                        Manage Leave
+                    </a>
                 </div>
             </div>
         </div>
         <div class="col-md-4">
-            <div class="card">
+            <div class="card card-white border-radius">
                 <div class="card-header">
                     Things to do first!
                 </div>

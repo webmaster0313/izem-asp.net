@@ -496,7 +496,7 @@ footer {
     z-index: 9999;
 }
 
-.sidebar-wrapper .navbar-brand-warpper {
+.sidebar-wrapper .navbar-brand-wrapper {
     background-color: #fff;
     width: 260px;
     height: 70px;
@@ -506,7 +506,7 @@ footer {
     width: 110px;
 }
 
-.sidebar-wrapper .navbar-brand-warpper .navbar-brand img {
+.sidebar-wrapper .navbar-brand-wrapper .navbar-brand img {
     width: calc(260px - 120px);
     max-width: 100%;
     height: 28px;

@@ -509,7 +509,7 @@ body {
     position: relative;
 }
 
-@media (min-width: 1200px) {
+@media (min-width: 992px) {
     .main-panel {
         margin-left: 17.125rem;
     }
@@ -526,14 +526,12 @@ body {
     color: #fff !important;
 }
 
-.sidebar-icon-only {
-    @media (min-width: 992px) {
-        .sidebar-wrapper {
-            .navbar-brand-wrapper {
-                .brand-logo {
-                    display: none;
-                }
-            }
-        }
+.navbar .navbar-menu-wrapper {
+    width: 100%;
+}
+
+@media (min-width: 992px) {
+    .sidebar-icon-only .navbar .navbar-menu-wrapper {
+        width: 100%;
     }
 }

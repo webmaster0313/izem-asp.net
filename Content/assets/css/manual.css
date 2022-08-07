@@ -496,6 +496,24 @@ footer {
     z-index: 9999;
 }
 
+.sidebar-wrapper .navbar-brand-warpper {
+    background-color: #fff;
+    width: 260px;
+    height: 70px;
+}
+
+.sidebar-wrapper .navbar-brand {
+    width: 110px;
+}
+
+.sidebar-wrapper .navbar-brand-warpper .navbar-brand img {
+    width: calc(260px - 120px);
+    max-width: 100%;
+    height: 28px;
+    margin: auto;
+    vertical-align: middle;
+}
+
 /* Main */
 .main {
     position: relative;
@@ -512,5 +530,5 @@ footer {
 }
 
 .navbar-toggler {
-    color: #fff;
+    color: #fff !important;
 }

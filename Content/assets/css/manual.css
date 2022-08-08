@@ -541,11 +541,13 @@ body {
 	background-color: #ccc;
 	border: 3px solid #fff;
     opacity: 0;
+    visibility: hidden;
     transition: opacity .3s;
 }
 
 .sidebar-wrapper:hover .sidebar-wrapper>div::-webkit-scrollbar-thumb {
     opacity: 1;
+    visibility: visible;
 }
 
 /* Card */

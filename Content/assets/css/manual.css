@@ -455,10 +455,6 @@ select.form-control {
     background-color: #5e72e4 !important;
 }
 
-.navbar {
-    background: transparent;
-}
-
 .card {
     box-shadow: 0 0 2rem 0 rgb(136 152 170 / 15%);
     overflow: hidden;
@@ -496,6 +492,28 @@ body {
     padding-right: 10px;
 }
 
+/* Navbar */
+.navbar {
+    background: transparent;
+}
+
+.navbar .navbar-brand-wrapper {
+    width: 250px;
+}
+
+.navbar .navbar-brand-wrapper .navbar-brand img {
+    width: auto;
+    height: 40px;
+}
+
+.navbar-toggler {
+    color: #fff !important;
+}
+
+.navbar .navbar-menu-wrapper {
+    width: 100%;
+}
+
 /* Sidebar */
 .sidebar-wrapper {
     display: block;
@@ -512,6 +530,10 @@ body {
     z-index: 9999;
 }
 
+.sidebar {
+    width: 250px;
+}
+
 .sidebar-wrapper > div {
     overflow-y: auto;
     overflow-x: hidden;
@@ -521,7 +543,7 @@ body {
 
 .sidebar-wrapper>div::-webkit-scrollbar-track
 {
-	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+	/* -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); */
 	background-color: #F5F5F5;
 }
 
@@ -546,14 +568,6 @@ body {
 .content-wrapper {
     padding: .5rem 1.25rem;
     background: transparent;
-}
-
-.navbar-toggler {
-    color: #fff !important;
-}
-
-.navbar .navbar-menu-wrapper {
-    width: 100%;
 }
 
 @media (min-width: 992px) {

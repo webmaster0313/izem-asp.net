@@ -462,10 +462,12 @@ select.form-control {
 
 .card-header {
     background-color: transparent;
+    border: none;
 }
 
 .card-footer {
     background-color: transparent;
+    border: none;
 }
 
 /* Layout */
@@ -533,5 +535,26 @@ body {
 @media (min-width: 992px) {
     .sidebar-icon-only .navbar .navbar-menu-wrapper {
         width: 100%;
+    }
+}
+
+@media (max-width: 991px) {
+    .sidebar-wrapper {
+        width: auto;
+    }
+    .navbar .navbar-brand-wrapper {
+        display: none !important;
+    }
+    .sidebar-offcanvas.active {
+        margin: 1rem 1.5rem 1rem 0;
+        top: 0;
+        box-shadow: 0 0 2rem 0 rgb(136 152 170 / 15%);
+        border-radius: 1rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .row.gut-md > [class*="col-"] {
+        margin-bottom: 1.5rem;
     }
 }

@@ -467,8 +467,6 @@ select.form-control {
 }
 
 .card-header {
-    color: #fff;
-    background-color: linear-gradient(to right, #f69563, #ef4a26);
     border: none;
     min-height: 40px;
 }

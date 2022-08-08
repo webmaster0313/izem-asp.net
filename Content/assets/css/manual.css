@@ -540,6 +540,12 @@ body {
 {
 	background-color: #ccc;
 	border: 3px solid #fff;
+    opacity: 0;
+    transition: opacity .3s;
+}
+
+.sidebar-wrapper:hover .sidebar-wrapper>div::-webkit-scrollbar-thumb {
+    opacity: 1;
 }
 
 /* Card */

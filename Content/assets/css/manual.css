@@ -514,6 +514,9 @@ body {
 
 .sidebar-wrapper > div {
     overflow-y: auto;
+    overflow-x: hidden;
+    height: 100%;
+    background-color: #fff;
 }
 
 .sidebar-wrapper>div::-webkit-scrollbar-track
@@ -525,13 +528,13 @@ body {
 .sidebar-wrapper>div::-webkit-scrollbar
 {
 	width: 10px;
-	background-color: #F5F5F5;
+	background-color: #fff;
 }
 
 .sidebar-wrapper>div::-webkit-scrollbar-thumb
 {
-	background-color: #000000;
-	border: 2px solid #555555;
+	background-color: #ccc;
+	border: 3px solid #fff;
 }
 
 /* Main */

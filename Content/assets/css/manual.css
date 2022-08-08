@@ -504,7 +504,7 @@ body {
     bottom: 0;
     width: 100%;
     max-width: 15.625rem!important;
-    overflow-y: scroll;
+    overflow: hidden;
     overflow-anchor: none;
     touch-action: auto;
     padding: 0;
@@ -512,19 +512,23 @@ body {
     z-index: 9999;
 }
 
-.sidebar-wrapper::-webkit-scrollbar-track
+.sidebar-wrapper > div {
+    overflow-y: auto;
+}
+
+.sidebar-wrapper>div::-webkit-scrollbar-track
 {
 	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
 	background-color: #F5F5F5;
 }
 
-.sidebar-wrapper::-webkit-scrollbar
+.sidebar-wrapper>div::-webkit-scrollbar
 {
 	width: 10px;
 	background-color: #F5F5F5;
 }
 
-.sidebar-wrapper::-webkit-scrollbar-thumb
+.sidebar-wrapper>div::-webkit-scrollbar-thumb
 {
 	background-color: #000000;
 	border: 2px solid #555555;
@@ -568,6 +572,9 @@ body {
 }
 
 @media (max-width: 991px) {
+    .main-panel {
+        width: 100% !important;
+    }
     .sidebar-wrapper {
         width: auto;
     }

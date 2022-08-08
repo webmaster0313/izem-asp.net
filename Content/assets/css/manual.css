@@ -507,8 +507,9 @@ body {
 }
 
 /* Main */
-.main {
+.main-panel {
     position: relative;
+    width: calc(100% - 275px);
 }
 
 .content-wrapper {

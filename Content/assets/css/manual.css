@@ -383,7 +383,10 @@ select.form-control {
 }
 
 .breadcrumb {
-    padding: 0 !important;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    background: white;
+    border-radius: 1rem;
 }
 
 .textboxHeight {
@@ -459,11 +462,14 @@ select.form-control {
 .card {
     box-shadow: 0 0 2rem 0 rgb(136 152 170 / 15%);
     overflow: hidden;
+    border-radius: 1rem;
+    background: white;
 }
 
 .card-header {
     background-color: #f26726;
     border: none;
+    min-height: 40px;
 }
 
 .card-footer {

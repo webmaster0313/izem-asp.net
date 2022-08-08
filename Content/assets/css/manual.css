@@ -458,10 +458,11 @@ select.form-control {
 
 .card {
     box-shadow: 0 0 2rem 0 rgb(136 152 170 / 15%);
+    overflow: hidden;
 }
 
 .card-header {
-    background-color: transparent;
+    background-color: #f26726;
     border: none;
 }
 
@@ -513,6 +514,7 @@ body {
 }
 
 .content-wrapper {
+    padding: .5rem 1.25rem;
     background: transparent;
 }
 

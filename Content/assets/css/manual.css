@@ -511,15 +511,6 @@ body {
     position: relative;
 }
 
-@media (min-width: 992px) {
-    .main-panel {
-        margin-left: 17.125rem;
-    }
-    .sidebar-icon-only .main-panel {
-        margin-left: 5.125rem;
-    }
-}
-
 .content-wrapper {
     background: transparent;
 }
@@ -533,6 +524,18 @@ body {
 }
 
 @media (min-width: 992px) {
+    .main-panel {
+        margin-left: 17.125rem;
+    }
+
+    .sidebar-icon-only .main-panel {
+        margin-left: 5.125rem;
+    }
+
+    .sidebar-icon-only .navbar .navbar-brand-wrapper {
+        display: none !important;
+    }
+
     .sidebar-icon-only .navbar .navbar-menu-wrapper {
         width: 100%;
     }

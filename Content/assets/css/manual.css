@@ -545,7 +545,7 @@ body {
     transition: opacity .3s;
 }
 
-.sidebar-wrapper:hover .sidebar-wrapper>div::-webkit-scrollbar-thumb {
+.sidebar-wrapper:hover>div::-webkit-scrollbar-thumb {
     opacity: 1;
     visibility: visible;
 }

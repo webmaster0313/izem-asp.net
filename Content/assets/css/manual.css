@@ -455,23 +455,6 @@ select.form-control {
     background-color: #5e72e4 !important;
 }
 
-.card {
-    box-shadow: 0 0 2rem 0 rgb(136 152 170 / 15%);
-    overflow: hidden;
-    border-radius: 1rem;
-    background: white;
-}
-
-.card-header {
-    border: none;
-    min-height: 40px;
-}
-
-.card-footer {
-    background-color: transparent;
-    border: none;
-}
-
 /* Layout */
 body {
     background: #f8f9fa!important;
@@ -557,6 +540,24 @@ body {
 {
 	background-color: #ccc;
 	border: 3px solid #fff;
+}
+
+/* Card */
+.card {
+    box-shadow: 0 0 2rem 0 rgb(136 152 170 / 15%);
+    overflow: hidden;
+    border-radius: 1rem;
+    background: white;
+}
+
+.card-header {
+    border: none;
+    min-height: 40px;
+}
+
+.card-footer {
+    background-color: transparent;
+    border: none;
 }
 
 /* Main */

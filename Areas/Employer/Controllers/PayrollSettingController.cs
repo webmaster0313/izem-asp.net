@@ -206,7 +206,7 @@ namespace iZem.my.Areas.Employer.Controllers
                 }
 
                 ReportDocument CryRPT = new ReportDocument();
-                var report = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Reports/Employer/PayrollReport/PayrollPayslipReport.rpt");
+                var report = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Reports/Employer/PayrollReport/PayrollPayslipDefaultReport.rpt");
                 CryRPT.Load(report);
                 CryRPT.SetDataSource(ds);
                 CryRPT.SetParameterValue("companyName", companyName);

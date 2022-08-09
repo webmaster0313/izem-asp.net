@@ -510,7 +510,6 @@ body {
     touch-action: auto;
     padding: 0;
     box-shadow: 0 0 2rem 0 rgb(136 152 170 / 15%);
-    z-index: 9999;
 }
 
 .sidebar {
@@ -548,6 +547,12 @@ body {
 .sidebar-wrapper:hover>div::-webkit-scrollbar-thumb {
     opacity: 1;
     visibility: visible;
+}
+
+/* Modal */
+.modal-dialog {
+    border-radius: 1rem;
+    overflow: hidden;
 }
 
 /* Card */
